@@ -17,6 +17,7 @@ class Main(QMainWindow):
     def UI(self):
         self.toolBar()
         self.tabWidget()
+        self.widgets()
         self.layouts()
 
     def toolBar(self):
@@ -46,6 +47,23 @@ class Main(QMainWindow):
         self.tabs.addTab(self.tab2, "Members")
         self.tabs.addTab(self.tab3, "Statistics")
 
+
+    def widgets(self):
+        ############Tab 1 Widgets##############
+        ############Product table Widget##############
+        self.prodcutTable = QTableWidget()
+        self.prodcutTable.setColumnCount(6)
+        # Hide the column product id
+        self.prodcutTable.setColumnHidden(0, True)
+        self.prodcutTable.setHorizontalHeaderItem(0, QTableWidgetItem("Product ID"))
+        self.prodcutTable.setHorizontalHeaderItem(1, QTableWidgetItem("Product Name"))
+        self.prodcutTable.setHorizontalHeaderItem(2, QTableWidgetItem("Manufacture"))
+        self.prodcutTable.setHorizontalHeaderItem(3, QTableWidgetItem("Price"))
+        self.prodcutTable.setHorizontalHeaderItem(4, QTableWidgetItem("Quota"))
+        self.prodcutTable.setHorizontalHeaderItem(5, QTableWidgetItem("Availability"))
+
+
+
     def layouts(self):
         ############Tab1 Layout##############
         self.mainLayout = QHBoxLayout()
@@ -56,6 +74,10 @@ class Main(QMainWindow):
         #self.rightBottomLayout = QVBoxLayout()
         self.topGroupBox = QGroupBox()
         self.middleGroupBox = QGroupBox()
+
+        self.mainLeftLayout.addWidget(self.prodcutTable)
+        self.mainLayout.addLayout(self.mainLeftLayout)
+        self.tab1.setLayout(self.mainLayout)
 
 
 
