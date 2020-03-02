@@ -17,6 +17,7 @@ class Main(QMainWindow):
     def UI(self):
         self.toolBar()
         self.tabWidget()
+        self.layouts()
 
     def toolBar(self):
         self.tb = self.addToolBar("Tool Bar")
@@ -44,6 +45,19 @@ class Main(QMainWindow):
         self.tabs.addTab(self.tab1, "Products")
         self.tabs.addTab(self.tab2, "Members")
         self.tabs.addTab(self.tab3, "Statistics")
+
+    def layouts(self):
+        ############Tab1 Layout##############
+        self.mainLayout = QHBoxLayout()
+        self.mainLeftLayout = QVBoxLayout()
+        self.mainRightLayout = QVBoxLayout()
+        self.rightTopLayout = QHBoxLayout()
+        self.rightMiddleLayout = QHBoxLayout()
+        #self.rightBottomLayout = QVBoxLayout()
+        self.topGroupBox = QGroupBox()
+        self.middleGroupBox = QGroupBox()
+
+
 
 
 
