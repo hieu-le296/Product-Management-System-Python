@@ -16,6 +16,7 @@ class Main(QMainWindow):
 
     def UI(self):
         self.toolBar()
+        self.tabWidget()
 
     def toolBar(self):
         self.tb = self.addToolBar("Tool Bar")
@@ -33,6 +34,16 @@ class Main(QMainWindow):
         self.sellProduct = QAction(QIcon('icons/sell.png'), "Sell Product", self)
         self.tb.addAction(self.sellProduct)
         self.tb.addSeparator()
+
+    def tabWidget(self):
+        self.tabs = QTabWidget()
+        self.setCentralWidget(self.tabs)
+        self.tab1 = QWidget()
+        self.tab2 = QWidget()
+        self.tab3 = QWidget()
+        self.tabs.addTab(self.tab1, "Products")
+        self.tabs.addTab(self.tab2, "Members")
+        self.tabs.addTab(self.tab3, "Statistics")
 
 
 
