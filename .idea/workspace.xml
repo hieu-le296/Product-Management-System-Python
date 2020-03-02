@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="5e9872a8-43ff-4c96-bf3b-34905ebb701f" name="Default Changelist" comment="" />
+    <list default="true" id="5e9872a8-43ff-4c96-bf3b-34905ebb701f" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/Product Manager.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Product Manager.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -14,6 +20,9 @@
       </list>
     </option>
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
   <component name="ProjectId" id="1YXRzvXCkUCZmJ05QogdjwjhSQ1" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -22,7 +31,9 @@
   </component>
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
@@ -70,6 +81,7 @@
       <option name="presentableId" value="Default" />
       <updated>1583087218810</updated>
       <workItem from="1583087220050" duration="1128000" />
+      <workItem from="1583176024363" duration="565000" />
     </task>
     <servers />
   </component>
@@ -77,24 +89,33 @@
     <option name="version" value="1" />
   </component>
   <component name="WindowStateProjectService">
-    <state width="2517" height="413" key="GridCell.Tab.0.bottom" timestamp="1583088479327">
-      <screen x="0" y="0" width="2560" height="1440" />
+    <state width="1638" height="295" key="GridCell.Tab.0.bottom" timestamp="1583176785156">
+      <screen x="0" y="0" width="1680" height="1050" />
     </state>
     <state width="2517" height="413" key="GridCell.Tab.0.bottom/0.0.2560.1440/2560.0.1920.1080@0.0.2560.1440" timestamp="1583088479327" />
-    <state width="2517" height="413" key="GridCell.Tab.0.center" timestamp="1583088479327">
-      <screen x="0" y="0" width="2560" height="1440" />
+    <state width="1638" height="295" key="GridCell.Tab.0.bottom/1680.0.1920.1080/0.0.1680.1050@0.0.1680.1050" timestamp="1583176785156" />
+    <state width="1638" height="295" key="GridCell.Tab.0.center" timestamp="1583176785154">
+      <screen x="0" y="0" width="1680" height="1050" />
     </state>
     <state width="2517" height="413" key="GridCell.Tab.0.center/0.0.2560.1440/2560.0.1920.1080@0.0.2560.1440" timestamp="1583088479327" />
-    <state width="2517" height="413" key="GridCell.Tab.0.left" timestamp="1583088479326">
-      <screen x="0" y="0" width="2560" height="1440" />
+    <state width="1638" height="295" key="GridCell.Tab.0.center/1680.0.1920.1080/0.0.1680.1050@0.0.1680.1050" timestamp="1583176785154" />
+    <state width="1638" height="295" key="GridCell.Tab.0.left" timestamp="1583176785153">
+      <screen x="0" y="0" width="1680" height="1050" />
     </state>
     <state width="2517" height="413" key="GridCell.Tab.0.left/0.0.2560.1440/2560.0.1920.1080@0.0.2560.1440" timestamp="1583088479326" />
-    <state width="2517" height="413" key="GridCell.Tab.0.right" timestamp="1583088479327">
-      <screen x="0" y="0" width="2560" height="1440" />
+    <state width="1638" height="295" key="GridCell.Tab.0.left/1680.0.1920.1080/0.0.1680.1050@0.0.1680.1050" timestamp="1583176785153" />
+    <state width="1638" height="295" key="GridCell.Tab.0.right" timestamp="1583176785155">
+      <screen x="0" y="0" width="1680" height="1050" />
     </state>
     <state width="2517" height="413" key="GridCell.Tab.0.right/0.0.2560.1440/2560.0.1920.1080@0.0.2560.1440" timestamp="1583088479327" />
+    <state width="1638" height="295" key="GridCell.Tab.0.right/1680.0.1920.1080/0.0.1680.1050@0.0.1680.1050" timestamp="1583176785155" />
+    <state x="341" y="164" key="SettingsEditor" timestamp="1583176099727">
+      <screen x="0" y="0" width="1680" height="1050" />
+    </state>
+    <state x="341" y="164" key="SettingsEditor/1680.0.1920.1080/0.0.1680.1050@0.0.1680.1050" timestamp="1583176099727" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/Product_Manager$main.coverage" NAME="main Coverage Results" MODIFIED="1583088475074" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Product_Manager_Python$main.coverage" NAME="main Coverage Results" MODIFIED="1583176785146" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
