@@ -4,6 +4,7 @@ from PyQt5.QtGui import *
 from PyQt5.QtCore import Qt
 import sqlite3
 import add_product
+import add_member
 
 sqlConnect = sqlite3.connect("products.db")
 cur = sqlConnect.cursor()
@@ -37,6 +38,7 @@ class Main(QMainWindow):
         ############Add Member##############
         self.addMember = QAction(QIcon('icons/users.png'), "Add Memeber", self)
         self.tb.addAction(self.addMember)
+        self.addMember.triggered.connect(self.funcAddMember)
         self.tb.addSeparator()
         ############Selling##############
         self.sellProduct = QAction(QIcon('icons/sell.png'), "Sell Product", self)
@@ -161,6 +163,10 @@ class Main(QMainWindow):
 
     def funcAddProduct(self):
         self.newProduct = add_product.AddProduct()
+
+
+    def funcAddMember(self):
+        self.newMember = add_member.AddMember()
 
 
 
