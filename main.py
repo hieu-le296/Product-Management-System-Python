@@ -72,45 +72,86 @@ class Main(QMainWindow):
         self.notAvailableProduct = QRadioButton("Not Available")
         self.listButton = QPushButton("List")
 
+        ############Tab 2 Widgets##############
+        self.memberTableWidget = QTableWidget()
+        self.memberTableWidget.setColumnCount(5)
+        self.memberTableWidget.setHorizontalHeaderItem(0, QTableWidgetItem("Member ID"))
+        self.memberTableWidget.setHorizontalHeaderItem(1, QTableWidgetItem("First Name"))
+        self.memberTableWidget.setHorizontalHeaderItem(2, QTableWidgetItem("Last Name"))
+        self.memberTableWidget.setHorizontalHeaderItem(3, QTableWidgetItem("Phone Number"))
+        self.memberTableWidget.setHorizontalHeaderItem(4, QTableWidgetItem("Address"))
+        self.memberSearchText = QLabel("Search Member")
+        self.memberSearchEntry = QLineEdit()
+        self.memberSearchButton = QPushButton("Search")
 
 
 
 
     def layouts(self):
         ############Tab1 Layout##############
-        self.mainLayout = QHBoxLayout()
-        self.mainLeftLayout = QVBoxLayout()
-        self.mainRightLayout = QVBoxLayout()
-        self.rightTopLayout = QHBoxLayout()
-        self.rightMiddleLayout = QHBoxLayout()
+        self.productMainLayout = QHBoxLayout()
+        self.productLeftLayout = QVBoxLayout()
+        self.productRightLayout = QVBoxLayout()
+        self.productRightTopLayout = QHBoxLayout()
+        self.productRightMiddleLayout = QHBoxLayout()
         #self.rightBottomLayout = QVBoxLayout()
-        self.topGroupBox = QGroupBox("Search Box")
-        self.middleGroupBox = QGroupBox("List Box")
-        #self.bottomGroupBox = QGroupBox("Product Image")
+
 
         ############Add Widgets##############
         ############Left Main Layout Widgets##############
-        self.mainLeftLayout.addWidget(self.prodcutTable)
+        self.productLeftLayout.addWidget(self.prodcutTable)
 
         ############Right Top Layout Widgets##############
-        self.rightTopLayout.addWidget(self.searchText)
-        self.rightTopLayout.addWidget(self.searchEntry)
-        self.rightTopLayout.addWidget(self.searchButton)
-        self.topGroupBox.setLayout(self.rightTopLayout)
+        self.topGroupBox = QGroupBox("Search Box")
+        self.middleGroupBox = QGroupBox("List Box")
+        # self.bottomGroupBox = QGroupBox("Product Image")
+        self.productRightTopLayout.addWidget(self.searchText)
+        self.productRightTopLayout.addWidget(self.searchEntry)
+        self.productRightTopLayout.addWidget(self.searchButton)
+        self.topGroupBox.setLayout(self.productRightTopLayout)
+        self.productRightLayout.addWidget(self.topGroupBox)
+
 
         ############Right Middle Layout Widget##############
-        self.rightMiddleLayout.addWidget(self.allProduct)
-        self.rightMiddleLayout.addWidget(self.availableProduct)
-        self.rightMiddleLayout.addWidget(self.notAvailableProduct)
-        self.rightMiddleLayout.addWidget(self.listButton)
-        self.middleGroupBox.setLayout(self.rightMiddleLayout)
+        self.productRightMiddleLayout.addWidget(self.allProduct)
+        self.productRightMiddleLayout.addWidget(self.availableProduct)
+        self.productRightMiddleLayout.addWidget(self.notAvailableProduct)
+        self.productRightMiddleLayout.addWidget(self.listButton)
+        self.middleGroupBox.setLayout(self.productRightMiddleLayout)
+        self.productRightLayout.addWidget(self.middleGroupBox)
 
 
-        self.mainRightLayout.addWidget(self.topGroupBox)
-        self.mainRightLayout.addWidget(self.middleGroupBox)
-        self.mainLayout.addLayout(self.mainLeftLayout, 70)
-        self.mainLayout.addLayout(self.mainRightLayout, 30)
-        self.tab1.setLayout(self.mainLayout)
+        ############Tab 1 Main Layouts##############
+        self.productMainLayout.addLayout(self.productLeftLayout, 70)
+        self.productMainLayout.addLayout(self.productRightLayout, 30)
+        self.tab1.setLayout(self.productMainLayout)
+
+        ############Tab2 Layout##############
+        self.memberMainLayout = QHBoxLayout()
+        self.memberLeftLayout = QVBoxLayout()
+        self.memberRightLayout = QVBoxLayout()
+        self.memberRightTopLayout = QHBoxLayout()
+
+
+        ############Add Widgets##############
+        ############Left Main Layout Widgets##############
+        self.memberLeftLayout.addWidget(self.memberTableWidget)
+
+        ############Right Top Layout Widgets##############
+        self.memberRightGroupBox = QGroupBox("Search For Member")
+        self.memberRightGroupBox.setContentsMargins(10, 10, 10, 580)
+        self.memberRightTopLayout.addWidget(self.memberSearchText)
+        self.memberRightTopLayout.addWidget(self.memberSearchEntry)
+        self.memberRightTopLayout.addWidget(self.memberSearchButton)
+        self.memberRightGroupBox.setLayout(self.memberRightTopLayout)
+        self.memberRightLayout.addWidget(self.memberRightGroupBox)
+
+
+        ############Tab 2 Main Layouts##############
+        self.memberMainLayout.addLayout(self.memberLeftLayout, 70)
+        self.memberMainLayout.addLayout(self.memberRightLayout, 30)
+        self.tab2.setLayout(self.memberMainLayout)
+
 
 
 
