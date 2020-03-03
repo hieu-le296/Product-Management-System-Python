@@ -43,6 +43,7 @@ class AddProduct(QWidget):
         self.uploadBtn = QPushButton("Upload")
         self.uploadBtn.clicked.connect(self.uploadImg)
         self.submitBtn = QPushButton("Submit")
+        self.submitBtn.clicked.connect(self.addProduct)
 
     def layouts(self):
         ##############Main Layout##############
@@ -82,3 +83,28 @@ class AddProduct(QWidget):
             img = Image.open(self.filename)
             img = img.resize(size)
             img.save("img/{0}".format(defaultImg))
+
+    def addProduct(self):
+        global defaultImg
+        name = self.nameEntry.text()
+        manufacturer = self.manufactureEntry.text()
+        price = self.priceEntry.text()
+        quota = self.quotaEntry.text()
+
+        if (name and manufacturer and price and quota != ""):
+            try:
+                query = "INSERT INTO 'products' (product_name, product_manufacturer, product_price, product_quota,product_img) VALUES (?,?,?,?,?)"
+                cur.execute(query, (name, manufacturer, price, quota, defaultImg))
+                sqlConnect.commit()
+                QMessageBox.information(self, "Info", "Product has been added")
+                sqlConnect.close()
+                self.close()
+
+
+            except:
+                QMessageBox.information(self, "Info", "Product has not been added")
+
+        else:
+            QMessageBox.information(self, "Info", "Fields cannot be empty!")
+
+
