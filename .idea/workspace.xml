@@ -2,8 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5e9872a8-43ff-4c96-bf3b-34905ebb701f" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/Product Manager.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Product Manager.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/add_member.py" beforeDir="false" afterPath="$PROJECT_DIR$/add_member.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -84,6 +86,7 @@
       <workItem from="1583273346403" duration="2088000" />
       <workItem from="1583277639552" duration="6000" />
       <workItem from="1583277650336" duration="2739000" />
+      <workItem from="1583302912459" duration="27000" />
     </task>
     <servers />
   </component>
@@ -119,9 +122,10 @@
     <state width="1638" height="295" key="GridCell.Tab.0.right/0.0.1680.1050@0.0.1680.1050" timestamp="1583209553138" />
     <state width="2517" height="413" key="GridCell.Tab.0.right/0.0.2560.1440/2560.0.1920.1080@0.0.2560.1440" timestamp="1583088479327" />
     <state width="1638" height="295" key="GridCell.Tab.0.right/1680.0.1920.1080/0.0.1680.1050@0.0.1680.1050" timestamp="1583192840426" />
-    <state x="341" y="164" key="SettingsEditor" timestamp="1583177114093">
-      <screen x="0" y="0" width="1680" height="1050" />
+    <state x="520" y="225" key="SettingsEditor" timestamp="1583302919672">
+      <screen x="0" y="0" width="2560" height="1440" />
     </state>
+    <state x="520" y="225" key="SettingsEditor/0.0.2560.1440/2560.0.1920.1080@0.0.2560.1440" timestamp="1583302919672" />
     <state x="341" y="164" key="SettingsEditor/1680.0.1920.1080/0.0.1680.1050@0.0.1680.1050" timestamp="1583177114093" />
     <state x="517" y="357" key="com.intellij.ide.util.TipDialog" timestamp="1583277639701">
       <screen x="0" y="0" width="1680" height="1050" />
