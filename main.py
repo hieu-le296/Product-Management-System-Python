@@ -76,7 +76,7 @@ class Main(QMainWindow):
         self.prodcutTable.setHorizontalHeaderItem(5, QTableWidgetItem("Availability"))
         self.prodcutTable.horizontalHeader().setSectionResizeMode(1, QHeaderView.Stretch)
         self.prodcutTable.horizontalHeader().setSectionResizeMode(2, QHeaderView.Stretch)
-        self.prodcutTable.doubleClicked.connect(self.selectProduct)
+        self.prodcutTable.doubleClicked.connect(self.selectedProduct)
 
         ############Right Top Layout Widget##############
         self.searchText = QLabel("Search")
@@ -207,7 +207,7 @@ class Main(QMainWindow):
 
         self.memberTable.setEditTriggers(QAbstractItemView.NoEditTriggers)
 
-    def selectProduct(self):
+    def selectedProduct(self):
 
         listProduct = []
         for i in range(0, 6):
@@ -229,24 +229,77 @@ class DisplayProduct(QWidget):
 
     def UI(self):
         self.productDetails()
+        self.widgets()
+        self.layouts()
 
     def productDetails(self):
         global productId
         query = ("SELECT * FROM products WHERE product_id=?")
-        product = cur.execute(query, (productId,)).fetchone() #single item tuple = (1,)
+        product = cur.execute(query, (productId,)).fetchone()  # single item tuple = (1,)
         self.productName = product[1]
-        self.productManufacture = product[2]
+        self.productManufacturer = product[2]
         self.productPrice = product[3]
         self.productQuota = product[4]
         self.productImg = product[5]
         self.productStatus = product[6]
 
+    def widgets(self):
+        #################Top layouts wigdets#########
+        self.product_Img = QLabel()
+        self.img = QPixmap('img/{}'.format(self.productImg))
+        self.product_Img.setPixmap(self.img)
+        self.product_Img.setAlignment(Qt.AlignCenter)
+        self.titleText = QLabel("Update Product")
+        self.titleText.setAlignment(Qt.AlignCenter)
+
+        ##############Bottom Layout's widgets###########
+        self.nameEntry = QLineEdit()
+        self.nameEntry.setText(self.productName)
+        self.manufacturerEntry = QLineEdit()
+        self.manufacturerEntry.setText(self.productManufacturer)
+        self.priceEntry = QLineEdit()
+        self.priceEntry.setText(str(self.productPrice))
+        self.quotaEntry = QLineEdit()
+        self.quotaEntry.setText(str(self.productQuota))
+        self.availabilityCombo = QComboBox()
+        self.availabilityCombo.addItems(["Available", "UnAvailable"])
+        self.uploadBtn = QPushButton("Upload")
+        self.uploadBtn.clicked.connect(self.uploadImg)
+        self.deleteBtn = QPushButton("Delete")
+        self.deleteBtn.clicked.connect(self.deleteProduct)
+        self.updateBtn = QPushButton("Update")
+        self.updateBtn.clicked.connect(self.updateProduct)
+
+
+
     def layouts(self):
         self.mainLayout = QVBoxLayout()
-        self.topLayout - QVBoxLayout()
+        self.topLayout = QVBoxLayout()
         self.bottomLayout = QFormLayout()
         self.topFrame = QFrame()
         self.bottomFrame = QFrame()
+
+        ###########Add Widgets##########
+        self.topLayout.addWidget(self.titleText)
+        self.topLayout.addWidget(self.productImg)
+        self.bottomLayout.addRow(QLabel("Name: "), self.nameEntry)
+        self.bottomLayout.addRow(QLabel("Manufacture: "), self.manufacturerEntry)
+        self.bottomLayout.addRow(QLabel("Price: "), self.priceEntry)
+        self.bottomLayout.addRow(QLabel("Quota: "), self.quotaEntry)
+        self.bottomLayout.addRow(QLabel("Status: "), self.availabilityCombo)
+        self.bottomLayout.addRow(QLabel("Image: "), self.uploadBtn)
+        self.bottomLayout.addRow(QLabel(""), self.deleteBtn)
+        self.bottomLayout.addRow(QLabel(""), self.updateBtn)
+
+        ###########Set Layouts##########
+        self.topFrame.setLayout(self.topLayout)
+        self.bottomFrame.setLayout(self.bottomLayout)
+        self.mainLayout.addWidget(self.topFrame)
+        self.mainLayout.addWidget(self.bottomFrame)
+
+        self.setLayout(self.mainLayout)
+
+
 
 def main():
     App = QApplication(sys.argv)
