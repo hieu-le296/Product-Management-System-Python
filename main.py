@@ -26,6 +26,7 @@ class Main(QMainWindow):
         self.widgets()
         self.layouts()
         self.displayProducts()
+        self.displayMember()
 
     def toolBar(self):
         self.tb = self.addToolBar("Tool Bar")
@@ -82,13 +83,13 @@ class Main(QMainWindow):
         self.listButton = QPushButton("List")
 
         ############Tab 2 Widgets##############
-        self.memberTableWidget = QTableWidget()
-        self.memberTableWidget.setColumnCount(5)
-        self.memberTableWidget.setHorizontalHeaderItem(0, QTableWidgetItem("Member ID"))
-        self.memberTableWidget.setHorizontalHeaderItem(1, QTableWidgetItem("First Name"))
-        self.memberTableWidget.setHorizontalHeaderItem(2, QTableWidgetItem("Last Name"))
-        self.memberTableWidget.setHorizontalHeaderItem(3, QTableWidgetItem("Phone Number"))
-        self.memberTableWidget.setHorizontalHeaderItem(4, QTableWidgetItem("Address"))
+        self.memberTable = QTableWidget()
+        self.memberTable.setColumnCount(5)
+        self.memberTable.setHorizontalHeaderItem(0, QTableWidgetItem("Member ID"))
+        self.memberTable.setHorizontalHeaderItem(1, QTableWidgetItem("First Name"))
+        self.memberTable.setHorizontalHeaderItem(2, QTableWidgetItem("Last Name"))
+        self.memberTable.setHorizontalHeaderItem(3, QTableWidgetItem("Phone Number"))
+        self.memberTable.setHorizontalHeaderItem(4, QTableWidgetItem("Address"))
         self.memberSearchText = QLabel("Search Member")
         self.memberSearchEntry = QLineEdit()
         self.memberSearchButton = QPushButton("Search")
@@ -144,7 +145,7 @@ class Main(QMainWindow):
 
         ############Add Widgets##############
         ############Left Main Layout Widgets##############
-        self.memberLeftLayout.addWidget(self.memberTableWidget)
+        self.memberLeftLayout.addWidget(self.memberTable)
 
         ############Right Top Layout Widgets##############
         self.memberRightGroupBox = QGroupBox("Search For Member")
@@ -183,6 +184,20 @@ class Main(QMainWindow):
                 self.prodcutTable.setItem(row_number, column_number, QTableWidgetItem(str(data)))
 
         self.prodcutTable.setEditTriggers(QAbstractItemView.NoEditTriggers)
+
+    def displayMember(self):
+        self.memberTable.setFont(QFont("Times", 12))
+        for i in reversed(range(self.memberTable.rowCount())):
+            self.memberTable.removeRow(i)
+
+        members = cur.execute("SELECT * FROM members")
+        for row_data in members:
+            row_number = self.memberTable.rowCount()
+            self.memberTable.insertRow(row_number)
+            for column_number, data in enumerate(row_data):
+                self.memberTable.setItem(row_number, column_number, QTableWidgetItem(str(data)))
+
+        self.memberTable.setEditTriggers(QAbstractItemView.NoEditTriggers)
 
 
 def main():
