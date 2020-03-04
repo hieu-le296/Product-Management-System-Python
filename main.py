@@ -5,6 +5,7 @@ from PyQt5.QtCore import Qt
 import sqlite3
 import add_product
 import add_member
+import display_product
 
 sqlConnect = sqlite3.connect("products.db")
 cur = sqlConnect.cursor()
@@ -71,6 +72,10 @@ class Main(QMainWindow):
         self.prodcutTable.setHorizontalHeaderItem(3, QTableWidgetItem("Price"))
         self.prodcutTable.setHorizontalHeaderItem(4, QTableWidgetItem("Quota"))
         self.prodcutTable.setHorizontalHeaderItem(5, QTableWidgetItem("Availability"))
+        self.prodcutTable.horizontalHeader().setSectionResizeMode(1, QHeaderView.Stretch)
+        self.prodcutTable.horizontalHeader().setSectionResizeMode(2, QHeaderView.Stretch)
+        self.prodcutTable.doubleClicked.connect(self.selectProduct)
+
         ############Right Top Layout Widget##############
         self.searchText = QLabel("Search")
         self.searchEntry = QLineEdit()
@@ -90,6 +95,7 @@ class Main(QMainWindow):
         self.memberTable.setHorizontalHeaderItem(2, QTableWidgetItem("Last Name"))
         self.memberTable.setHorizontalHeaderItem(3, QTableWidgetItem("Phone Number"))
         self.memberTable.setHorizontalHeaderItem(4, QTableWidgetItem("Address"))
+        self.memberTable.horizontalHeader().setSectionResizeMode(4, QHeaderView.Stretch)
         self.memberSearchText = QLabel("Search Member")
         self.memberSearchEntry = QLineEdit()
         self.memberSearchButton = QPushButton("Search")
@@ -198,6 +204,17 @@ class Main(QMainWindow):
                 self.memberTable.setItem(row_number, column_number, QTableWidgetItem(str(data)))
 
         self.memberTable.setEditTriggers(QAbstractItemView.NoEditTriggers)
+
+    def selectProduct(self):
+        global productId
+        listProduct = []
+        for i in range(0, 6):
+            listProduct.append(self.prodcutTable.item(self.prodcutTable.currentRow(), i).text())
+
+        productId = listProduct[0]
+        self.display = display_product.DisplayProduct()
+        self.display.show()
+
 
 
 def main():
