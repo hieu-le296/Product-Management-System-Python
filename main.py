@@ -243,10 +243,11 @@ class DisplayProduct(QWidget):
         self.productImg = product[5]
         self.productStatus = product[6]
 
+
     def widgets(self):
         #################Top layouts wigdets#########
         self.product_Img = QLabel()
-        self.img = QPixmap('img/{}'.format(self.productImg))
+        self.img = QPixmap('{}'.format(self.productImg))
         self.product_Img.setPixmap(self.img)
         self.product_Img.setAlignment(Qt.AlignCenter)
         self.titleText = QLabel("Update Product")
@@ -264,11 +265,8 @@ class DisplayProduct(QWidget):
         self.availabilityCombo = QComboBox()
         self.availabilityCombo.addItems(["Available", "UnAvailable"])
         self.uploadBtn = QPushButton("Upload")
-        self.uploadBtn.clicked.connect(self.uploadImg)
         self.deleteBtn = QPushButton("Delete")
-        self.deleteBtn.clicked.connect(self.deleteProduct)
         self.updateBtn = QPushButton("Update")
-        self.updateBtn.clicked.connect(self.updateProduct)
 
 
 
@@ -281,7 +279,7 @@ class DisplayProduct(QWidget):
 
         ###########Add Widgets##########
         self.topLayout.addWidget(self.titleText)
-        self.topLayout.addWidget(self.productImg)
+        self.topLayout.addWidget(self.product_Img)
         self.bottomLayout.addRow(QLabel("Name: "), self.nameEntry)
         self.bottomLayout.addRow(QLabel("Manufacture: "), self.manufacturerEntry)
         self.bottomLayout.addRow(QLabel("Price: "), self.priceEntry)
