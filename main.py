@@ -25,6 +25,7 @@ class Main(QMainWindow):
         self.tabWidget()
         self.widgets()
         self.layouts()
+        self.displayProducts()
 
     def toolBar(self):
         self.tb = self.addToolBar("Tool Bar")
@@ -169,7 +170,19 @@ class Main(QMainWindow):
         self.newMember = add_member.AddMember()
 
 
+    def displayProducts(self):
+        self.prodcutTable.setFont(QFont("Times", 12))
+        for i in reversed(range(self.prodcutTable.rowCount())):
+            self.prodcutTable.removeRow(i)
 
+        query = cur.execute("SELECT product_id, product_name, product_manufacturer, product_price, product_quota, product_availability FROM products")
+        for row_data in query:
+            row_number = self.prodcutTable.rowCount()
+            self.prodcutTable.insertRow(row_number)
+            for column_number, data in enumerate(row_data):
+                self.prodcutTable.setItem(row_number, column_number, QTableWidgetItem(str(data)))
+
+        self.prodcutTable.setEditTriggers(QAbstractItemView.NoEditTriggers)
 
 
 def main():
