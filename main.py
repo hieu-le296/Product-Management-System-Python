@@ -5,10 +5,12 @@ from PyQt5.QtCore import Qt
 import sqlite3
 import add_product
 import add_member
-import display_product
+
 
 sqlConnect = sqlite3.connect("products.db")
 cur = sqlConnect.cursor()
+
+global productId
 
 class Main(QMainWindow):
     def __init__(self):
@@ -206,16 +208,45 @@ class Main(QMainWindow):
         self.memberTable.setEditTriggers(QAbstractItemView.NoEditTriggers)
 
     def selectProduct(self):
-        global productId
+
         listProduct = []
         for i in range(0, 6):
             listProduct.append(self.prodcutTable.item(self.prodcutTable.currentRow(), i).text())
-
+        global productId
         productId = listProduct[0]
-        self.display = display_product.DisplayProduct()
+        self.display = DisplayProduct()
         self.display.show()
 
+class DisplayProduct(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle("Product Detail")
+        self.setWindowIcon(QIcon("icons/icon.ico"))
+        self.setGeometry(450, 150, 350, 600)
+        self.setFixedSize(self.size())
+        self.UI()
+        self.show()
 
+    def UI(self):
+        self.productDetails()
+
+    def productDetails(self):
+        global productId
+        query = ("SELECT * FROM products WHERE product_id=?")
+        product = cur.execute(query, (productId,)).fetchone() #single item tuple = (1,)
+        self.productName = product[1]
+        self.productManufacture = product[2]
+        self.productPrice = product[3]
+        self.productQuota = product[4]
+        self.productImg = product[5]
+        self.productStatus = product[6]
+
+    def layouts(self):
+        self.mainLayout = QVBoxLayout()
+        self.topLayout - QVBoxLayout()
+        self.bottomLayout = QFormLayout()
+        self.topFrame = QFrame()
+        self.bottomFrame = QFrame()
 
 def main():
     App = QApplication(sys.argv)

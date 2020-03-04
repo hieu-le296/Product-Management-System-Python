@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="5e9872a8-43ff-4c96-bf3b-34905ebb701f" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/display_product.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -109,7 +110,7 @@
       <workItem from="1583277650336" duration="2739000" />
       <workItem from="1583302912459" duration="3820000" />
       <workItem from="1583306765693" duration="1703000" />
-      <workItem from="1583335375593" duration="2142000" />
+      <workItem from="1583335375593" duration="3612000" />
     </task>
     <servers />
   </component>
@@ -117,33 +118,37 @@
     <option name="version" value="1" />
   </component>
   <component name="WindowStateProjectService">
-    <state width="2517" height="413" key="GridCell.Tab.0.bottom" timestamp="1583337520468">
+    <state x="1002" y="467" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1583338753413">
+      <screen x="0" y="0" width="2560" height="1440" />
+    </state>
+    <state x="1002" y="467" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.2560.1440/2560.0.1920.1080@0.0.2560.1440" timestamp="1583338753413" />
+    <state width="2500" height="413" key="GridCell.Tab.0.bottom" timestamp="1583338880088">
       <screen x="0" y="0" width="2560" height="1440" />
     </state>
     <state width="1638" height="271" key="GridCell.Tab.0.bottom/-1680.0.1680.1050/0.0.1680.1050@0.0.1680.1050" timestamp="1583280422970" />
     <state width="1638" height="295" key="GridCell.Tab.0.bottom/0.0.1680.1050@0.0.1680.1050" timestamp="1583209553139" />
-    <state width="2517" height="413" key="GridCell.Tab.0.bottom/0.0.2560.1440/2560.0.1920.1080@0.0.2560.1440" timestamp="1583337520468" />
+    <state width="2500" height="413" key="GridCell.Tab.0.bottom/0.0.2560.1440/2560.0.1920.1080@0.0.2560.1440" timestamp="1583338880088" />
     <state width="1638" height="295" key="GridCell.Tab.0.bottom/1680.0.1920.1080/0.0.1680.1050@0.0.1680.1050" timestamp="1583192840427" />
-    <state width="2517" height="413" key="GridCell.Tab.0.center" timestamp="1583337520468">
+    <state width="2500" height="413" key="GridCell.Tab.0.center" timestamp="1583338880088">
       <screen x="0" y="0" width="2560" height="1440" />
     </state>
     <state width="1638" height="271" key="GridCell.Tab.0.center/-1680.0.1680.1050/0.0.1680.1050@0.0.1680.1050" timestamp="1583280422968" />
     <state width="1638" height="295" key="GridCell.Tab.0.center/0.0.1680.1050@0.0.1680.1050" timestamp="1583209553138" />
-    <state width="2517" height="413" key="GridCell.Tab.0.center/0.0.2560.1440/2560.0.1920.1080@0.0.2560.1440" timestamp="1583337520468" />
+    <state width="2500" height="413" key="GridCell.Tab.0.center/0.0.2560.1440/2560.0.1920.1080@0.0.2560.1440" timestamp="1583338880088" />
     <state width="1638" height="295" key="GridCell.Tab.0.center/1680.0.1920.1080/0.0.1680.1050@0.0.1680.1050" timestamp="1583192840425" />
-    <state width="2517" height="413" key="GridCell.Tab.0.left" timestamp="1583337520467">
+    <state width="2500" height="413" key="GridCell.Tab.0.left" timestamp="1583338880088">
       <screen x="0" y="0" width="2560" height="1440" />
     </state>
     <state width="1638" height="271" key="GridCell.Tab.0.left/-1680.0.1680.1050/0.0.1680.1050@0.0.1680.1050" timestamp="1583280422967" />
     <state width="1638" height="295" key="GridCell.Tab.0.left/0.0.1680.1050@0.0.1680.1050" timestamp="1583209553138" />
-    <state width="2517" height="413" key="GridCell.Tab.0.left/0.0.2560.1440/2560.0.1920.1080@0.0.2560.1440" timestamp="1583337520467" />
+    <state width="2500" height="413" key="GridCell.Tab.0.left/0.0.2560.1440/2560.0.1920.1080@0.0.2560.1440" timestamp="1583338880088" />
     <state width="1638" height="295" key="GridCell.Tab.0.left/1680.0.1920.1080/0.0.1680.1050@0.0.1680.1050" timestamp="1583192840424" />
-    <state width="2517" height="413" key="GridCell.Tab.0.right" timestamp="1583337520468">
+    <state width="2500" height="413" key="GridCell.Tab.0.right" timestamp="1583338880088">
       <screen x="0" y="0" width="2560" height="1440" />
     </state>
     <state width="1638" height="271" key="GridCell.Tab.0.right/-1680.0.1680.1050/0.0.1680.1050@0.0.1680.1050" timestamp="1583280422969" />
     <state width="1638" height="295" key="GridCell.Tab.0.right/0.0.1680.1050@0.0.1680.1050" timestamp="1583209553138" />
-    <state width="2517" height="413" key="GridCell.Tab.0.right/0.0.2560.1440/2560.0.1920.1080@0.0.2560.1440" timestamp="1583337520468" />
+    <state width="2500" height="413" key="GridCell.Tab.0.right/0.0.2560.1440/2560.0.1920.1080@0.0.2560.1440" timestamp="1583338880088" />
     <state width="1638" height="295" key="GridCell.Tab.0.right/1680.0.1920.1080/0.0.1680.1050@0.0.1680.1050" timestamp="1583192840426" />
     <state width="2517" height="507" key="GridCell.Tab.1.bottom" timestamp="1583308469483">
       <screen x="0" y="0" width="2560" height="1440" />
@@ -183,10 +188,14 @@
       <screen x="2560" y="0" width="1920" height="1080" />
     </state>
     <state x="2560" y="0" width="1884" height="985" maximized="true" key="dock-window-3/0.0.2560.1440/2560.0.1920.1080@0.0.2560.1440" timestamp="1583306785164" />
+    <state x="943" y="325" width="672" height="678" key="search.everywhere.popup" timestamp="1583338490681">
+      <screen x="0" y="0" width="2560" height="1440" />
+    </state>
+    <state x="943" y="325" width="672" height="678" key="search.everywhere.popup/0.0.2560.1440/2560.0.1920.1080@0.0.2560.1440" timestamp="1583338490681" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/Product_Manager_Python$main.coverage" NAME="main Coverage Results" MODIFIED="1583280422959" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/Product_Manager$main.coverage" NAME="main Coverage Results" MODIFIED="1583337520460" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Product_Manager$main.coverage" NAME="main Coverage Results" MODIFIED="1583338880081" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Product_Manager$add_member.coverage" NAME="add_member Coverage Results" MODIFIED="1583306815626" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
