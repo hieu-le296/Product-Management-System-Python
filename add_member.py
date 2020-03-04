@@ -11,6 +11,7 @@ cur = sqlConnect.cursor()
 
 defaultImg = 'img/store.png'
 
+
 class AddMember(QWidget):
     def __init__(self):
         super().__init__()
@@ -44,8 +45,7 @@ class AddMember(QWidget):
         self.addressEntry = QLineEdit()
         self.addressEntry.setPlaceholderText("Enter member full address")
         self.submitBtn = QPushButton("Submit")
-
-
+        self.submitBtn.clicked.connect(self.addMember)
 
     def layouts(self):
         self.mainLayout = QVBoxLayout()
@@ -55,8 +55,8 @@ class AddMember(QWidget):
         self.bottomFrame = QFrame()
 
         ##############Add Widgets################
-        self.topLayout.addWidget(self.titleText)
         self.topLayout.addWidget(self.addMemberImg)
+        self.topLayout.addWidget(self.titleText)
         self.topFrame.setLayout(self.topLayout)
 
         self.bottomLayout.addRow(QLabel("First Name: "), self.fnameEntry)
@@ -71,3 +71,33 @@ class AddMember(QWidget):
 
         self.setLayout(self.mainLayout)
 
+    def addMember(self):
+        fname = self.fnameEntry.text()
+        lname = self.lnameEntry.text()
+        phone = self.phoneEntry.text()
+        address = self.addressEntry.text()
+        emptyString = ""
+
+        if fname != "" and lname == "" and phone == "" and address == "":
+            try:
+                query = "INSERT INTO 'members' (member_fname, member_lname, member_phone, member_address) VALUES (?,?,?,?)"
+                cur.execute(query, (fname, emptyString, emptyString, emptyString))
+                sqlConnect.commit()
+                QMessageBox.information(self, "Info", "New member has been added")
+                sqlConnect.close()
+                self.close()
+            except:
+                QMessageBox.information(self, "Info", "New member has not been added")
+        elif fname and lname and phone and address != "":
+            try:
+                query = "INSERT INTO 'members' (member_fname, member_lname, member_phone, member_address) VALUES (?,?,?,?)"
+                cur.execute(query, (fname, lname, phone, address))
+                sqlConnect.commit()
+                QMessageBox.information(self, "Info", "New member has been added")
+                sqlConnect.close()
+                self.close()
+            except:
+                QMessageBox.information(self, "Info", "New member has not been added")
+
+        else:
+            QMessageBox.information(self, "Info", "Fields cannot be empty!")

@@ -30,7 +30,9 @@ class AddProduct(QWidget):
         self.addProductImg = QLabel()
         self.img = QPixmap('icons/addproduct.png')
         self.addProductImg.setPixmap(self.img)
+        self.addProductImg.setAlignment(Qt.AlignCenter)
         self.titleText = QLabel("Add Product")
+        self.titleText.setAlignment(Qt.AlignCenter)
         ##############Widgets of top layout##############
         self.nameEntry = QLineEdit()
         self.nameEntry.setPlaceholderText("Enter product name")
@@ -48,7 +50,7 @@ class AddProduct(QWidget):
     def layouts(self):
         ##############Main Layout##############
         self.mainLayout = QVBoxLayout()
-        self.topLayout = QHBoxLayout()
+        self.topLayout = QVBoxLayout()
         self.bottomLayout = QFormLayout()
         self.topFrame = QFrame()
         self.bottomFrame = QFrame()
@@ -91,12 +93,12 @@ class AddProduct(QWidget):
         price = self.priceEntry.text()
         quota = self.quotaEntry.text()
 
-        if (name and manufacturer and price and quota != ""):
+        if name and manufacturer and price and quota != "":
             try:
                 query = "INSERT INTO 'products' (product_name, product_manufacturer, product_price, product_quota,product_img) VALUES (?,?,?,?,?)"
                 cur.execute(query, (name, manufacturer, price, quota, defaultImg))
                 sqlConnect.commit()
-                QMessageBox.information(self, "Info", "Product has been added")
+                QMessageBox.information(self, "Info", "New product has been added")
                 sqlConnect.close()
                 self.close()
 
