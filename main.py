@@ -368,13 +368,56 @@ class DisplayMember(QWidget):
 
     def UI(self):
         self.memberDetails()
+        self.widgets()
+        self.layouts()
 
-    def layout(self):
+    def widgets(self):
+        #################Top layouts wigdets#########
+        self.memberImg = QLabel()
+        self.img = QPixmap('icons/members.png')
+        self.memberImg.setPixmap(self.img)
+        self.memberImg.setAlignment(Qt.AlignCenter)
+        self.titleText = QLabel("Display Membership")
+        self.titleText.setAlignment(Qt.AlignCenter)
+
+        #################Bottom layouts wigdets#########
+        self.fnameEntry = QLineEdit()
+        self.fnameEntry.setText(self.memberFname)
+        self.lnameEntry = QLineEdit()
+        self.lnameEntry.setText(self.memberLname)
+        self.phoneEntry = QLineEdit()
+        self.phoneEntry.setText(self.memberPhone)
+        self.addressEntry = QLineEdit()
+        self.addressEntry.setText(self.memberAddress)
+        self.updateBtn = QPushButton("Update")
+        self.deleteBtn = QPushButton("Delete")
+
+
+
+    def layouts(self):
         self.mainLayout = QVBoxLayout()
         self.topLayout = QVBoxLayout()
         self.bottomLayout = QFormLayout()
         self.topFrame = QFrame()
         self.bottomFrame = QFrame()
+
+        #################Add wigdets#########
+        self.topLayout.addWidget(self.titleText)
+        self.topLayout.addWidget(self.memberImg)
+        self.topFrame.setLayout(self.topLayout)
+
+        self.bottomLayout.addRow(QLabel("First Name: "), self.fnameEntry)
+        self.bottomLayout.addRow(QLabel("Last Name: "), self.lnameEntry)
+        self.bottomLayout.addRow(QLabel("Phone: "), self.phoneEntry)
+        self.bottomLayout.addRow(QLabel("Full Address: "), self.addressEntry)
+        self.bottomFrame.setLayout(self.bottomLayout)
+
+        self.mainLayout.addWidget(self.topFrame)
+        self.mainLayout.addWidget(self.bottomFrame)
+        self.setLayout(self.mainLayout)
+
+
+
 
     def memberDetails(self):
         global  memberId
