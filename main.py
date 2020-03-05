@@ -85,6 +85,7 @@ class Main(QMainWindow):
         self.searchEntry = QLineEdit()
         self.searchEntry.setPlaceholderText("Search for products")
         self.searchButton = QPushButton("Search")
+        self.searchButton.clicked.connect(self.searchProduct)
         ############Right Middle Layout Widget##############
         self.allProduct = QRadioButton("All Products")
         self.availableProduct = QRadioButton("Available")
@@ -230,6 +231,29 @@ class Main(QMainWindow):
         self.displayMember = DisplayMember()
         self.displayMember.show()
 
+    def searchProduct(self):
+        value = self.searchEntry.text()
+        if value == "":
+            QMessageBox.information(self, "Warning", "Search query cannot be empty")
+        else:
+            self.searchEntry.setText("")
+            query = "SELECT product_id, product_name, product_manufacturer, product_price, product_quota, product_availability FROM products WHERE product_name LIKE ? or product_manufacturer LIKE ? "
+            results = cur.execute(query, ('%' + value + '%', '%' + value + '%')).fetchall()
+            print(results)
+
+            if results == []:
+                QMessageBox.information(self, "Warning", "There is no such a product or manufacturer")
+            else:
+                for i in reversed(range(self.prodcutTable.rowCount())):
+                    self.prodcutTable.removeRow(i)
+
+                for row_data in results:
+                    row_number = self.prodcutTable.rowCount()
+                    self.prodcutTable.insertRow(row_number)
+                    for column_number, data in enumerate(row_data):
+                        self.prodcutTable.setItem(row_number, column_number, QTableWidgetItem(str(data)))
+
+
 class DisplayProduct(QWidget):
     def __init__(self):
         super().__init__()
@@ -332,7 +356,7 @@ class DisplayProduct(QWidget):
 
         if (name and manufacturer and price and quota != " "):
             try:
-                query = "UPDATE products set product_name = ?, product_manufacturer =?, product_price =?, product_quota =?, product_img =?, product_availability =? WHERE product_id =?"
+                query = "UPDATE products set product_name = ?, product_manufacturer =?, product_price = ?, product_quota = ?, product_img = ?, product_availability =? WHERE product_id = ?"
                 cur.execute(query, (name, manufacturer, price, quota, defaultImg, status, productId))
                 sqlConnect.commit()
                 QMessageBox.information(self, "Info", "Product has been updated")
