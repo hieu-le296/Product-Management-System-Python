@@ -367,7 +367,23 @@ class DisplayMember(QWidget):
         self.show()
 
     def UI(self):
-        pass
+        self.memberDetails()
+
+    def layout(self):
+        self.mainLayout = QVBoxLayout()
+        self.topLayout = QVBoxLayout()
+        self.bottomLayout = QFormLayout()
+        self.topFrame = QFrame()
+        self.bottomFrame = QFrame()
+
+    def memberDetails(self):
+        global  memberId
+        query = ("SELECT * FROM members WHERE member_id =?")
+        member = cur.execute(query, (memberId,)).fetchone()
+        self.memberFname = member[1]
+        self.memberLname = member[2]
+        self.memberPhone = member[3]
+        self.memberAddress = member[4]
 
 
 
