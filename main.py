@@ -410,6 +410,8 @@ class DisplayMember(QWidget):
         self.bottomLayout.addRow(QLabel("Last Name: "), self.lnameEntry)
         self.bottomLayout.addRow(QLabel("Phone: "), self.phoneEntry)
         self.bottomLayout.addRow(QLabel("Full Address: "), self.addressEntry)
+        self.bottomLayout.addRow(QLabel(""), self.deleteBtn)
+        self.bottomLayout.addRow(QLabel(""), self.updateBtn)
         self.bottomFrame.setLayout(self.bottomLayout)
 
         self.mainLayout.addWidget(self.topFrame)
