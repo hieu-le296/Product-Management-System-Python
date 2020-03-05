@@ -270,6 +270,7 @@ class DisplayProduct(QWidget):
         self.uploadBtn.clicked.connect(self.uploadImg)
         self.deleteBtn = QPushButton("Delete")
         self.updateBtn = QPushButton("Update")
+        self.updateBtn.clicked.connect(self.updateProduct)
 
 
     def layouts(self):
@@ -308,6 +309,27 @@ class DisplayProduct(QWidget):
             img = img.resize(size)
             img.save("img{0}".format(self.productImg))
 
+    def updateProduct(self):
+        global productId
+        name = self.nameEntry.text()
+        manufacturer = self.manufacturerEntry.text()
+        price = int(self.priceEntry.text())
+        quota = int(self.quotaEntry.text())
+        status = self.availabilityCombo.currentText()
+        defaultImg = self.productImg
+
+        if (name and manufacturer and price and quota != " "):
+            try:
+                query = "UPDATE products set product_name = ?, product_manufacturer =?, product_price =?, product_quota =?, product_img =?, product_availability =? WHERE product_id =?"
+                cur.execute(query, (name, manufacturer, price, quota, defaultImg, status, productId))
+                sqlConnect.commit()
+                QMessageBox.information(self, "Info", "Product has been updated")
+
+            except:
+                QMessageBox.information(self, "Info", "Product has not been updated")
+
+        else:
+            QMessageBox.information(self, "Info", "Fields cannot be empty")
 
 
 def main():
