@@ -43,7 +43,7 @@ class Main(QMainWindow):
         self.tb.addAction(self.addProduct)
         self.tb.addSeparator()
         ############Add Member##############
-        self.addMember = QAction(QIcon('icons/users.png'), "Add Memeber", self)
+        self.addMember = QAction(QIcon('icons/users.png'), "Add Membership", self)
         self.tb.addAction(self.addMember)
         self.addMember.triggered.connect(self.funcAddMember)
         self.tb.addSeparator()
@@ -59,7 +59,7 @@ class Main(QMainWindow):
         self.tab2 = QWidget()
         self.tab3 = QWidget()
         self.tabs.addTab(self.tab1, "Products")
-        self.tabs.addTab(self.tab2, "Members")
+        self.tabs.addTab(self.tab2, "Membership")
         self.tabs.addTab(self.tab3, "Statistics")
 
 
@@ -100,6 +100,7 @@ class Main(QMainWindow):
         self.memberTable.setHorizontalHeaderItem(3, QTableWidgetItem("Phone Number"))
         self.memberTable.setHorizontalHeaderItem(4, QTableWidgetItem("Address"))
         self.memberTable.horizontalHeader().setSectionResizeMode(4, QHeaderView.Stretch)
+        self.memberTable.doubleClicked.connect(self.selectedMember)
         self.memberSearchText = QLabel("Search Member")
         self.memberSearchEntry = QLineEdit()
         self.memberSearchButton = QPushButton("Search")
@@ -218,6 +219,16 @@ class Main(QMainWindow):
         productId = listProduct[0]
         self.display = DisplayProduct()
         self.display.show()
+
+    def selectedMember(self):
+        global memberId
+        listMember = []
+        for i in range(0, 5):
+            listMember.append(self.memberTable.item(self.memberTable.currentRow(), i).text())
+
+        memberId = listMember[0]
+        self.displayMember = DisplayMember()
+        self.displayMember.show()
 
 class DisplayProduct(QWidget):
     def __init__(self):
@@ -344,6 +355,20 @@ class DisplayProduct(QWidget):
                 self.close()
             except:
                 QMessageBox.information(self, "Information", "Product has not been deleted")
+
+class DisplayMember(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle("Membership Detail")
+        self.setWindowIcon(QIcon("icons/icon.ico"))
+        self.setGeometry(450, 150, 350, 600)
+        self.setFixedSize(self.size())
+        self.UI()
+        self.show()
+
+    def UI(self):
+        pass
+
 
 
 def main():
