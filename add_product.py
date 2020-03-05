@@ -99,7 +99,6 @@ class AddProduct(QWidget):
                 cur.execute(query, (name, manufacturer, price, quota, defaultImg))
                 sqlConnect.commit()
                 QMessageBox.information(self, "Info", "New product has been added")
-                sqlConnect.close()
                 self.close()
 
 

@@ -341,7 +341,6 @@ class DisplayProduct(QWidget):
                 cur.execute("DELETE FROM products WHERE product_id=?", (productId,))
                 sqlConnect.commit()
                 QMessageBox.information(self, "Information", "Product has been deleted")
-                sqlConnect.close()
                 self.close()
             except:
                 QMessageBox.information(self, "Information", "Product has not been deleted")

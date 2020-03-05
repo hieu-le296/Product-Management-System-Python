@@ -84,7 +84,6 @@ class AddMember(QWidget):
                 cur.execute(query, (fname, emptyString, emptyString, emptyString))
                 sqlConnect.commit()
                 QMessageBox.information(self, "Info", "New member has been added")
-                sqlConnect.close()
                 self.close()
             except:
                 QMessageBox.information(self, "Info", "New member has not been added")
@@ -94,7 +93,6 @@ class AddMember(QWidget):
                 cur.execute(query, (fname, lname, phone, address))
                 sqlConnect.commit()
                 QMessageBox.information(self, "Info", "New member has been added")
-                sqlConnect.close()
                 self.close()
             except:
                 QMessageBox.information(self, "Info", "New member has not been added")
