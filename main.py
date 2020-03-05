@@ -1,7 +1,9 @@
 import sys
+import os
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import Qt
+from PIL import Image
 import sqlite3
 import add_product
 import add_member
@@ -265,9 +267,9 @@ class DisplayProduct(QWidget):
         self.availabilityCombo = QComboBox()
         self.availabilityCombo.addItems(["Available", "UnAvailable"])
         self.uploadBtn = QPushButton("Upload")
+        self.uploadBtn.clicked.connect(self.uploadImg)
         self.deleteBtn = QPushButton("Delete")
         self.updateBtn = QPushButton("Update")
-
 
 
     def layouts(self):
@@ -296,6 +298,15 @@ class DisplayProduct(QWidget):
         self.mainLayout.addWidget(self.bottomFrame)
 
         self.setLayout(self.mainLayout)
+
+    def uploadImg(self):
+        size = (256, 256)
+        self.filename, ok = QFileDialog.getOpenFileName(self, 'Upload Image', '', 'Image files (*.jpg *.png)')
+        if ok:
+            self.productImg = os.path.basename(self.filename)
+            img = Image.open(self.filename)
+            img = img.resize(size)
+            img.save("img{0}".format(self.productImg))
 
 
 
