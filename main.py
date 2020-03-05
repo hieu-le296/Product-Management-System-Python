@@ -390,7 +390,9 @@ class DisplayMember(QWidget):
         self.addressEntry = QLineEdit()
         self.addressEntry.setText(self.memberAddress)
         self.updateBtn = QPushButton("Update")
+        self.updateBtn.clicked.connect(self.updateMember)
         self.deleteBtn = QPushButton("Delete")
+        self.deleteBtn.clicked.connect(self.deleteMember)
 
 
 
@@ -429,6 +431,51 @@ class DisplayMember(QWidget):
         self.memberLname = member[2]
         self.memberPhone = member[3]
         self.memberAddress = member[4]
+
+    def deleteMember(self):
+        global memberId
+        mbox = QMessageBox.question(self, "Warning", "Are you sure to delete this member?", QMessageBox.Yes|QMessageBox.No, QMessageBox.No)
+
+        if mbox == QMessageBox.Yes:
+            try:
+                query = "DELETE FROM members WHERE member_id=?"
+                cur.execute(query, (memberId,))
+                sqlConnect.commit()
+                QMessageBox.information(self, "Info", "Member has been deleted")
+                self.close()
+            except:
+                QMessageBox.information(self, "Info", "Member has not been deleted")
+
+
+    def updateMember(self):
+        global memberId
+        fname = self.fnameEntry.text()
+        lname = self.lnameEntry.text()
+        phone = self.phoneEntry.text()
+        address = self.addressEntry.text()
+        emptyString = ""
+
+        if fname != "" and lname == "" and phone == "" and address == "":
+            try:
+                query = "UPDATE members set member_fname = ?, member_lname = ?, member_phone = ?, member_address = ? WHERE member_id = ?"
+                cur.execute(query, (fname, emptyString, emptyString, emptyString, memberId))
+                sqlConnect.commit()
+                QMessageBox.information(self, "Info", "Membership has been updated")
+            except:
+                QMessageBox.information(self, "Info", "Membership has not been updated")
+
+
+        elif fname and lname and phone and address != "":
+            try:
+                query = "UPDATE members set member_fname = ?, member_lname = ?, member_phone = ?, member_address = ? WHERE member_id = ?"
+                cur.execute(query, (fname, lname, phone, address, memberId))
+                sqlConnect.commit()
+                QMessageBox.information(self, "Info", "Membership has been updated")
+            except:
+                QMessageBox.information(self, "Info", "Membership has not been updated")
+        else:
+            QMessageBox.information(self, "Info", "Fields cannot be empty!")
+
 
 
 
