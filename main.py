@@ -110,6 +110,12 @@ class Main(QMainWindow):
         self.memberSearchButton = QPushButton("Search")
         self.memberSearchButton.clicked.connect(self.searchMember)
 
+        ############Tab 3 Widgets##############
+        self.totalProductLabel = QLabel()
+        self.totalMemberLabel = QLabel()
+        self.soldProductLabel = QLabel()
+        self.totalAmountLabel = QLabel()
+
 
 
 
@@ -177,6 +183,20 @@ class Main(QMainWindow):
         self.memberMainLayout.addLayout(self.memberLeftLayout, 70)
         self.memberMainLayout.addLayout(self.memberRightLayout, 30)
         self.tab2.setLayout(self.memberMainLayout)
+
+        ############Tab3 Layout##############
+        self.statMainLayout = QVBoxLayout()
+        self.statLayout = QFormLayout()
+        self.statGroupBox = QGroupBox("Statistics")
+        self.statLayout.addRow("Total Products: ", self.totalProductLabel)
+        self.statLayout.addRow("Total Members: ", self.totalMemberLabel)
+        self.statLayout.addRow("Sold Products: ", self.soldProductLabel)
+        self.statLayout.addRow("Total Amount: ", self.totalAmountLabel)
+
+        self.statGroupBox.setLayout(self.statLayout)
+        self.statGroupBox.setFont(QFont("Times", 20))
+        self.statMainLayout.addWidget(self.statGroupBox)
+        self.tab3.setLayout(self.statMainLayout)
 
 
     def funcAddProduct(self):
