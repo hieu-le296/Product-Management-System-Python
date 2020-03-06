@@ -7,6 +7,7 @@ from PIL import Image
 import sqlite3
 import add_product
 import add_member
+import selling
 
 
 sqlConnect = sqlite3.connect("products.db")
@@ -49,6 +50,7 @@ class Main(QMainWindow):
         self.tb.addSeparator()
         ############Selling##############
         self.sellProduct = QAction(QIcon('icons/sell.png'), "Sell Product", self)
+        self.sellProduct.triggered.connect(self.funcSellProduct)
         self.tb.addAction(self.sellProduct)
         self.tb.addSeparator()
 
@@ -183,6 +185,9 @@ class Main(QMainWindow):
 
     def funcAddMember(self):
         self.newMember = add_member.AddMember()
+
+    def funcSellProduct(self):
+        self.sell = selling.SellProduct()
 
 
     def displayProduct(self):

@@ -4,7 +4,6 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import Qt
 import sqlite3
-from PIL import Image
 
 sqlConnect = sqlite3.connect("products.db")
 cur = sqlConnect.cursor()
