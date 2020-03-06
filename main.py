@@ -30,7 +30,7 @@ class Main(QMainWindow):
         self.tabWidget()
         self.widgets()
         self.layouts()
-        self.displayProducts()
+        self.displayProduct()
         self.displayMember()
 
     def toolBar(self):
@@ -91,6 +91,7 @@ class Main(QMainWindow):
         self.availableProduct = QRadioButton("Available")
         self.notAvailableProduct = QRadioButton("Not Available")
         self.listButton = QPushButton("List")
+        self.listButton.clicked.connect(self.listProduct)
 
         ############Tab 2 Widgets##############
         self.memberTable = QTableWidget()
@@ -184,7 +185,7 @@ class Main(QMainWindow):
         self.newMember = add_member.AddMember()
 
 
-    def displayProducts(self):
+    def displayProduct(self):
         self.prodcutTable.setFont(QFont("Times", 12))
         for i in reversed(range(self.prodcutTable.rowCount())):
             self.prodcutTable.removeRow(i)
@@ -252,6 +253,33 @@ class Main(QMainWindow):
                     self.prodcutTable.insertRow(row_number)
                     for column_number, data in enumerate(row_data):
                         self.prodcutTable.setItem(row_number, column_number, QTableWidgetItem(str(data)))
+
+    def listProduct(self):
+        if self.allProduct.isChecked():
+            query = "SELECT product_id, product_name, product_manufacturer, product_price, product_quota, product_availability FROM products"
+            products = cur.execute(query).fetchall()
+
+        elif self.availableProduct.isChecked():
+            query = "SELECT product_id, product_name, product_manufacturer, product_price, product_quota, " \
+                    "product_availability FROM products WHERE product_availability = 'Available'"
+            products = cur.execute(query).fetchall()
+
+        elif self.notAvailableProduct.isChecked():
+            query = "SELECT product_id, product_name, product_manufacturer, product_price, product_quota, " \
+                    "product_availability FROM products WHERE product_availability = 'UnAvailable'"
+            products = cur.execute(query).fetchall()
+
+        for i in reversed(range(self.prodcutTable.rowCount())):
+            self.prodcutTable.removeRow(i)
+
+        for row_data in products:
+            row_number = self.prodcutTable.rowCount()
+            self.prodcutTable.insertRow(row_number)
+            for column_number, data in enumerate(row_data):
+                self.prodcutTable.setItem(row_number, column_number, QTableWidgetItem(str(data)))
+
+
+
 
     def searchMember(self):
         value = self.memberSearchEntry.text()
