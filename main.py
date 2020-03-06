@@ -105,6 +105,7 @@ class Main(QMainWindow):
         self.memberSearchText = QLabel("Search Member")
         self.memberSearchEntry = QLineEdit()
         self.memberSearchButton = QPushButton("Search")
+        self.memberSearchButton.clicked.connect(self.searchMember)
 
 
 
@@ -239,7 +240,6 @@ class Main(QMainWindow):
             self.searchEntry.setText("")
             query = "SELECT product_id, product_name, product_manufacturer, product_price, product_quota, product_availability FROM products WHERE product_name LIKE ? or product_manufacturer LIKE ? "
             results = cur.execute(query, ('%' + value + '%', '%' + value + '%')).fetchall()
-            print(results)
 
             if results == []:
                 QMessageBox.information(self, "Warning", "There is no such a product or manufacturer")
@@ -252,6 +252,28 @@ class Main(QMainWindow):
                     self.prodcutTable.insertRow(row_number)
                     for column_number, data in enumerate(row_data):
                         self.prodcutTable.setItem(row_number, column_number, QTableWidgetItem(str(data)))
+
+    def searchMember(self):
+        value = self.memberSearchEntry.text()
+        if value == "":
+            QMessageBox.information(self, "Warning", "Search query cannot be empty.")
+        else:
+            self.memberSearchEntry.setText("")
+            query = "SELECT * FROM members WHERE member_fname LIKE ? or member_lname LIKE ? or member_phone LIKE ? or member_address LIKE ?"
+            results = cur.execute(query, ('%' + value + '%', '%' + value + '%', '%' + value + '%', '%' + value + '%')).fetchall()
+            if results == []:
+                QMessageBox.information(self, "Warning", "There is no such a member")
+            else:
+                for i in reversed(range(self.memberTable.rowCount())):
+                    self.memberTable.removeRow(i)
+
+                for row_data in results:
+                    row_number = self.memberTable.rowCount()
+                    self.memberTable.insertRow(row_number)
+                    for column_number, data in enumerate(row_data):
+                        self.memberTable.setItem(row_number, column_number, QTableWidgetItem(str(data)))
+
+
 
 
 class DisplayProduct(QWidget):
