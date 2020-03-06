@@ -157,6 +157,7 @@ class ConfirmWindow(QWidget):
         self.amountLabel = QLabel()
         self.amountLabel.setText(str(price[0]) + "x" + str(quantity) + " = $" + str(self.amount))
         self.confirmBtn = QPushButton("Confirm")
+        self.confirmBtn.clicked.connect(self.confirm)
 
 
 
@@ -184,6 +185,28 @@ class ConfirmWindow(QWidget):
 
         self.setLayout(self.mainLayout)
 
+    def confirm(self):
+        global productName, productId, memberName, memberId, quantity
+        try:
+            sellQuery = "INSERT INTO 'sellings' (selling_product_id, selling_member_id, selling_quantity, selling_amount) VALUES (?,?,?,?)"
+            quotaQuery = ("SELECT product_quota FROM products WHERE product_id =?")
+            cur.execute(sellQuery, (productId, memberId, quantity, self.amount))
+            self.quota = cur.execute(quotaQuery, (productId,)).fetchone()
+            sqlConnect.commit()
+
+            if (quantity == self.quota[0]):
+                updateQuotaQuery = "UPDATE products set product_quota =?, product_availability =? WHERE product_id =? "
+                cur.execute(updateQuotaQuery, (0, 'UnAvailable', productId))
+                sqlConnect.commit()
+
+            else:
+                newQuota = (self.quota[0] - quantity)
+                updateQuotaQuery = "UPDATE products set product_quota =? WHERE product_id =?"
+                cur.execute(updateQuotaQuery, (newQuota, productId))
+                sqlConnect.commit()
+            QMessageBox.information(self, "Info", "Success")
+        except:
+            QMessageBox.information(self, "Info", "Something went wrong")
 
 
 
