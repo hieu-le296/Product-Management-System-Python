@@ -8,6 +8,7 @@ import sqlite3
 import add_product
 import add_member
 import selling
+import styles
 
 
 sqlConnect = sqlite3.connect("products.db")
@@ -34,6 +35,7 @@ class Main(QMainWindow):
         self.displayProduct()
         self.displayMember()
         self.getStat()
+        self.styles()
 
     def toolBar(self):
         self.tb = self.addToolBar("Tool Bar")
@@ -94,8 +96,10 @@ class Main(QMainWindow):
         self.searchEntry.setPlaceholderText("Search for products")
         self.searchButton = QPushButton("Search")
         self.searchButton.clicked.connect(self.searchProduct)
+
         ############Right Middle Layout Widget##############
         self.allProduct = QRadioButton("All Products")
+        self.allProduct.setChecked(True)
         self.availableProduct = QRadioButton("Available")
         self.notAvailableProduct = QRadioButton("Not Available")
         self.listButton = QPushButton("List")
@@ -132,22 +136,24 @@ class Main(QMainWindow):
         self.productRightLayout = QVBoxLayout()
         self.productRightTopLayout = QHBoxLayout()
         self.productRightMiddleLayout = QHBoxLayout()
-        #self.rightBottomLayout = QVBoxLayout()
+        self.productRightBottomLayout = QVBoxLayout()
 
 
         ############Add Widgets##############
         ############Left Main Layout Widgets##############
         self.productLeftLayout.addWidget(self.prodcutTable)
 
-        ############Right Top Layout Widgets##############
+        ############Right Layouts##############
         self.topGroupBox = QGroupBox("Search Box")
         self.middleGroupBox = QGroupBox("List Box")
-        # self.bottomGroupBox = QGroupBox("Product Image")
+        self.bottomGroupBox = QGroupBox()
+
+        ############Right Top Layout Widgets##############
         self.productRightTopLayout.addWidget(self.searchText)
         self.productRightTopLayout.addWidget(self.searchEntry)
         self.productRightTopLayout.addWidget(self.searchButton)
         self.topGroupBox.setLayout(self.productRightTopLayout)
-        self.productRightLayout.addWidget(self.topGroupBox)
+        self.productRightLayout.addWidget(self.topGroupBox, 20)
 
 
         ############Right Middle Layout Widget##############
@@ -156,7 +162,11 @@ class Main(QMainWindow):
         self.productRightMiddleLayout.addWidget(self.notAvailableProduct)
         self.productRightMiddleLayout.addWidget(self.listButton)
         self.middleGroupBox.setLayout(self.productRightMiddleLayout)
-        self.productRightLayout.addWidget(self.middleGroupBox)
+        self.productRightLayout.addWidget(self.middleGroupBox, 20)
+
+        ############Right Bottom Layout Widget##############
+        self.bottomGroupBox.setLayout(self.productRightBottomLayout)
+        self.productRightLayout.addWidget(self.bottomGroupBox, 60)
 
 
         ############Tab 1 Main Layouts##############
@@ -311,6 +321,7 @@ class Main(QMainWindow):
                         self.prodcutTable.setItem(row_number, column_number, QTableWidgetItem(str(data)))
 
     def listProduct(self):
+        products = None
         if self.allProduct.isChecked():
             query = "SELECT product_id, product_name, product_manufacturer, product_price, product_quota, product_availability FROM products"
             products = cur.execute(query).fetchall()
@@ -325,6 +336,7 @@ class Main(QMainWindow):
                     "product_availability FROM products WHERE product_availability = 'UnAvailable'"
             products = cur.execute(query).fetchall()
 
+
         for i in reversed(range(self.prodcutTable.rowCount())):
             self.prodcutTable.removeRow(i)
 
@@ -333,6 +345,7 @@ class Main(QMainWindow):
             self.prodcutTable.insertRow(row_number)
             for column_number, data in enumerate(row_data):
                 self.prodcutTable.setItem(row_number, column_number, QTableWidgetItem(str(data)))
+
 
 
 
@@ -357,6 +370,11 @@ class Main(QMainWindow):
                     for column_number, data in enumerate(row_data):
                         self.memberTable.setItem(row_number, column_number, QTableWidgetItem(str(data)))
 
+    def styles(self):
+        self.topGroupBox.setStyleSheet(styles.searchBoxStyle())
+        self.middleGroupBox.setStyleSheet(styles.listBoxStyle())
+        self.searchButton.setStyleSheet(styles.searchButtonStyle())
+        self.listButton.setStyleSheet(styles.listButtonStyle())
 
 
 
@@ -374,6 +392,7 @@ class DisplayProduct(QWidget):
         self.productDetails()
         self.widgets()
         self.layouts()
+        self.styles()
 
     def productDetails(self):
         global productId
@@ -486,6 +505,10 @@ class DisplayProduct(QWidget):
             except:
                 QMessageBox.information(self, "Information", "Product has not been deleted")
 
+    def styles(self):
+        self.bottomFrame.setStyleSheet(styles.productBottomFrame())
+        self.topFrame.setStyleSheet(styles.productTopFrame())
+
 class DisplayMember(QWidget):
     def __init__(self):
         super().__init__()
@@ -500,6 +523,7 @@ class DisplayMember(QWidget):
         self.memberDetails()
         self.widgets()
         self.layouts()
+        self.styles()
 
     def widgets(self):
         #################Top layouts wigdets#########
@@ -605,6 +629,11 @@ class DisplayMember(QWidget):
                 QMessageBox.information(self, "Info", "Membership has not been updated")
         else:
             QMessageBox.information(self, "Info", "Fields cannot be empty!")
+
+    def styles(self):
+        self.topFrame.setStyleSheet(styles.memberTopFrame())
+        self.bottomFrame.setStyleSheet(styles.memberBottomFrame())
+
 
 
 

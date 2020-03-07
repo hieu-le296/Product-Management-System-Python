@@ -1,10 +1,8 @@
-import sys
-import os
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import Qt
-from PIL import Image
 import sqlite3
+import styles
 
 sqlConnect = sqlite3.connect("products.db")
 cur = sqlConnect.cursor()
@@ -26,6 +24,7 @@ class SellProduct(QWidget):
         self.widgets()
         self.layouts()
         self.fetchData()
+        self.styles()
 
     def widgets(self):
         ##############Widgets of Top Layout##############
@@ -121,6 +120,10 @@ class SellProduct(QWidget):
         self.confirm = ConfirmWindow()
         self.close()
 
+    def styles(self):
+        self.topFrame.setStyleSheet(styles.sellProductTopFrame())
+        self.bottomFrame.setStyleSheet(styles.sellProductBottomFrame())
+
 class ConfirmWindow(QWidget):
     def __init__(self):
         super().__init__()
@@ -134,6 +137,7 @@ class ConfirmWindow(QWidget):
     def UI(self):
         self.widgets()
         self.layouts()
+        self.styles()
 
     def widgets(self):
         ##############widgets of top layout################
@@ -205,8 +209,13 @@ class ConfirmWindow(QWidget):
                 cur.execute(updateQuotaQuery, (newQuota, productId))
                 sqlConnect.commit()
             QMessageBox.information(self, "Info", "Success")
+            self.close()
         except:
             QMessageBox.information(self, "Info", "Something went wrong")
+
+    def styles(self):
+        self.topFrame.setStyleSheet(styles.confirmProductTopFrame())
+        self.bottomFrame.setStyleSheet(styles.confirmProductBottomFrame())
 
 
 
