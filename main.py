@@ -33,6 +33,7 @@ class Main(QMainWindow):
         self.layouts()
         self.displayProduct()
         self.displayMember()
+        self.getStat()
 
     def toolBar(self):
         self.tb = self.addToolBar("Tool Bar")
@@ -56,6 +57,11 @@ class Main(QMainWindow):
 
     def tabWidget(self):
         self.tabs = QTabWidget()
+
+        # Update the content dynamically every time each tab is clicked
+        self.tabs.blockSignals(True)
+        self.tabs.currentChanged.connect(self.tabsChanged)
+
         self.setCentralWidget(self.tabs)
         self.tab1 = QWidget()
         self.tab2 = QWidget()
@@ -198,6 +204,9 @@ class Main(QMainWindow):
         self.statMainLayout.addWidget(self.statGroupBox)
         self.tab3.setLayout(self.statMainLayout)
 
+        # block signal for tabs
+        self.tabs.blockSignals(False)
+
 
     def funcAddProduct(self):
         self.newProduct = add_product.AddProduct()
@@ -208,6 +217,29 @@ class Main(QMainWindow):
 
     def funcSellProduct(self):
         self.sell = selling.SellProduct()
+
+    def getStat(self):
+        countProducts = cur.execute("SELECT count(product_id) FROM products").fetchall()
+        countProducts = countProducts[0][0]
+
+        countMember = cur.execute("SELECT count(member_id) FROM members").fetchall()
+        countMember = countMember[0][0]
+
+        soldProducts = cur.execute("SELECT sum(selling_quantity) FROM sellings").fetchall()
+        soldProducts = soldProducts[0][0]
+
+        totalAmount = cur.execute("SELECT sum(selling_amount) FROM sellings").fetchall()
+        totalAmount = totalAmount[0][0]
+
+        self.totalProductLabel.setText(str(countProducts))
+        self.totalMemberLabel.setText(str(countMember))
+        self.soldProductLabel.setText(str(soldProducts))
+        self.totalAmountLabel.setText("$ " + str(totalAmount))
+
+    def tabsChanged(self):
+        self.getStat()
+        self.displayProduct()
+        self.displayMember()
 
 
     def displayProduct(self):
@@ -239,7 +271,6 @@ class Main(QMainWindow):
         self.memberTable.setEditTriggers(QAbstractItemView.NoEditTriggers)
 
     def selectedProduct(self):
-
         listProduct = []
         for i in range(0, 6):
             listProduct.append(self.prodcutTable.item(self.prodcutTable.currentRow(), i).text())
