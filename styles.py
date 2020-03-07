@@ -112,3 +112,12 @@ def confirmProductBottomFrame():
             background-color: #fcc324;
         }
         """
+
+def infoTopFrame():
+    return """
+       QFrame {
+           font: 12pt Times Bold;
+           color: white;
+           background-color: rgb(12,95,46);
+       }
+       """

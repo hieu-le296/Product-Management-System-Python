@@ -9,6 +9,7 @@ import add_product
 import add_member
 import selling
 import styles
+import info
 
 
 sqlConnect = sqlite3.connect("products.db")
@@ -56,6 +57,12 @@ class Main(QMainWindow):
         self.sellProduct.triggered.connect(self.funcSellProduct)
         self.tb.addAction(self.sellProduct)
         self.tb.addSeparator()
+        ############Information##############
+        self.infoToolBar = QAction(QIcon('icons/info.png'), "Info", self)
+        self.infoToolBar.triggered.connect(self.funcInfo)
+        self.tb.addAction(self.infoToolBar)
+        self.tb.addSeparator()
+
 
     def tabWidget(self):
         self.tabs = QTabWidget()
@@ -218,6 +225,9 @@ class Main(QMainWindow):
         self.tabs.blockSignals(False)
 
 
+
+
+
     def funcAddProduct(self):
         self.newProduct = add_product.AddProduct()
 
@@ -227,6 +237,9 @@ class Main(QMainWindow):
 
     def funcSellProduct(self):
         self.sell = selling.SellProduct()
+
+    def funcInfo(self):
+        self.info = info.Info()
 
     def getStat(self):
         countProducts = cur.execute("SELECT count(product_id) FROM products").fetchall()
