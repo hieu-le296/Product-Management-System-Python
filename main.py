@@ -22,7 +22,7 @@ global productId
 class Main(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Product Manager")
+        self.setWindowTitle("Product Management")
         self.setWindowIcon(QIcon('icons/icon.ico'))
         self.setGeometry(450, 150, 1350, 750)
         self.setFixedSize(self.size())
@@ -60,6 +60,15 @@ class Main(QMainWindow):
         self.sellProduct.triggered.connect(self.funcSellProduct)
         self.tb.addAction(self.sellProduct)
         self.tb.addSeparator()
+        ############Printer##############
+        self.print = QAction(QIcon('icons/printer.png'), "Print", self)
+        self.tb.addAction(self.print)
+        self.tb.addSeparator()
+        ############Export PDF##############
+        self.exportPDF = QAction(QIcon('icons/pdf.png'), "Export PDF", self)
+        self.exportPDF.triggered.connect(self.funcExportPdf)
+        self.tb.addAction(self.exportPDF)
+        self.tb.addSeparator()
         ############Information##############
         self.infoToolBar = QAction(QIcon('icons/info.png'), "Info", self)
         self.infoToolBar.triggered.connect(self.funcInfo)
@@ -86,19 +95,19 @@ class Main(QMainWindow):
     def widgets(self):
         ############Tab 1 Widgets##############
         ############Main Left Layout Widget##############
-        self.prodcutTable = QTableWidget()
-        self.prodcutTable.setColumnCount(6)
+        self.productTable = QTableWidget()
+        self.productTable.setColumnCount(6)
         # Hide the column product id
-        self.prodcutTable.setColumnHidden(0, True)
-        self.prodcutTable.setHorizontalHeaderItem(0, QTableWidgetItem("Product ID"))
-        self.prodcutTable.setHorizontalHeaderItem(1, QTableWidgetItem("Product Name"))
-        self.prodcutTable.setHorizontalHeaderItem(2, QTableWidgetItem("Manufacture"))
-        self.prodcutTable.setHorizontalHeaderItem(3, QTableWidgetItem("Price"))
-        self.prodcutTable.setHorizontalHeaderItem(4, QTableWidgetItem("Quota"))
-        self.prodcutTable.setHorizontalHeaderItem(5, QTableWidgetItem("Availability"))
-        self.prodcutTable.horizontalHeader().setSectionResizeMode(1, QHeaderView.Stretch)
-        self.prodcutTable.horizontalHeader().setSectionResizeMode(2, QHeaderView.Stretch)
-        self.prodcutTable.doubleClicked.connect(self.selectedProduct)
+        self.productTable.setColumnHidden(0, True)
+        self.productTable.setHorizontalHeaderItem(0, QTableWidgetItem("Product ID"))
+        self.productTable.setHorizontalHeaderItem(1, QTableWidgetItem("Product Name"))
+        self.productTable.setHorizontalHeaderItem(2, QTableWidgetItem("Manufacture"))
+        self.productTable.setHorizontalHeaderItem(3, QTableWidgetItem("Price"))
+        self.productTable.setHorizontalHeaderItem(4, QTableWidgetItem("Quota"))
+        self.productTable.setHorizontalHeaderItem(5, QTableWidgetItem("Availability"))
+        self.productTable.horizontalHeader().setSectionResizeMode(1, QHeaderView.Stretch)
+        self.productTable.horizontalHeader().setSectionResizeMode(2, QHeaderView.Stretch)
+        self.productTable.doubleClicked.connect(self.selectedProduct)
 
         ############Right Top Layout Widget##############
         self.searchText = QLabel("Search")
@@ -151,7 +160,7 @@ class Main(QMainWindow):
 
         ############Add Widgets##############
         ############Left Main Layout Widgets##############
-        self.productLeftLayout.addWidget(self.prodcutTable)
+        self.productLeftLayout.addWidget(self.productTable)
 
         ############Right Layouts##############
         self.topGroupBox = QGroupBox("Search Box")
@@ -240,22 +249,25 @@ class Main(QMainWindow):
         addProductMenu.triggered.connect(self.funcAddProduct)
 
         addMemberMenu = QAction("Add Membership", self)
-        addMemberMenu.setIcon(QIcon("icons/users.png"))
+        addMemberMenu.setIcon(QIcon('icons/users.png'))
         addMemberMenu.setShortcut("Ctrl+M")
         addMemberMenu.triggered.connect(self.funcAddMember)
 
         printMenu = QAction("Print", self)
-        printMenu.setIcon(QIcon("icons/printer.png"))
+        printMenu.setIcon(QIcon('icons/printer.png'))
         printMenu.setShortcut("Ctrl+P")
+
         exportPDF = QAction("ExportPDF", self)
+        exportPDF.setShortcut("Ctrl+E")
+        exportPDF.triggered.connect(self.funcExportPdf)
 
         sellProductMenu = QAction("Sell Product", self)
-        sellProductMenu.setIcon(QIcon("icons/sell.png"))
-        sellProductMenu.setShortcut("Ctrl+E")
+        sellProductMenu.setIcon(QIcon('icons/sell.png'))
+        sellProductMenu.setShortcut("Ctrl+S")
         sellProductMenu.triggered.connect(self.funcSellProduct)
 
         infoMenu = QAction("Information", self)
-        infoMenu.setIcon(QIcon("icons/info.png"))
+        infoMenu.setIcon(QIcon('icons/info.png'))
         infoMenu.triggered.connect(self.funcInfo)
 
         file.addAction(addProductMenu)
@@ -276,6 +288,9 @@ class Main(QMainWindow):
 
     def funcSellProduct(self):
         self.sell = selling.SellProduct()
+
+    def funcExportPdf(self):
+        self.export = ExportPDF()
 
     def funcInfo(self):
         self.info = info.Info()
@@ -305,18 +320,18 @@ class Main(QMainWindow):
 
 
     def displayProduct(self):
-        self.prodcutTable.setFont(QFont("Times", 12))
-        for i in reversed(range(self.prodcutTable.rowCount())):
-            self.prodcutTable.removeRow(i)
+        self.productTable.setFont(QFont("Times", 12))
+        for i in reversed(range(self.productTable.rowCount())):
+            self.productTable.removeRow(i)
 
         query = cur.execute("SELECT product_id, product_name, product_manufacturer, product_price, product_quota, product_availability FROM products")
         for row_data in query:
-            row_number = self.prodcutTable.rowCount()
-            self.prodcutTable.insertRow(row_number)
+            row_number = self.productTable.rowCount()
+            self.productTable.insertRow(row_number)
             for column_number, data in enumerate(row_data):
-                self.prodcutTable.setItem(row_number, column_number, QTableWidgetItem(str(data)))
+                self.productTable.setItem(row_number, column_number, QTableWidgetItem(str(data)))
 
-        self.prodcutTable.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        self.productTable.setEditTriggers(QAbstractItemView.NoEditTriggers)
 
     def displayMember(self):
         self.memberTable.setFont(QFont("Times", 12))
@@ -335,7 +350,7 @@ class Main(QMainWindow):
     def selectedProduct(self):
         listProduct = []
         for i in range(0, 6):
-            listProduct.append(self.prodcutTable.item(self.prodcutTable.currentRow(), i).text())
+            listProduct.append(self.productTable.item(self.productTable.currentRow(), i).text())
         global productId
         productId = listProduct[0]
         self.displayP = DisplayProduct()
@@ -363,14 +378,14 @@ class Main(QMainWindow):
             if results == []:
                 QMessageBox.information(self, "Warning", "There is no such a product or manufacturer")
             else:
-                for i in reversed(range(self.prodcutTable.rowCount())):
-                    self.prodcutTable.removeRow(i)
+                for i in reversed(range(self.productTable.rowCount())):
+                    self.productTable.removeRow(i)
 
                 for row_data in results:
-                    row_number = self.prodcutTable.rowCount()
-                    self.prodcutTable.insertRow(row_number)
+                    row_number = self.productTable.rowCount()
+                    self.productTable.insertRow(row_number)
                     for column_number, data in enumerate(row_data):
-                        self.prodcutTable.setItem(row_number, column_number, QTableWidgetItem(str(data)))
+                        self.productTable.setItem(row_number, column_number, QTableWidgetItem(str(data)))
 
     def listProduct(self):
         products = None
@@ -389,14 +404,14 @@ class Main(QMainWindow):
             products = cur.execute(query).fetchall()
 
 
-        for i in reversed(range(self.prodcutTable.rowCount())):
-            self.prodcutTable.removeRow(i)
+        for i in reversed(range(self.productTable.rowCount())):
+            self.productTable.removeRow(i)
 
         for row_data in products:
-            row_number = self.prodcutTable.rowCount()
-            self.prodcutTable.insertRow(row_number)
+            row_number = self.productTable.rowCount()
+            self.productTable.insertRow(row_number)
             for column_number, data in enumerate(row_data):
-                self.prodcutTable.setItem(row_number, column_number, QTableWidgetItem(str(data)))
+                self.productTable.setItem(row_number, column_number, QTableWidgetItem(str(data)))
 
 
 
@@ -686,6 +701,54 @@ class DisplayMember(QWidget):
         self.topFrame.setStyleSheet(styles.memberTopFrame())
         self.bottomFrame.setStyleSheet(styles.memberBottomFrame())
 
+class ExportPDF(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle("Export to PDF")
+        self.setWindowIcon(QIcon('icons/icon.ico'))
+        self.setGeometry(450, 250, 250, 150)
+        self.setFixedSize(self.size())
+        self.UI()
+        self.show()
+
+    def UI(self):
+        self.product = QRadioButton("Products", self)
+        self.product.move(20, 50)
+        self.member = QRadioButton("Membership", self)
+        self.member.move(120, 50)
+        self.exportBtn = QPushButton("Export PDF", self)
+        self.exportBtn.move(70, 100)
+        self.exportBtn.clicked.connect(self.export)
+
+    def export(self):
+        self.textEdit = QTextEdit(self)
+        checked = False
+        if self.product.isChecked():
+            checked = True
+            query = cur.execute("SELECT product_id, product_name, product_manufacturer, product_price, product_quota, product_availability FROM products")
+            self.textEdit.append("                Product List        ")
+            self.textEdit.append("(product ID, product name, manufracturer, price, quota, availability)")
+            for row_data in query:
+                self.textEdit.append(str(row_data))
+        elif self.member.isChecked():
+            checked = True
+            query = cur.execute("SELECT * FROM members")
+            self.textEdit.append("                Membership List        ")
+            self.textEdit.append("(member id, first name, last name, phone number, address)")
+            for row_member in query:
+                self.textEdit.append(str(row_member))
+
+        if checked is True:
+            fn, _ = QFileDialog.getSaveFileName(self, 'Export PDF', None, 'PDF files (.pdf);;All Files()')
+            if fn != '':
+                if QFileInfo(fn).suffix() == "": fn += '.pdf'
+                printer = QPrinter(QPrinter.HighResolution)
+                printer.setOutputFormat(QPrinter.PdfFormat)
+                printer.setOutputFileName(fn)
+                self.textEdit.print_(printer)
+                self.close()
+        else:
+            QMessageBox.information(self, "Wanring", "Please select one")
 
 
 
