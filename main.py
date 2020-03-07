@@ -3,6 +3,8 @@ import os
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import Qt
+from PyQt5.QtPrintSupport import QPrintDialog, QPrinter, QPrintPreviewDialog
+from PyQt5.Qt import QFileInfo
 from PIL import Image
 import sqlite3
 import add_product
@@ -33,6 +35,7 @@ class Main(QMainWindow):
         self.tabWidget()
         self.widgets()
         self.layouts()
+        self.createMenu()
         self.displayProduct()
         self.displayMember()
         self.getStat()
@@ -224,7 +227,43 @@ class Main(QMainWindow):
         # block signal for tabs
         self.tabs.blockSignals(False)
 
+    def createMenu(self):
+        ########Main Menu########
+        menuBar = self.menuBar()
+        file = menuBar.addMenu("File")
+        product = menuBar.addMenu("Product")
+        help = menuBar.addMenu("About")
+        ########Sub Menu########
+        addProductMenu = QAction("Add Product", self)
+        addProductMenu.setIcon(QIcon("icons/add.png"))
+        addProductMenu.setShortcut("Ctrl+A")
+        addProductMenu.triggered.connect(self.funcAddProduct)
 
+        addMemberMenu = QAction("Add Membership", self)
+        addMemberMenu.setIcon(QIcon("icons/users.png"))
+        addMemberMenu.setShortcut("Ctrl+M")
+        addMemberMenu.triggered.connect(self.funcAddMember)
+
+        printMenu = QAction("Print", self)
+        printMenu.setIcon(QIcon("icons/printer.png"))
+        printMenu.setShortcut("Ctrl+P")
+        exportPDF = QAction("ExportPDF", self)
+
+        sellProductMenu = QAction("Sell Product", self)
+        sellProductMenu.setIcon(QIcon("icons/sell.png"))
+        sellProductMenu.setShortcut("Ctrl+E")
+        sellProductMenu.triggered.connect(self.funcSellProduct)
+
+        infoMenu = QAction("Information", self)
+        infoMenu.setIcon(QIcon("icons/info.png"))
+        infoMenu.triggered.connect(self.funcInfo)
+
+        file.addAction(addProductMenu)
+        file.addAction(addMemberMenu)
+        file.addAction(printMenu)
+        file.addAction(exportPDF)
+        product.addAction(sellProductMenu)
+        help.addAction(infoMenu)
 
 
 
