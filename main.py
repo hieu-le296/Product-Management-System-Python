@@ -286,8 +286,8 @@ class Main(QMainWindow):
             listProduct.append(self.prodcutTable.item(self.prodcutTable.currentRow(), i).text())
         global productId
         productId = listProduct[0]
-        self.display = DisplayProduct()
-        self.display.show()
+        self.displayP = DisplayProduct()
+        self.displayP.show()
 
     def selectedMember(self):
         global memberId
@@ -296,8 +296,8 @@ class Main(QMainWindow):
             listMember.append(self.memberTable.item(self.memberTable.currentRow(), i).text())
 
         memberId = listMember[0]
-        self.displayMember = DisplayMember()
-        self.displayMember.show()
+        self.displayM = DisplayMember()
+        self.displayM.show()
 
     def searchProduct(self):
         value = self.searchEntry.text()
