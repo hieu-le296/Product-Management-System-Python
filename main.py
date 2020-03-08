@@ -9,6 +9,7 @@ from PyQt5.QtWidgets import *
 
 import add_member
 import add_product
+import display_product
 import display_member
 import export_pdf
 import info
@@ -347,13 +348,18 @@ class Main(QMainWindow):
 
         self.memberTable.setEditTriggers(QAbstractItemView.NoEditTriggers)
 
-    def selectedProduct(self):
+    def getProductIdFromCurrentRow(self):
         listProduct = []
         for i in range(0, 6):
             listProduct.append(self.productTable.item(self.productTable.currentRow(), i).text())
         global productId
         productId = listProduct[0]
-        self.displayP = DisplayProduct()
+        return productId
+
+    def selectedProduct(self):
+        productId = self.getProductIdFromCurrentRow()
+        display_product.DisplayProduct.productId = productId
+        self.displayP = display_product.DisplayProduct()
         self.displayP.show()
 
     def getMemberIdFromCurrentRow(self):
@@ -446,264 +452,6 @@ class Main(QMainWindow):
         self.middleGroupBox.setStyleSheet(styles.listBoxStyle())
         self.searchButton.setStyleSheet(styles.searchButtonStyle())
         self.listButton.setStyleSheet(styles.listButtonStyle())
-
-
-
-class DisplayProduct(QWidget):
-    def __init__(self):
-        super().__init__()
-        self.setWindowTitle("Product Detail")
-        self.setWindowIcon(QIcon("icons/icon.ico"))
-        self.setGeometry(450, 150, 350, 600)
-        self.setFixedSize(self.size())
-        self.UI()
-        self.show()
-
-    def UI(self):
-        self.productDetails()
-        self.widgets()
-        self.layouts()
-        self.styles()
-
-    def productDetails(self):
-        global productId
-        query = ("SELECT * FROM products WHERE product_id=?")
-        product = cur.execute(query, (productId,)).fetchone()  # single item tuple = (1,)
-        self.productName = product[1]
-        self.productManufacturer = product[2]
-        self.productPrice = product[3]
-        self.productQuota = product[4]
-        self.productImg = product[5]
-        self.productStatus = product[6]
-
-
-    def widgets(self):
-        #################Top layouts wigdets#########
-        self.product_Img = QLabel()
-        self.img = QPixmap('{}'.format(self.productImg))
-        self.product_Img.setPixmap(self.img)
-        self.product_Img.setAlignment(Qt.AlignCenter)
-        self.titleText = QLabel("Update Product")
-        self.titleText.setAlignment(Qt.AlignCenter)
-
-        ##############Bottom Layout's widgets###########
-        self.nameEntry = QLineEdit()
-        self.nameEntry.setText(self.productName)
-        self.manufacturerEntry = QLineEdit()
-        self.manufacturerEntry.setText(self.productManufacturer)
-        self.priceEntry = QLineEdit()
-        self.priceEntry.setText(str(self.productPrice))
-        self.quotaEntry = QLineEdit()
-        self.quotaEntry.setText(str(self.productQuota))
-        self.availabilityCombo = QComboBox()
-        self.availabilityCombo.addItems(["Available", "UnAvailable"])
-        self.uploadBtn = QPushButton("Upload")
-        self.uploadBtn.clicked.connect(self.uploadImg)
-        self.deleteBtn = QPushButton("Delete")
-        self.deleteBtn.clicked.connect(self.deleteProduct)
-        self.updateBtn = QPushButton("Update")
-        self.updateBtn.clicked.connect(self.updateProduct)
-
-
-    def layouts(self):
-        self.mainLayout = QVBoxLayout()
-        self.topLayout = QVBoxLayout()
-        self.bottomLayout = QFormLayout()
-        self.topFrame = QFrame()
-        self.bottomFrame = QFrame()
-
-        ###########Add Widgets##########
-        self.topLayout.addWidget(self.titleText)
-        self.topLayout.addWidget(self.product_Img)
-        self.bottomLayout.addRow(QLabel("Name: "), self.nameEntry)
-        self.bottomLayout.addRow(QLabel("Manufacture: "), self.manufacturerEntry)
-        self.bottomLayout.addRow(QLabel("Price: "), self.priceEntry)
-        self.bottomLayout.addRow(QLabel("Quota: "), self.quotaEntry)
-        self.bottomLayout.addRow(QLabel("Status: "), self.availabilityCombo)
-        self.bottomLayout.addRow(QLabel("Image: "), self.uploadBtn)
-        self.bottomLayout.addRow(QLabel(""), self.deleteBtn)
-        self.bottomLayout.addRow(QLabel(""), self.updateBtn)
-
-        ###########Set Layouts##########
-        self.topFrame.setLayout(self.topLayout)
-        self.bottomFrame.setLayout(self.bottomLayout)
-        self.mainLayout.addWidget(self.topFrame)
-        self.mainLayout.addWidget(self.bottomFrame)
-
-        self.setLayout(self.mainLayout)
-
-    def uploadImg(self):
-        size = (256, 256)
-        self.filename, ok = QFileDialog.getOpenFileName(self, 'Upload Image', '', 'Image files (*.jpg *.png)')
-        if ok:
-            self.productImg = os.path.basename(self.filename)
-            img = Image.open(self.filename)
-            img = img.resize(size)
-            img.save("img{0}".format(self.productImg))
-
-    def updateProduct(self):
-        global productId
-        name = self.nameEntry.text()
-        manufacturer = self.manufacturerEntry.text()
-        price = int(self.priceEntry.text())
-        quota = int(self.quotaEntry.text())
-        status = self.availabilityCombo.currentText()
-        defaultImg = self.productImg
-
-        if (name and manufacturer and price and quota != " "):
-            try:
-                query = "UPDATE products set product_name = ?, product_manufacturer =?, product_price = ?, product_quota = ?, product_img = ?, product_availability =? WHERE product_id = ?"
-                cur.execute(query, (name, manufacturer, price, quota, defaultImg, status, productId))
-                sqlConnect.commit()
-                QMessageBox.information(self, "Info", "Product has been updated")
-
-            except:
-                QMessageBox.information(self, "Info", "Product has not been updated")
-
-        else:
-            QMessageBox.information(self, "Info", "Fields cannot be empty")
-
-    def deleteProduct(self):
-        global productId
-
-        mbox = QMessageBox.question(self, "Wanrning", "Are you sure to delete this product?", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
-        if (mbox == QMessageBox.Yes):
-            try:
-                cur.execute("DELETE FROM products WHERE product_id=?", (productId,))
-                sqlConnect.commit()
-                QMessageBox.information(self, "Information", "Product has been deleted")
-                self.close()
-            except:
-                QMessageBox.information(self, "Information", "Product has not been deleted")
-
-    def styles(self):
-        self.bottomFrame.setStyleSheet(styles.productBottomFrame())
-        self.topFrame.setStyleSheet(styles.productTopFrame())
-
-class DisplayMember(QWidget):
-    def __init__(self):
-        super().__init__()
-        self.setWindowTitle("Membership Detail")
-        self.setWindowIcon(QIcon("icons/icon.ico"))
-        self.setGeometry(450, 150, 350, 600)
-        self.setFixedSize(self.size())
-        self.UI()
-        self.show()
-
-    def UI(self):
-        self.memberDetails()
-        self.widgets()
-        self.layouts()
-        self.styles()
-
-    def widgets(self):
-        #################Top layouts wigdets#########
-        self.memberImg = QLabel()
-        self.img = QPixmap('icons/members.png')
-        self.memberImg.setPixmap(self.img)
-        self.memberImg.setAlignment(Qt.AlignCenter)
-        self.titleText = QLabel("Display Membership")
-        self.titleText.setAlignment(Qt.AlignCenter)
-
-        #################Bottom layouts wigdets#########
-        self.fnameEntry = QLineEdit()
-        self.fnameEntry.setText(self.memberFname)
-        self.lnameEntry = QLineEdit()
-        self.lnameEntry.setText(self.memberLname)
-        self.phoneEntry = QLineEdit()
-        self.phoneEntry.setText(self.memberPhone)
-        self.addressEntry = QLineEdit()
-        self.addressEntry.setText(self.memberAddress)
-        self.updateBtn = QPushButton("Update")
-        self.updateBtn.clicked.connect(self.updateMember)
-        self.deleteBtn = QPushButton("Delete")
-        self.deleteBtn.clicked.connect(self.deleteMember)
-
-
-
-    def layouts(self):
-        self.mainLayout = QVBoxLayout()
-        self.topLayout = QVBoxLayout()
-        self.bottomLayout = QFormLayout()
-        self.topFrame = QFrame()
-        self.bottomFrame = QFrame()
-
-        #################Add wigdets#########
-        self.topLayout.addWidget(self.titleText)
-        self.topLayout.addWidget(self.memberImg)
-        self.topFrame.setLayout(self.topLayout)
-
-        self.bottomLayout.addRow(QLabel("First Name: "), self.fnameEntry)
-        self.bottomLayout.addRow(QLabel("Last Name: "), self.lnameEntry)
-        self.bottomLayout.addRow(QLabel("Phone: "), self.phoneEntry)
-        self.bottomLayout.addRow(QLabel("Full Address: "), self.addressEntry)
-        self.bottomLayout.addRow(QLabel(""), self.deleteBtn)
-        self.bottomLayout.addRow(QLabel(""), self.updateBtn)
-        self.bottomFrame.setLayout(self.bottomLayout)
-
-        self.mainLayout.addWidget(self.topFrame)
-        self.mainLayout.addWidget(self.bottomFrame)
-        self.setLayout(self.mainLayout)
-
-
-
-
-    def memberDetails(self):
-        global  memberId
-        query = ("SELECT * FROM members WHERE member_id =?")
-        member = cur.execute(query, (memberId,)).fetchone()
-        self.memberFname = member[1]
-        self.memberLname = member[2]
-        self.memberPhone = member[3]
-        self.memberAddress = member[4]
-
-    def deleteMember(self):
-        global memberId
-        mbox = QMessageBox.question(self, "Warning", "Are you sure to delete this member?", QMessageBox.Yes|QMessageBox.No, QMessageBox.No)
-
-        if mbox == QMessageBox.Yes:
-            try:
-                query = "DELETE FROM members WHERE member_id=?"
-                cur.execute(query, (memberId,))
-                sqlConnect.commit()
-                QMessageBox.information(self, "Info", "Member has been deleted")
-                self.close()
-            except:
-                QMessageBox.information(self, "Info", "Member has not been deleted")
-
-
-    def updateMember(self):
-        global memberId
-        fname = self.fnameEntry.text()
-        lname = self.lnameEntry.text()
-        phone = self.phoneEntry.text()
-        address = self.addressEntry.text()
-        emptyString = ""
-
-        if fname != "" and lname == "" and phone == "" and address == "":
-            try:
-                query = "UPDATE members set member_fname = ?, member_lname = ?, member_phone = ?, member_address = ? WHERE member_id = ?"
-                cur.execute(query, (fname, emptyString, emptyString, emptyString, memberId))
-                sqlConnect.commit()
-                QMessageBox.information(self, "Info", "Membership has been updated")
-            except:
-                QMessageBox.information(self, "Info", "Membership has not been updated")
-
-
-        elif fname and lname and phone and address != "":
-            try:
-                query = "UPDATE members set member_fname = ?, member_lname = ?, member_phone = ?, member_address = ? WHERE member_id = ?"
-                cur.execute(query, (fname, lname, phone, address, memberId))
-                sqlConnect.commit()
-                QMessageBox.information(self, "Info", "Membership has been updated")
-            except:
-                QMessageBox.information(self, "Info", "Membership has not been updated")
-        else:
-            QMessageBox.information(self, "Info", "Fields cannot be empty!")
-
-    def styles(self):
-        self.topFrame.setStyleSheet(styles.memberTopFrame())
-        self.bottomFrame.setStyleSheet(styles.memberBottomFrame())
 
 
 def main():
