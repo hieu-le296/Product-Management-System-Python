@@ -1,9 +1,12 @@
 import os
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import *
+from datetime import datetime
+
 import sqlite3
 from PIL import Image
+import calendar_class
 import main
 
 sqlConnect = sqlite3.connect("products.db")
@@ -12,6 +15,7 @@ cur = sqlConnect.cursor()
 defaultImg = 'img/store.png'
 
 class AddProduct(QWidget):
+    date = ''
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Add Product")
@@ -42,9 +46,18 @@ class AddProduct(QWidget):
         self.priceEntry.setPlaceholderText("Enter product price")
         self.quotaEntry = QLineEdit()
         self.quotaEntry.setPlaceholderText("Enter number of products")
+
+        x = datetime.now()
+        global datePickEntry
+        dateString = '{}/{}/{}'.format(x.day, x.month, x.year)
+        datePickEntry = QLineEdit()
+        datePickEntry.setText(dateString)
+
+        self.dateBtn = QPushButton("...")
+        self.dateBtn.clicked.connect(self.openCalendar)
         self.uploadBtn = QPushButton("Upload")
         self.uploadBtn.clicked.connect(self.uploadImg)
-        self.submitBtn = QPushButton("Submit")
+        self.submitBtn = QPushButton("Browse")
         self.submitBtn.clicked.connect(self.addProduct)
         self.backBtn = QPushButton("Back to Main")
         self.backBtn.clicked.connect(self.backToMain)
@@ -67,6 +80,8 @@ class AddProduct(QWidget):
         self.bottomLayout.addRow("Manufacture: ", self.manufactureEntry)
         self.bottomLayout.addRow("Price: ", self.priceEntry)
         self.bottomLayout.addRow("Quota: ", self.quotaEntry)
+        self.bottomLayout.addRow("Date: ", datePickEntry)
+        self.bottomLayout.addRow("", self.dateBtn)
         self.bottomLayout.addRow("Product Image: ", self.uploadBtn)
         self.bottomLayout.addRow("", self.backBtn)
         self.bottomLayout.addRow("", self.submitBtn)
@@ -111,8 +126,50 @@ class AddProduct(QWidget):
         else:
             QMessageBox.information(self, "Info", "Fields cannot be empty!")
 
+    def openCalendar(self):
+        self.open = Calendar()
+
+
+
+
     def backToMain(self):
         self.main = main.Main()
         self.main.show()
         self.close()
+
+
+
+class Calendar(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle('Calendar')
+        self.UI()
+        self.show()
+
+    def UI(self):
+        vbox = QVBoxLayout()
+        self.setGeometry(1100, 300, 350, 300)
+        self.setWindowTitle('Calendar')
+
+        cal = QCalendarWidget(self)
+        cal.setGridVisible(True)
+        cal.clicked[QDate].connect(self.showDate)
+
+        vbox.addWidget(cal)
+
+        self.lbl = QLabel(self)
+        date = cal.selectedDate()
+        global dateSelected
+        dateSelected = '{}/{}/{}'.format(date.day(), date.month(), date.year())
+        self.lbl.setText(dateSelected)
+
+        vbox.addWidget(self.lbl)
+        self.setLayout(vbox)
+
+    def showDate(self, date):
+        global datePickEntry
+        dateSelected = '{}/{}/{}'.format(date.day(), date.month(), date.year())
+        self.lbl.setText(dateSelected)
+        datePickEntry.setText(dateSelected)
+
 
