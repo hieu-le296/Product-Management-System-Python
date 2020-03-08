@@ -10,6 +10,7 @@ import add_product
 import display_product
 import display_member
 import export_pdf
+import print
 import info
 import selling
 import styles
@@ -60,6 +61,7 @@ class Main(QMainWindow):
         self.tb.addSeparator()
         ############Printer##############
         self.print = QAction(QIcon('icons/printer.png'), "Print", self)
+        self.print.triggered.connect(self.funcPrintPreview)
         self.tb.addAction(self.print)
         self.tb.addSeparator()
         ############Export PDF##############
@@ -251,6 +253,7 @@ class Main(QMainWindow):
         printMenu = QAction("Print", self)
         printMenu.setIcon(QIcon('icons/printer.png'))
         printMenu.setShortcut("Ctrl+P")
+        printMenu.triggered.connect(self.funcPrintPreview)
 
         exportPDF = QAction("ExportPDF", self)
         exportPDF.setShortcut("Ctrl+E")
@@ -286,6 +289,9 @@ class Main(QMainWindow):
 
     def funcExportPdf(self):
         self.export = export_pdf.ExportPDF()
+
+    def funcPrintPreview(self):
+        self.printDiaglog = print.Print()
 
     def funcInfo(self):
         self.info = info.Info()
