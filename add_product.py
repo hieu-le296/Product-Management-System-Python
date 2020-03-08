@@ -6,7 +6,6 @@ from datetime import datetime
 
 import sqlite3
 from PIL import Image
-import calendar_class
 import main
 
 sqlConnect = sqlite3.connect("products.db")
@@ -55,9 +54,9 @@ class AddProduct(QWidget):
 
         self.dateBtn = QPushButton("...")
         self.dateBtn.clicked.connect(self.openCalendar)
-        self.uploadBtn = QPushButton("Upload")
+        self.uploadBtn = QPushButton("Browse")
         self.uploadBtn.clicked.connect(self.uploadImg)
-        self.submitBtn = QPushButton("Browse")
+        self.submitBtn = QPushButton("Submit")
         self.submitBtn.clicked.connect(self.addProduct)
         self.backBtn = QPushButton("Back to Main")
         self.backBtn.clicked.connect(self.backToMain)
@@ -106,15 +105,19 @@ class AddProduct(QWidget):
 
     def addProduct(self):
         global defaultImg
+        global datePickEntry
         name = self.nameEntry.text()
         manufacturer = self.manufactureEntry.text()
         price = self.priceEntry.text()
         quota = self.quotaEntry.text()
-
+        if datePickEntry.text() != '':
+            productDate = datePickEntry.text()
+        else:
+            productDate = None
         if name and manufacturer and price and quota != "":
             try:
-                query = "INSERT INTO 'products' (product_name, product_manufacturer, product_price, product_quota,product_img) VALUES (?,?,?,?,?)"
-                cur.execute(query, (name, manufacturer, price, quota, defaultImg))
+                query = "INSERT INTO 'products' (product_name, product_manufacturer, product_price, product_quota,product_img, product_date) VALUES (?,?,?,?,?,?)"
+                cur.execute(query, (name, manufacturer, price, quota, defaultImg, productDate))
                 sqlConnect.commit()
                 QMessageBox.information(self, "Info", "New product has been added")
                 self.backToMain()

@@ -102,7 +102,7 @@ class Main(QMainWindow):
         ############Tab 1 Widgets##############
         ############Main Left Layout Widget##############
         self.productTable = QTableWidget()
-        self.productTable.setColumnCount(6)
+        self.productTable.setColumnCount(7)
         # Hide the column product id
         self.productTable.setColumnHidden(0, True)
         self.productTable.setHorizontalHeaderItem(0, QTableWidgetItem("Product ID"))
@@ -110,7 +110,8 @@ class Main(QMainWindow):
         self.productTable.setHorizontalHeaderItem(2, QTableWidgetItem("Manufacture"))
         self.productTable.setHorizontalHeaderItem(3, QTableWidgetItem("Price"))
         self.productTable.setHorizontalHeaderItem(4, QTableWidgetItem("Quota"))
-        self.productTable.setHorizontalHeaderItem(5, QTableWidgetItem("Availability"))
+        self.productTable.setHorizontalHeaderItem(5, QTableWidgetItem("Date Added"))
+        self.productTable.setHorizontalHeaderItem(6, QTableWidgetItem("Availability"))
         self.productTable.horizontalHeader().setSectionResizeMode(1, QHeaderView.Stretch)
         self.productTable.horizontalHeader().setSectionResizeMode(2, QHeaderView.Stretch)
         self.productTable.doubleClicked.connect(self.selectedProduct)
@@ -334,7 +335,7 @@ class Main(QMainWindow):
         for i in reversed(range(self.productTable.rowCount())):
             self.productTable.removeRow(i)
 
-        query = cur.execute("SELECT product_id, product_name, product_manufacturer, product_price, product_quota, product_availability FROM products")
+        query = cur.execute("SELECT product_id, product_name, product_manufacturer, product_price, product_quota, product_date, product_availability FROM products")
         for row_data in query:
             row_number = self.productTable.rowCount()
             self.productTable.insertRow(row_number)
@@ -393,7 +394,7 @@ class Main(QMainWindow):
             QMessageBox.information(self, "Warning", "Search query cannot be empty")
         else:
             self.searchEntry.setText("")
-            query = "SELECT product_id, product_name, product_manufacturer, product_price, product_quota, product_availability FROM products WHERE product_name LIKE ? or product_manufacturer LIKE ? "
+            query = "SELECT product_id, product_name, product_manufacturer, product_price, product_quota, product_date, product_availability FROM products WHERE product_name LIKE ? or product_manufacturer LIKE ? "
             results = cur.execute(query, ('%' + value + '%', '%' + value + '%')).fetchall()
 
             if results == []:
@@ -411,17 +412,17 @@ class Main(QMainWindow):
     def listProduct(self):
         products = None
         if self.allProduct.isChecked():
-            query = "SELECT product_id, product_name, product_manufacturer, product_price, product_quota, product_availability FROM products"
+            query = "SELECT product_id, product_name, product_manufacturer, product_price, product_quota, product_date, product_availability FROM products"
             products = cur.execute(query).fetchall()
 
         elif self.availableProduct.isChecked():
-            query = "SELECT product_id, product_name, product_manufacturer, product_price, product_quota, " \
+            query = "SELECT product_id, product_name, product_manufacturer, product_price, product_quota, product_date, " \
                     "product_availability FROM products WHERE product_availability = 'Available'"
             products = cur.execute(query).fetchall()
 
         elif self.notAvailableProduct.isChecked():
             query = "SELECT product_id, product_name, product_manufacturer, product_price, product_quota, " \
-                    "product_availability FROM products WHERE product_availability = 'UnAvailable'"
+                    "product_date, product_availability FROM products WHERE product_availability = 'UnAvailable'"
             products = cur.execute(query).fetchall()
 
 

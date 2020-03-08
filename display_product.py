@@ -1,7 +1,8 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import *
 from PIL import Image
+from datetime import datetime
 import os
 import sqlite3
 import styles
@@ -48,6 +49,15 @@ class DisplayProduct(QWidget):
         self.quotaEntry.setText(str(self.productQuota))
         self.availabilityCombo = QComboBox()
         self.availabilityCombo.addItems(["Available", "UnAvailable"])
+
+        x = datetime.now()
+        global datePickEntry
+        dateString = '{}/{}/{}'.format(x.day, x.month, x.year)
+        datePickEntry = QLineEdit()
+        datePickEntry.setText(dateString)
+
+        self.dateBtn = QPushButton("...")
+        self.dateBtn.clicked.connect(self.openCalendar)
         self.uploadBtn = QPushButton("Upload")
         self.uploadBtn.clicked.connect(self.uploadImg)
         self.deleteBtn = QPushButton("Delete")
@@ -73,6 +83,8 @@ class DisplayProduct(QWidget):
         self.bottomLayout.addRow(QLabel("Price: "), self.priceEntry)
         self.bottomLayout.addRow(QLabel("Quota: "), self.quotaEntry)
         self.bottomLayout.addRow(QLabel("Status: "), self.availabilityCombo)
+        self.bottomLayout.addRow("Date: ", datePickEntry)
+        self.bottomLayout.addRow("", self.dateBtn)
         self.bottomLayout.addRow(QLabel("Image: "), self.uploadBtn)
         self.bottomLayout.addRow(QLabel(""), self.deleteBtn)
         self.bottomLayout.addRow(QLabel(""), self.backBtn)
@@ -108,18 +120,26 @@ class DisplayProduct(QWidget):
             img = img.resize(size)
             img.save("img{0}".format(self.productImg))
 
+    def openCalendar(self):
+        self.open = Calendar()
+
     def updateProduct(self):
+        global datePickEntry
         name = self.nameEntry.text()
         manufacturer = self.manufacturerEntry.text()
         price = int(self.priceEntry.text())
         quota = int(self.quotaEntry.text())
         status = self.availabilityCombo.currentText()
         defaultImg = self.productImg
+        if datePickEntry.text() != '':
+            productDate = datePickEntry.text()
+        else:
+            productDate = None
 
         if (name and manufacturer and price and quota != " "):
             try:
-                query = "UPDATE products set product_name = ?, product_manufacturer =?, product_price = ?, product_quota = ?, product_img = ?, product_availability =? WHERE product_id = ?"
-                cur.execute(query, (name, manufacturer, price, quota, defaultImg, status, self.productId))
+                query = "UPDATE products set product_name = ?, product_manufacturer =?, product_price = ?, product_quota = ?, product_img = ?, product_date = ?, product_availability = ? WHERE product_id = ?"
+                cur.execute(query, (name, manufacturer, price, quota, defaultImg, productDate, status, self.productId))
                 sqlConnect.commit()
                 QMessageBox.information(self, "Info", "Product has been updated")
                 self.close()
@@ -152,3 +172,38 @@ class DisplayProduct(QWidget):
     def styles(self):
         self.bottomFrame.setStyleSheet(styles.productBottomFrame())
         self.topFrame.setStyleSheet(styles.productTopFrame())
+
+class Calendar(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle('Calendar')
+        self.UI()
+        self.show()
+
+    def UI(self):
+        vbox = QVBoxLayout()
+        self.setGeometry(1100, 300, 350, 300)
+        self.setWindowTitle('Calendar')
+
+        cal = QCalendarWidget(self)
+        cal.setGridVisible(True)
+        cal.clicked[QDate].connect(self.showDate)
+
+        vbox.addWidget(cal)
+
+        self.lbl = QLabel(self)
+        date = cal.selectedDate()
+        global dateSelected
+        dateSelected = '{}/{}/{}'.format(date.day(), date.month(), date.year())
+        self.lbl.setText(dateSelected)
+
+        vbox.addWidget(self.lbl)
+        self.setLayout(vbox)
+
+    def showDate(self, date):
+        global datePickEntry
+        dateSelected = '{}/{}/{}'.format(date.day(), date.month(), date.year())
+        self.lbl.setText(dateSelected)
+        datePickEntry.setText(dateSelected)
+
+
