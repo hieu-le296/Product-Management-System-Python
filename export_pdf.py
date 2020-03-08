@@ -1,4 +1,4 @@
-from PyQt5.QtPrintSupport import QPrintDialog, QPrinter, QPrintPreviewDialog
+from PyQt5.QtPrintSupport import QPrinter
 from PyQt5.Qt import QFileInfo
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
@@ -53,7 +53,7 @@ class ExportPDF(QWidget):
                 printer = QPrinter(QPrinter.HighResolution)
                 printer.setOutputFormat(QPrinter.PdfFormat)
                 printer.setOutputFileName(fn)
-                self.textEdit.print_(printer)
+                self.textEdit.document().print_(printer)
                 QMessageBox.information(self, "Success", "Exporting PDF successfully")
                 self.close()
         else:

@@ -102,9 +102,9 @@ class AddProduct(QWidget):
                 cur.execute(query, (name, manufacturer, price, quota, defaultImg))
                 sqlConnect.commit()
                 QMessageBox.information(self, "Info", "New product has been added")
+                self.backToMain()
                 self.close()
-                self.main = main.Main()
-                self.main.show()
+
             except:
                 QMessageBox.information(self, "Info", "Product has not been added")
 

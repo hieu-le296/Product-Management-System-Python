@@ -100,6 +100,7 @@ class DisplayMember(QWidget):
                 cur.execute(query, (DisplayMember.memberId,))
                 sqlConnect.commit()
                 QMessageBox.information(self, "Info", "Member has been deleted")
+                self.backToMain()
                 self.close()
 
             except:
@@ -119,6 +120,7 @@ class DisplayMember(QWidget):
                 cur.execute(query, (fname, emptyString, emptyString, emptyString, self.memberId))
                 sqlConnect.commit()
                 QMessageBox.information(self, "Info", "Membership has been updated")
+                self.backToMain()
                 self.close()
             except:
                 QMessageBox.information(self, "Info", "Membership has not been updated")
@@ -130,6 +132,7 @@ class DisplayMember(QWidget):
                 cur.execute(query, (fname, lname, phone, address, self.memberId))
                 sqlConnect.commit()
                 QMessageBox.information(self, "Info", "Membership has been updated")
+                self.backToMain()
                 self.close()
             except:
                 QMessageBox.information(self, "Info", "Membership has not been updated")
