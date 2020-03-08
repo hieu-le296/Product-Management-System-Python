@@ -25,7 +25,7 @@ class Main(QMainWindow):
         self.setWindowTitle("Product Management")
         self.setWindowIcon(QIcon('icons/icon.ico'))
         self.setGeometry(450, 150, 1350, 750)
-        self.setFixedSize(self.size())
+        #self.setFixedSize(self.size())
 
         self.UI()
         self.show()
@@ -193,8 +193,8 @@ class Main(QMainWindow):
 
 
         ############Tab 1 Main Layouts##############
-        self.productMainLayout.addLayout(self.productLeftLayout, 70)
-        self.productMainLayout.addLayout(self.productRightLayout, 30)
+        self.productMainLayout.addLayout(self.productLeftLayout, 75)
+        self.productMainLayout.addLayout(self.productRightLayout, 25)
         self.tab1.setLayout(self.productMainLayout)
 
         ############Tab2 Layout##############
@@ -219,8 +219,8 @@ class Main(QMainWindow):
 
 
         ############Tab 2 Main Layouts##############
-        self.memberMainLayout.addLayout(self.memberLeftLayout, 70)
-        self.memberMainLayout.addLayout(self.memberRightLayout, 30)
+        self.memberMainLayout.addLayout(self.memberLeftLayout, 75)
+        self.memberMainLayout.addLayout(self.memberRightLayout, 25)
         self.tab2.setLayout(self.memberMainLayout)
 
         ############Tab3 Layout##############
@@ -235,6 +235,7 @@ class Main(QMainWindow):
         self.statGroupBox.setLayout(self.statLayout)
         self.statGroupBox.setFont(QFont("Times", 20))
         self.statMainLayout.addWidget(self.statGroupBox)
+        self.statMainLayout.setAlignment(Qt.AlignCenter)
         self.tab3.setLayout(self.statMainLayout)
 
         # block signal for tabs
