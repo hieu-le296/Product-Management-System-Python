@@ -11,6 +11,7 @@ import display_product
 import display_member
 import export_pdf
 import print
+import calendar_class
 import info
 import selling
 import styles
@@ -68,6 +69,11 @@ class Main(QMainWindow):
         self.exportPDF = QAction(QIcon('icons/pdf.png'), "Export PDF", self)
         self.exportPDF.triggered.connect(self.funcExportPdf)
         self.tb.addAction(self.exportPDF)
+        self.tb.addSeparator()
+        ############Calendar##############
+        self.calendarToolBar = QAction(QIcon('icons/calendar.png'), "Calendar", self)
+        self.calendarToolBar.triggered.connect(self.funcCalendar)
+        self.tb.addAction(self.calendarToolBar)
         self.tb.addSeparator()
         ############Information##############
         self.infoToolBar = QAction(QIcon('icons/info.png'), "Info", self)
@@ -292,6 +298,9 @@ class Main(QMainWindow):
 
     def funcPrintPreview(self):
         self.printDiaglog = print.Print()
+
+    def funcCalendar(self):
+        self.calendarDialog = calendar_class.Calendar()
 
     def funcInfo(self):
         self.info = info.Info()

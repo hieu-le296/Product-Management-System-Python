@@ -17,7 +17,7 @@ class DisplayProduct(QWidget):
         super().__init__()
         self.setWindowTitle("Product Detail")
         self.setWindowIcon(QIcon("icons/icon.ico"))
-        self.setGeometry(850, 150, 350, 600)
+        self.setGeometry(800, 150, 350, 600)
         self.setFixedSize(self.size())
         self.UI()
         self.show()
