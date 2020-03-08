@@ -3,12 +3,12 @@ from PyQt5.QtGui import *
 from PyQt5.QtCore import Qt
 import sqlite3
 import styles
+import main
 
 sqlConnect = sqlite3.connect("products.db")
 cur = sqlConnect.cursor()
 
 defaultImg = 'img/store.png'
-
 
 class SellProduct(QWidget):
     def __init__(self):
@@ -41,22 +41,8 @@ class SellProduct(QWidget):
         self.quantityCombo = QComboBox()
         self.submitBtn = QPushButton("Submit")
         self.submitBtn.clicked.connect(self.sellProduct)
-
-        # query1 = "SELECT * FROM products WHERE product_availability =?"
-        # query2 = "SELECT member_id, member_fname from members"
-        # products = cur.execute(query1, ('Available',)).fetchall()
-        # members = cur.execute(query2).fetchall()
-        # quantity = products[0][4]
-        #
-        # for product in products:
-        #     self.productCombo.addItem(product[1], product[0])
-        #
-        # for member in members:
-        #     self.memberCombo.addItem(member[1], member[0])
-        #
-        # for i in range(1, quantity + 1):
-        #     self.quantityCombo.addItem(str(i))
-
+        self.backBtn = QPushButton("Back to Main")
+        self.backBtn.clicked.connect(self.backToMain)
 
     def layouts(self):
         ##############Main Layout##############
@@ -75,6 +61,7 @@ class SellProduct(QWidget):
         self.bottomLayout.addRow(QLabel("Product: "), self.productCombo)
         self.bottomLayout.addRow(QLabel("Selling to: "), self.memberCombo)
         self.bottomLayout.addRow(QLabel("Quantity: "), self.quantityCombo)
+        self.bottomLayout.addRow(QLabel(""), self.backBtn)
         self.bottomLayout.addRow(QLabel(""), self.submitBtn)
         self.bottomFrame.setLayout(self.bottomLayout)
 
@@ -120,6 +107,11 @@ class SellProduct(QWidget):
         self.confirm = ConfirmWindow()
         self.close()
 
+    def backToMain(self):
+        self.main = main.Main()
+        self.main.show()
+        self.close()
+
     def styles(self):
         self.topFrame.setStyleSheet(styles.sellProductTopFrame())
         self.bottomFrame.setStyleSheet(styles.sellProductBottomFrame())
@@ -129,7 +121,7 @@ class ConfirmWindow(QWidget):
         super().__init__()
         self.setWindowTitle("Sell Product")
         self.setWindowIcon(QIcon("icons/icon.ico"))
-        self.setGeometry(450, 150, 350, 600)
+        self.setGeometry(850, 150, 350, 600)
         self.setFixedSize(self.size())
         self.UI()
         self.show()
@@ -162,9 +154,6 @@ class ConfirmWindow(QWidget):
         self.amountLabel.setText(str(price[0]) + "x" + str(quantity) + " = $" + str(self.amount))
         self.confirmBtn = QPushButton("Confirm")
         self.confirmBtn.clicked.connect(self.confirm)
-
-
-
 
     def layouts(self):
         self.mainLayout = QVBoxLayout()
@@ -202,7 +191,6 @@ class ConfirmWindow(QWidget):
                 updateQuotaQuery = "UPDATE products set product_quota =?, product_availability =? WHERE product_id =? "
                 cur.execute(updateQuotaQuery, (0, 'UnAvailable', productId))
                 sqlConnect.commit()
-
             else:
                 newQuota = (self.quota[0] - quantity)
                 updateQuotaQuery = "UPDATE products set product_quota =? WHERE product_id =?"
@@ -210,6 +198,8 @@ class ConfirmWindow(QWidget):
                 sqlConnect.commit()
             QMessageBox.information(self, "Info", "Success")
             self.close()
+            self.main = main.Main()
+            self.main.show()
         except:
             QMessageBox.information(self, "Info", "Something went wrong")
 

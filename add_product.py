@@ -4,6 +4,7 @@ from PyQt5.QtGui import *
 from PyQt5.QtCore import Qt
 import sqlite3
 from PIL import Image
+import main
 
 sqlConnect = sqlite3.connect("products.db")
 cur = sqlConnect.cursor()
@@ -45,6 +46,8 @@ class AddProduct(QWidget):
         self.uploadBtn.clicked.connect(self.uploadImg)
         self.submitBtn = QPushButton("Submit")
         self.submitBtn.clicked.connect(self.addProduct)
+        self.backBtn = QPushButton("Back to Main")
+        self.backBtn.clicked.connect(self.backToMain)
 
     def layouts(self):
         ##############Main Layout##############
@@ -65,6 +68,7 @@ class AddProduct(QWidget):
         self.bottomLayout.addRow("Price: ", self.priceEntry)
         self.bottomLayout.addRow("Quota: ", self.quotaEntry)
         self.bottomLayout.addRow("Product Image: ", self.uploadBtn)
+        self.bottomLayout.addRow("", self.backBtn)
         self.bottomLayout.addRow("", self.submitBtn)
         self.bottomFrame.setLayout(self.bottomLayout)
 
@@ -99,12 +103,16 @@ class AddProduct(QWidget):
                 sqlConnect.commit()
                 QMessageBox.information(self, "Info", "New product has been added")
                 self.close()
-
-
+                self.main = main.Main()
+                self.main.show()
             except:
                 QMessageBox.information(self, "Info", "Product has not been added")
 
         else:
             QMessageBox.information(self, "Info", "Fields cannot be empty!")
 
+    def backToMain(self):
+        self.main = main.Main()
+        self.main.show()
+        self.close()
 

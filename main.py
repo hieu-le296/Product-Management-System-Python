@@ -1,7 +1,5 @@
-import os
 import sqlite3
 import sys
-
 from PIL import Image
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import *
@@ -18,8 +16,6 @@ import styles
 
 sqlConnect = sqlite3.connect("products.db")
 cur = sqlConnect.cursor()
-
-global productId
 
 class Main(QMainWindow):
     def __init__(self):
@@ -146,9 +142,6 @@ class Main(QMainWindow):
         self.totalMemberLabel = QLabel()
         self.soldProductLabel = QLabel()
         self.totalAmountLabel = QLabel()
-
-
-
 
     def layouts(self):
         ############Tab1 Layout##############
@@ -279,16 +272,17 @@ class Main(QMainWindow):
         product.addAction(sellProductMenu)
         help.addAction(infoMenu)
 
-
-
     def funcAddProduct(self):
         self.newProduct = add_product.AddProduct()
+        self.close()
 
     def funcAddMember(self):
         self.newMember = add_member.AddMember()
+        self.close()
 
     def funcSellProduct(self):
         self.sell = selling.SellProduct()
+        self.close()
 
     def funcExportPdf(self):
         self.export = export_pdf.ExportPDF()
@@ -361,6 +355,7 @@ class Main(QMainWindow):
         display_product.DisplayProduct.productId = productId
         self.displayP = display_product.DisplayProduct()
         self.displayP.show()
+        self.close()
 
     def getMemberIdFromCurrentRow(self):
         listMember = []
@@ -375,6 +370,7 @@ class Main(QMainWindow):
         display_member.DisplayMember.memberId = memberId
         self.displayM = display_member.DisplayMember()
         self.displayM.show()
+        self.close()
 
     def searchProduct(self):
         value = self.searchEntry.text()
@@ -422,10 +418,6 @@ class Main(QMainWindow):
             self.productTable.insertRow(row_number)
             for column_number, data in enumerate(row_data):
                 self.productTable.setItem(row_number, column_number, QTableWidgetItem(str(data)))
-
-
-
-
 
     def searchMember(self):
         value = self.memberSearchEntry.text()

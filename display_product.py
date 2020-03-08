@@ -5,6 +5,7 @@ from PIL import Image
 import os
 import sqlite3
 import styles
+import main
 
 sqlConnect = sqlite3.connect("products.db")
 cur = sqlConnect.cursor()
@@ -16,7 +17,7 @@ class DisplayProduct(QWidget):
         super().__init__()
         self.setWindowTitle("Product Detail")
         self.setWindowIcon(QIcon("icons/icon.ico"))
-        self.setGeometry(450, 150, 350, 600)
+        self.setGeometry(850, 150, 350, 600)
         self.setFixedSize(self.size())
         self.UI()
         self.show()
@@ -26,17 +27,6 @@ class DisplayProduct(QWidget):
         self.widgets()
         self.layouts()
         self.styles()
-
-    def productDetails(self):
-        query = ("SELECT * FROM products WHERE product_id=?")
-        product = cur.execute(query, (self.productId,)).fetchone()  # single item tuple = (1,)
-        self.productName = product[1]
-        self.productManufacturer = product[2]
-        self.productPrice = product[3]
-        self.productQuota = product[4]
-        self.productImg = product[5]
-        self.productStatus = product[6]
-
 
     def widgets(self):
         #################Top layouts wigdets#########
@@ -64,6 +54,8 @@ class DisplayProduct(QWidget):
         self.deleteBtn.clicked.connect(self.deleteProduct)
         self.updateBtn = QPushButton("Update")
         self.updateBtn.clicked.connect(self.updateProduct)
+        self.backBtn = QPushButton("Back to Main")
+        self.backBtn.clicked.connect(self.backToMain)
 
 
     def layouts(self):
@@ -83,6 +75,7 @@ class DisplayProduct(QWidget):
         self.bottomLayout.addRow(QLabel("Status: "), self.availabilityCombo)
         self.bottomLayout.addRow(QLabel("Image: "), self.uploadBtn)
         self.bottomLayout.addRow(QLabel(""), self.deleteBtn)
+        self.bottomLayout.addRow(QLabel(""), self.backBtn)
         self.bottomLayout.addRow(QLabel(""), self.updateBtn)
 
         ###########Set Layouts##########
@@ -92,6 +85,19 @@ class DisplayProduct(QWidget):
         self.mainLayout.addWidget(self.bottomFrame)
 
         self.setLayout(self.mainLayout)
+
+    def productDetails(self):
+        try:
+            query = ("SELECT * FROM products WHERE product_id=?")
+            product = cur.execute(query, (self.productId,)).fetchone()  # single item tuple = (1,)
+            self.productName = product[1]
+            self.productManufacturer = product[2]
+            self.productPrice = product[3]
+            self.productQuota = product[4]
+            self.productImg = product[5]
+            self.productStatus = product[6]
+        except:
+            QMessageBox.information(self, "Error", "This product has been deleted.")
 
     def uploadImg(self):
         size = (256, 256)
@@ -103,7 +109,6 @@ class DisplayProduct(QWidget):
             img.save("img{0}".format(self.productImg))
 
     def updateProduct(self):
-        global productId
         name = self.nameEntry.text()
         manufacturer = self.manufacturerEntry.text()
         price = int(self.priceEntry.text())
@@ -118,7 +123,8 @@ class DisplayProduct(QWidget):
                 sqlConnect.commit()
                 QMessageBox.information(self, "Info", "Product has been updated")
                 self.close()
-
+                self.main = main.Main()
+                self.main.show()
             except:
                 QMessageBox.information(self, "Info", "Product has not been updated")
 
@@ -133,8 +139,15 @@ class DisplayProduct(QWidget):
                 sqlConnect.commit()
                 QMessageBox.information(self, "Information", "Product has been deleted")
                 self.close()
+                self.main = main.Main()
+                self.main.show()
             except:
                 QMessageBox.information(self, "Information", "Product has not been deleted")
+
+    def backToMain(self):
+        self.main = main.Main()
+        self.main.show()
+        self.close()
 
     def styles(self):
         self.bottomFrame.setStyleSheet(styles.productBottomFrame())

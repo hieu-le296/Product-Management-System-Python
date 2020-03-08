@@ -14,7 +14,7 @@ class DisplayMember(QWidget):
         super().__init__()
         self.setWindowTitle("Membership Detail")
         self.setWindowIcon(QIcon("icons/icon.ico"))
-        self.setGeometry(450, 150, 350, 600)
+        self.setGeometry(850, 150, 350, 600)
         self.setFixedSize(self.size())
         self.UI()
         self.show()
@@ -47,6 +47,8 @@ class DisplayMember(QWidget):
         self.updateBtn.clicked.connect(self.updateMember)
         self.deleteBtn = QPushButton("Delete")
         self.deleteBtn.clicked.connect(self.deleteMember)
+        self.backBtn = QPushButton("Back to Main")
+        self.backBtn.clicked.connect(self.backToMain)
 
 
 
@@ -67,6 +69,7 @@ class DisplayMember(QWidget):
         self.bottomLayout.addRow(QLabel("Phone: "), self.phoneEntry)
         self.bottomLayout.addRow(QLabel("Full Address: "), self.addressEntry)
         self.bottomLayout.addRow(QLabel(""), self.deleteBtn)
+        self.bottomLayout.addRow(QLabel(""), self.backBtn)
         self.bottomLayout.addRow(QLabel(""), self.updateBtn)
         self.bottomFrame.setLayout(self.bottomLayout)
 
@@ -84,7 +87,7 @@ class DisplayMember(QWidget):
             self.memberPhone = member[3]
             self.memberAddress = member[4]
         except:
-            QMessageBox.information(self, "Error", "Member has been deleted. Program exited")
+            QMessageBox.information(self, "Error", "Member has been deleted. Program exited.")
 
 
 
@@ -132,6 +135,11 @@ class DisplayMember(QWidget):
                 QMessageBox.information(self, "Info", "Membership has not been updated")
         else:
             QMessageBox.information(self, "Info", "Fields cannot be empty!")
+
+    def backToMain(self):
+        self.main = main.Main()
+        self.main.show()
+        self.close()
 
     def styles(self):
         self.topFrame.setStyleSheet(styles.memberTopFrame())
