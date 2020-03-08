@@ -11,7 +11,7 @@ class Info(QWidget):
         super().__init__()
         self.setWindowTitle("Information")
         self.setWindowIcon(QIcon('icons/icon.ico'))
-        self.setGeometry(450, 150, 350, 550)
+        self.setGeometry(850, 150, 350, 550)
         self.setFixedSize(self.size())
         self.UI()
         self.show()

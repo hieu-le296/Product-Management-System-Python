@@ -1,19 +1,19 @@
-import sys
 import os
-from PyQt5.QtWidgets import *
-from PyQt5.QtGui import *
-from PyQt5.QtCore import Qt
-from PyQt5.QtPrintSupport import QPrintDialog, QPrinter, QPrintPreviewDialog
-from PyQt5.Qt import QFileInfo
-from PIL import Image
 import sqlite3
-import add_product
+import sys
+
+from PIL import Image
+from PyQt5.QtCore import Qt
+from PyQt5.QtGui import *
+from PyQt5.QtWidgets import *
+
 import add_member
+import add_product
+import display_member
+import export_pdf
+import info
 import selling
 import styles
-import info
-import export_pdf
-
 
 sqlConnect = sqlite3.connect("products.db")
 cur = sqlConnect.cursor()
@@ -283,7 +283,6 @@ class Main(QMainWindow):
     def funcAddProduct(self):
         self.newProduct = add_product.AddProduct()
 
-
     def funcAddMember(self):
         self.newMember = add_member.AddMember()
 
@@ -357,14 +356,18 @@ class Main(QMainWindow):
         self.displayP = DisplayProduct()
         self.displayP.show()
 
-    def selectedMember(self):
-        global memberId
+    def getMemberIdFromCurrentRow(self):
         listMember = []
         for i in range(0, 5):
             listMember.append(self.memberTable.item(self.memberTable.currentRow(), i).text())
 
         memberId = listMember[0]
-        self.displayM = DisplayMember()
+        return memberId
+
+    def selectedMember(self):
+        memberId = self.getMemberIdFromCurrentRow()
+        display_member.DisplayMember.memberId = memberId
+        self.displayM = display_member.DisplayMember()
         self.displayM.show()
 
     def searchProduct(self):
