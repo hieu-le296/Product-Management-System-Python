@@ -1,9 +1,8 @@
-import sys
-import os
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import Qt
 import sqlite3
+import main
 
 sqlConnect = sqlite3.connect("products.db")
 cur = sqlConnect.cursor()
@@ -45,6 +44,8 @@ class AddMember(QWidget):
         self.addressEntry.setPlaceholderText("Enter member full address")
         self.submitBtn = QPushButton("Submit")
         self.submitBtn.clicked.connect(self.addMember)
+        self.backBtn = QPushButton("Back to Main")
+        self.backBtn.clicked.connect(self.backToMain)
 
     def layouts(self):
         self.mainLayout = QVBoxLayout()
@@ -62,6 +63,7 @@ class AddMember(QWidget):
         self.bottomLayout.addRow(QLabel("Last Name: "), self.lnameEntry)
         self.bottomLayout.addRow(QLabel("Phone Number: "), self.phoneEntry)
         self.bottomLayout.addRow(QLabel("Full Address: "), self.addressEntry)
+        self.bottomLayout.addRow(QLabel(""), self.backBtn)
         self.bottomLayout.addRow(QLabel(""), self.submitBtn)
         self.bottomFrame.setLayout(self.bottomLayout)
 
@@ -98,3 +100,8 @@ class AddMember(QWidget):
 
         else:
             QMessageBox.information(self, "Info", "Fields cannot be empty!")
+
+    def backToMain(self):
+        self.main = main.Main()
+        self.main.show()
+        self.close()
