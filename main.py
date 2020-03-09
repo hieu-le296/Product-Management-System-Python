@@ -10,7 +10,7 @@ import add_product
 import display_product
 import display_member
 import export_pdf
-import print
+import print_widget
 import calendar_class
 import info
 import selling
@@ -299,7 +299,7 @@ class Main(QMainWindow):
         self.export = export_pdf.ExportPDF()
 
     def funcPrintPreview(self):
-        self.printDiaglog = print.Print()
+        self.printDiaglog = print_widget.Print()
 
     def funcCalendar(self):
         self.calendarDialog = calendar_class.Calendar()
