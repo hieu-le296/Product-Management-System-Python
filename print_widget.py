@@ -79,7 +79,7 @@ class Print(QWidget):
 
         elif self.selling.isChecked():
             checked = True
-            query = "SELECT products.product_name, products.product_manufacturer, product_price, members.member_fname, sellings.selling_quantity, sellings.selling_amount, sellings.selling_date FROM products, members, sellings WHERE products.product_id = sellings.selling_id AND members.member_id = sellings.selling_member_id"
+            query ="SELECT products.product_name, products.product_manufacturer, products.product_price, members.member_fname, sellings.selling_quantity, sellings.selling_amount, sellings.selling_date FROM products, members, sellings WHERE products.product_id = sellings.selling_product_id AND members.member_id = sellings.selling_member_id"
             history = cur.execute(query).fetchall()
             self.textEdit.append("                                                                               Selling History        ")
             for record in history:

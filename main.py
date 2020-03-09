@@ -19,13 +19,14 @@ import styles
 sqlConnect = sqlite3.connect("products.db")
 cur = sqlConnect.cursor()
 
+
 class Main(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Product Management")
         self.setWindowIcon(QIcon('icons/icon.ico'))
         self.setGeometry(450, 150, 1350, 750)
-        #self.setFixedSize(self.size())
+        # self.setFixedSize(self.size())
 
         self.UI()
         self.show()
@@ -39,7 +40,7 @@ class Main(QMainWindow):
         self.displayProduct()
         self.displayMember()
         self.getStat()
-        self.getSellingHistory()
+        #self.getSellingHistory()
         self.styles()
 
     def toolBar(self):
@@ -82,7 +83,6 @@ class Main(QMainWindow):
         self.tb.addAction(self.infoToolBar)
         self.tb.addSeparator()
 
-
     def tabWidget(self):
         self.tabs = QTabWidget()
 
@@ -99,7 +99,6 @@ class Main(QMainWindow):
         self.tabs.addTab(self.tab2, "Membership")
         self.tabs.addTab(self.tab3, "Statistics")
         self.tabs.addTab(self.tab4, "Selling History")
-
 
     def widgets(self):
         ############Tab 1 Widgets##############
@@ -158,6 +157,10 @@ class Main(QMainWindow):
         ############Tab 4 Widgets##############
         self.historyShow = QTextEdit()
         self.historyShow.setReadOnly(True)
+        self.fetchBtn = QPushButton("Fetch Data")
+        self.fetchBtn.clicked.connect(self.getSellingHistory)
+        self.deleteBtn = QPushButton("Delete History")
+        self.deleteBtn.clicked.connect(self.deleteHistory)
 
     def layouts(self):
         ############Tab1 Layout##############
@@ -167,7 +170,6 @@ class Main(QMainWindow):
         self.productRightTopLayout = QHBoxLayout()
         self.productRightMiddleLayout = QHBoxLayout()
         self.productRightBottomLayout = QVBoxLayout()
-
 
         ############Add Widgets##############
         ############Left Main Layout Widgets##############
@@ -185,7 +187,6 @@ class Main(QMainWindow):
         self.topGroupBox.setLayout(self.productRightTopLayout)
         self.productRightLayout.addWidget(self.topGroupBox, 20)
 
-
         ############Right Middle Layout Widget##############
         self.productRightMiddleLayout.addWidget(self.allProduct)
         self.productRightMiddleLayout.addWidget(self.availableProduct)
@@ -198,7 +199,6 @@ class Main(QMainWindow):
         self.bottomGroupBox.setLayout(self.productRightBottomLayout)
         self.productRightLayout.addWidget(self.bottomGroupBox, 60)
 
-
         ############Tab 1 Main Layouts##############
         self.productMainLayout.addLayout(self.productLeftLayout, 75)
         self.productMainLayout.addLayout(self.productRightLayout, 25)
@@ -209,7 +209,6 @@ class Main(QMainWindow):
         self.memberLeftLayout = QVBoxLayout()
         self.memberRightLayout = QVBoxLayout()
         self.memberRightTopLayout = QHBoxLayout()
-
 
         ############Add Widgets##############
         ############Left Main Layout Widgets##############
@@ -223,7 +222,6 @@ class Main(QMainWindow):
         self.memberRightTopLayout.addWidget(self.memberSearchButton)
         self.memberRightGroupBox.setLayout(self.memberRightTopLayout)
         self.memberRightLayout.addWidget(self.memberRightGroupBox)
-
 
         ############Tab 2 Main Layouts##############
         self.memberMainLayout.addLayout(self.memberLeftLayout, 75)
@@ -250,15 +248,14 @@ class Main(QMainWindow):
         self.historyLayout = QVBoxLayout()
         self.historyGroupBox = QGroupBox("Selling History")
         self.historyLayout.addWidget(self.historyShow)
-
-
+        self.historyLayout.addWidget(self.fetchBtn)
+        self.historyLayout.addWidget(self.deleteBtn)
 
         self.historyGroupBox.setLayout(self.historyLayout)
         self.historyGroupBox.setFont(QFont("Times", 14))
         self.historyMainLayout.addWidget(self.historyGroupBox)
         self.historyMainLayout.setAlignment(Qt.AlignCenter)
         self.tab4.setLayout(self.historyMainLayout)
-
 
         # block signal for tabs
         self.tabs.blockSignals(False)
@@ -348,38 +345,50 @@ class Main(QMainWindow):
         self.totalAmountLabel.setText("$ " + str(totalAmount))
 
     def getSellingHistory(self):
-        query = "SELECT products.product_name, products.product_manufacturer, product_price, members.member_fname, sellings.selling_quantity, sellings.selling_amount, sellings.selling_date FROM products, members, sellings WHERE products.product_id = sellings.selling_id AND members.member_id = sellings.selling_member_id"
+        query = "SELECT products.product_name, products.product_manufacturer, products.product_price, members.member_fname, sellings.selling_quantity, sellings.selling_amount, sellings.selling_date FROM products, members, sellings WHERE products.product_id = sellings.selling_product_id AND members.member_id = sellings.selling_member_id"
         history = cur.execute(query).fetchall()
-        for record in history:
-            product_name = record[0]
-            product_manu = record[1]
-            product_price = record[2]
-            member_name = record[3]
-            selling_quantity = record[4]
-            selling_amount = record[5]
-            selling_date = record[6]
-            self.historyShow.append("Product Name: " + product_name)
-            self.historyShow.append("Manufacturer: " + product_manu)
-            self.historyShow.append("Product Price: $" + str(product_price))
-            self.historyShow.append("Selling to: " + member_name)
-            self.historyShow.append("Quantity: " + str(selling_quantity))
-            self.historyShow.append("Amount: $" + str(selling_amount))
-            self.historyShow.append("Date Sold: " + str(selling_date))
-            self.historyShow.append("")
+        if history is not None:
+            for record in history:
+                product_name = record[0]
+                product_manu = record[1]
+                product_price = record[2]
+                member_name = record[3]
+                selling_quantity = record[4]
+                selling_amount = record[5]
+                selling_date = record[6]
+                self.historyShow.append("Product Name: " + str(product_name))
+                self.historyShow.append("Manufacturer: " + str(product_manu))
+                self.historyShow.append("Product Price: $" + str(product_price))
+                self.historyShow.append("Selling to: " + str(member_name))
+                self.historyShow.append("Quantity: " + str(selling_quantity))
+                self.historyShow.append("Amount: $" + str(selling_amount))
+                self.historyShow.append("Date Sold: " + str(selling_date))
+                self.historyShow.append("")
 
+    def deleteHistory(self):
+        mbox = QMessageBox.question(self, "Wanrning", "Are you sure to delete this product?",
+                                    QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+        if (mbox == QMessageBox.Yes):
+            try:
+                cur.execute("DELETE FROM sellings")
+                sqlConnect.commit()
+                QMessageBox.information(self, "Information", "History has been deleted")
+            except:
+                QMessageBox.information(self, "Information", "History has not been deleted")
 
     def tabsChanged(self):
+        #self.getSellingHistory()
         self.getStat()
         self.displayProduct()
         self.displayMember()
-
 
     def displayProduct(self):
         self.productTable.setFont(QFont("Times", 12))
         for i in reversed(range(self.productTable.rowCount())):
             self.productTable.removeRow(i)
 
-        query = cur.execute("SELECT product_id, product_name, product_manufacturer, product_price, product_quota, product_date, product_availability FROM products")
+        query = cur.execute(
+            "SELECT product_id, product_name, product_manufacturer, product_price, product_quota, product_date, product_availability FROM products")
         for row_data in query:
             row_number = self.productTable.rowCount()
             self.productTable.insertRow(row_number)
@@ -469,7 +478,6 @@ class Main(QMainWindow):
                     "product_date, product_availability FROM products WHERE product_availability = 'UnAvailable'"
             products = cur.execute(query).fetchall()
 
-
         for i in reversed(range(self.productTable.rowCount())):
             self.productTable.removeRow(i)
 
@@ -486,7 +494,8 @@ class Main(QMainWindow):
         else:
             self.memberSearchEntry.setText("")
             query = "SELECT * FROM members WHERE member_fname LIKE ? or member_lname LIKE ? or member_phone LIKE ? or member_address LIKE ?"
-            results = cur.execute(query, ('%' + value + '%', '%' + value + '%', '%' + value + '%', '%' + value + '%')).fetchall()
+            results = cur.execute(query, (
+            '%' + value + '%', '%' + value + '%', '%' + value + '%', '%' + value + '%')).fetchall()
             if results == []:
                 QMessageBox.information(self, "Warning", "There is no such a member")
             else:
@@ -511,6 +520,6 @@ def main():
     window = Main()
     sys.exit(App.exec_())
 
+
 if __name__ == '__main__':
     main()
-
