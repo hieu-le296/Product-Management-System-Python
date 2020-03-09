@@ -40,7 +40,7 @@ class Main(QMainWindow):
         self.displayProduct()
         self.displayMember()
         self.getStat()
-        #self.getSellingHistory()
+        self.getSellingHistory()
         self.styles()
 
     def toolBar(self):
@@ -157,8 +157,6 @@ class Main(QMainWindow):
         ############Tab 4 Widgets##############
         self.historyShow = QTextEdit()
         self.historyShow.setReadOnly(True)
-        self.fetchBtn = QPushButton("Fetch Data")
-        self.fetchBtn.clicked.connect(self.getSellingHistory)
         self.deleteBtn = QPushButton("Delete History")
         self.deleteBtn.clicked.connect(self.deleteHistory)
 
@@ -248,7 +246,6 @@ class Main(QMainWindow):
         self.historyLayout = QVBoxLayout()
         self.historyGroupBox = QGroupBox("Selling History")
         self.historyLayout.addWidget(self.historyShow)
-        self.historyLayout.addWidget(self.fetchBtn)
         self.historyLayout.addWidget(self.deleteBtn)
 
         self.historyGroupBox.setLayout(self.historyLayout)
@@ -363,7 +360,7 @@ class Main(QMainWindow):
                 self.historyShow.append("Quantity: " + str(selling_quantity))
                 self.historyShow.append("Amount: $" + str(selling_amount))
                 self.historyShow.append("Date Sold: " + str(selling_date))
-                self.historyShow.append("")
+                self.historyShow.append("-----------------------------------------------------")
 
     def deleteHistory(self):
         mbox = QMessageBox.question(self, "Wanrning", "Are you sure to delete this product?",
@@ -377,7 +374,6 @@ class Main(QMainWindow):
                 QMessageBox.information(self, "Information", "History has not been deleted")
 
     def tabsChanged(self):
-        #self.getSellingHistory()
         self.getStat()
         self.displayProduct()
         self.displayMember()

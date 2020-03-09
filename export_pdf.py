@@ -52,7 +52,7 @@ class ExportPDF(QWidget):
                 self.textEdit.append("Quantity: " + str(product_quota))
                 self.textEdit.append("Date Added: " + str(product_date))
                 self.textEdit.append("Status: " + product_status)
-                self.textEdit.append("")
+                self.textEdit.append("-----------------------------------------------------")
         elif self.member.isChecked():
             checked = True
             members = cur.execute("SELECT * FROM members")
@@ -68,7 +68,7 @@ class ExportPDF(QWidget):
                 self.textEdit.append("Last name: " + str(member_lname))
                 self.textEdit.append("Phone number: " + str(member_phone))
                 self.textEdit.append("Address: " + str(member_addr))
-                self.textEdit.append("")
+                self.textEdit.append("-----------------------------------------------------")
 
         elif self.selling.isChecked():
             checked = True
@@ -90,7 +90,7 @@ class ExportPDF(QWidget):
                 self.textEdit.append("Quantity: " + str(selling_quantity))
                 self.textEdit.append("Amount: $" + str(selling_amount))
                 self.textEdit.append("Date Sold: " + str(selling_date))
-                self.textEdit.append("")
+                self.textEdit.append("-----------------------------------------------------")
 
         if checked is True:
             fn, _ = QFileDialog.getSaveFileName(self, 'Export PDF', None, 'PDF files (.pdf);;All Files()')

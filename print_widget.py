@@ -18,7 +18,7 @@ class Print(QWidget):
 
     def UI(self):
         self.text = QLabel("Select one option", self)
-        self.text.move(85, 20)
+        self.text.move(150, 20)
         self.product = QRadioButton("Products", self)
         self.product.setChecked(True)
         self.product.move(40, 50)
@@ -58,7 +58,7 @@ class Print(QWidget):
                 self.textEdit.append("Quantity: " + str(product_quota))
                 self.textEdit.append("Date Added: " + str(product_date))
                 self.textEdit.append("Status: " + product_status)
-                self.textEdit.append("")
+                self.textEdit.append("-----------------------------------------------------")
         elif self.member.isChecked():
             checked = True
             members = cur.execute("SELECT * FROM members")
@@ -75,7 +75,7 @@ class Print(QWidget):
                 self.textEdit.append("Last name: " + str(member_lname))
                 self.textEdit.append("Phone number: " + str(member_phone))
                 self.textEdit.append("Address: " + str(member_addr))
-                self.textEdit.append("")
+                self.textEdit.append("-----------------------------------------------------")
 
         elif self.selling.isChecked():
             checked = True
@@ -97,7 +97,7 @@ class Print(QWidget):
                 self.textEdit.append("Quantity: " + str(selling_quantity))
                 self.textEdit.append("Amount: $" + str(selling_amount))
                 self.textEdit.append("Date Sold: " + str(selling_date))
-                self.textEdit.append("")
+                self.textEdit.append("-----------------------------------------------------")
 
         self.textEdit.document().print_(printer)
 
