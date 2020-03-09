@@ -9,7 +9,7 @@ cur = sqlConnect.cursor()
 class Print(QWidget):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Export to PDF")
+        self.setWindowTitle("Print Preview")
         self.setWindowIcon(QIcon('icons/icon.ico'))
         self.setGeometry(850, 450, 250, 150)
         self.setFixedSize(self.size())

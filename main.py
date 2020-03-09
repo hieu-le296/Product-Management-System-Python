@@ -350,14 +350,14 @@ class Main(QMainWindow):
     def getSellingHistory(self):
         query = "SELECT products.product_name, products.product_manufacturer, product_price, members.member_fname, sellings.selling_quantity, sellings.selling_amount, sellings.selling_date FROM products, members, sellings WHERE products.product_id = sellings.selling_id AND members.member_id = sellings.selling_member_id"
         history = cur.execute(query).fetchall()
-        for element in history:
-            product_name = element[0]
-            product_manu = element[1]
-            product_price = element[2]
-            member_name = element[3]
-            selling_quantity = element[4]
-            selling_amount = element[5]
-            selling_date = element[6]
+        for record in history:
+            product_name = record[0]
+            product_manu = record[1]
+            product_price = record[2]
+            member_name = record[3]
+            selling_quantity = record[4]
+            selling_amount = record[5]
+            selling_date = record[6]
             self.historyShow.append("Product Name: " + product_name)
             self.historyShow.append("Manufacturer: " + product_manu)
             self.historyShow.append("Product Price: $" + str(product_price))
