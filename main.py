@@ -39,6 +39,7 @@ class Main(QMainWindow):
         self.displayProduct()
         self.displayMember()
         self.getStat()
+        self.getSellingHistory()
         self.styles()
 
     def toolBar(self):
@@ -239,24 +240,25 @@ class Main(QMainWindow):
         self.statLayout.addRow("Total Amount: ", self.totalAmountLabel)
 
         self.statGroupBox.setLayout(self.statLayout)
-        self.statGroupBox.setFont(QFont("Times", 20))
+        self.statGroupBox.setFont(QFont("Times", 30))
         self.statMainLayout.addWidget(self.statGroupBox)
         self.statMainLayout.setAlignment(Qt.AlignCenter)
         self.tab3.setLayout(self.statMainLayout)
 
         ############Tab4 Layout##############
         self.historyMainLayout = QVBoxLayout()
-        self.historyLayout = QFormLayout()
+        self.historyLayout = QVBoxLayout()
         self.historyGroupBox = QGroupBox("Selling History")
-        self.historyLayout.addRow("", self.historyShow)
+        self.historyLayout.addWidget(self.historyShow)
 
 
 
         self.historyGroupBox.setLayout(self.historyLayout)
-        self.historyGroupBox.setFont(QFont("Times", 20))
+        self.historyGroupBox.setFont(QFont("Times", 14))
         self.historyMainLayout.addWidget(self.historyGroupBox)
         self.historyMainLayout.setAlignment(Qt.AlignCenter)
         self.tab4.setLayout(self.historyMainLayout)
+
 
         # block signal for tabs
         self.tabs.blockSignals(False)
@@ -344,6 +346,27 @@ class Main(QMainWindow):
         self.totalMemberLabel.setText(str(countMember))
         self.soldProductLabel.setText(str(soldProducts))
         self.totalAmountLabel.setText("$ " + str(totalAmount))
+
+    def getSellingHistory(self):
+        query = "SELECT products.product_name, products.product_manufacturer, product_price, members.member_fname, sellings.selling_quantity, sellings.selling_amount, sellings.selling_date FROM products, members, sellings WHERE products.product_id = sellings.selling_id AND members.member_id = sellings.selling_member_id"
+        history = cur.execute(query).fetchall()
+        for element in history:
+            product_name = element[0]
+            product_manu = element[1]
+            product_price = element[2]
+            member_name = element[3]
+            selling_quantity = element[4]
+            selling_amount = element[5]
+            selling_date = element[6]
+            self.historyShow.append("Product Name: " + product_name)
+            self.historyShow.append("Manufacturer: " + product_manu)
+            self.historyShow.append("Product Price: $" + str(product_price))
+            self.historyShow.append("Selling to: " + member_name)
+            self.historyShow.append("Quantity: " + str(selling_quantity))
+            self.historyShow.append("Amount: $" + str(selling_amount))
+            self.historyShow.append("Date Sold: " + str(selling_date))
+            self.historyShow.append("")
+
 
     def tabsChanged(self):
         self.getStat()
