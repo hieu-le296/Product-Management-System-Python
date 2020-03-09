@@ -93,9 +93,11 @@ class Main(QMainWindow):
         self.tab1 = QWidget()
         self.tab2 = QWidget()
         self.tab3 = QWidget()
+        self.tab4 = QWidget()
         self.tabs.addTab(self.tab1, "Products")
         self.tabs.addTab(self.tab2, "Membership")
         self.tabs.addTab(self.tab3, "Statistics")
+        self.tabs.addTab(self.tab4, "Selling History")
 
 
     def widgets(self):
@@ -151,6 +153,10 @@ class Main(QMainWindow):
         self.totalMemberLabel = QLabel()
         self.soldProductLabel = QLabel()
         self.totalAmountLabel = QLabel()
+
+        ############Tab 4 Widgets##############
+        self.historyShow = QTextEdit()
+        self.historyShow.setReadOnly(True)
 
     def layouts(self):
         ############Tab1 Layout##############
@@ -237,6 +243,20 @@ class Main(QMainWindow):
         self.statMainLayout.addWidget(self.statGroupBox)
         self.statMainLayout.setAlignment(Qt.AlignCenter)
         self.tab3.setLayout(self.statMainLayout)
+
+        ############Tab4 Layout##############
+        self.historyMainLayout = QVBoxLayout()
+        self.historyLayout = QFormLayout()
+        self.historyGroupBox = QGroupBox("Selling History")
+        self.historyLayout.addRow("", self.historyShow)
+
+
+
+        self.historyGroupBox.setLayout(self.historyLayout)
+        self.historyGroupBox.setFont(QFont("Times", 20))
+        self.historyMainLayout.addWidget(self.historyGroupBox)
+        self.historyMainLayout.setAlignment(Qt.AlignCenter)
+        self.tab4.setLayout(self.historyMainLayout)
 
         # block signal for tabs
         self.tabs.blockSignals(False)
