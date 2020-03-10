@@ -18,7 +18,7 @@ class DisplayProduct(QWidget):
         super().__init__()
         self.setWindowTitle("Product Detail")
         self.setWindowIcon(QIcon("icons/icon.ico"))
-        self.setGeometry(800, 150, 350, 600)
+        self.setGeometry(800, 150, 400, 700)
         self.setFixedSize(self.size())
         self.UI()
         self.show()
@@ -32,7 +32,7 @@ class DisplayProduct(QWidget):
     def widgets(self):
         #################Top layouts wigdets#########
         self.product_Img = QLabel()
-        self.img = QPixmap('{}'.format(self.productImg))
+        self.img = QPixmap('img/{}'.format(self.productImg))
         self.product_Img.setPixmap(self.img)
         self.product_Img.setAlignment(Qt.AlignCenter)
         self.titleText = QLabel("Update Product")
@@ -107,7 +107,7 @@ class DisplayProduct(QWidget):
             self.productPrice = product[3]
             self.productQuota = product[4]
             self.productImg = product[5]
-            self.productStatus = product[6]
+            self.productStatus = product[7]
         except:
             QMessageBox.information(self, "Error", "This product has been deleted.")
 
@@ -118,7 +118,7 @@ class DisplayProduct(QWidget):
             self.productImg = os.path.basename(self.filename)
             img = Image.open(self.filename)
             img = img.resize(size)
-            img.save("img{0}".format(self.productImg))
+            img.save("img/{0}".format(self.productImg))
 
     def openCalendar(self):
         self.open = Calendar()

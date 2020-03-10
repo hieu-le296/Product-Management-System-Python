@@ -11,7 +11,7 @@ import main
 sqlConnect = sqlite3.connect("products.db")
 cur = sqlConnect.cursor()
 
-defaultImg = 'img/store.png'
+defaultImg = 'store.png'
 
 class AddProduct(QWidget):
     date = ''
@@ -93,7 +93,7 @@ class AddProduct(QWidget):
 
     def uploadImg(self):
         global defaultImg
-        size = (256, 256)
+        size = (300, 300)
         self.filename, ok = QFileDialog.getOpenFileName(self, "Upload Image", "", "Image File (*.jpg *.png)")
         if ok:
             print(self.filename)

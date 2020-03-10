@@ -117,6 +117,7 @@ class Main(QMainWindow):
         self.productTable.horizontalHeader().setSectionResizeMode(1, QHeaderView.Stretch)
         self.productTable.horizontalHeader().setSectionResizeMode(2, QHeaderView.Stretch)
         self.productTable.doubleClicked.connect(self.selectedProduct)
+        self.productTable.clicked.connect(self.viewProductItem)
 
         ############Right Top Layout Widget##############
         self.searchText = QLabel("Search")
@@ -132,6 +133,23 @@ class Main(QMainWindow):
         self.notAvailableProduct = QRadioButton("Not Available")
         self.listButton = QPushButton("List")
         self.listButton.clicked.connect(self.listProduct)
+
+        ############Right Bottom Layout Widget##############
+        self.product_name = QLabel()
+        self.product_name.setAlignment(Qt.AlignCenter)
+        self.product_manu = QLabel()
+        self.product_manu.setAlignment(Qt.AlignCenter)
+        self.product_price = QLabel()
+        self.product_price.setAlignment(Qt.AlignCenter)
+        self.product_quantity = QLabel()
+        self.product_quantity.setAlignment(Qt.AlignCenter)
+        self.product_date = QLabel()
+        self.product_date.setAlignment(Qt.AlignCenter)
+        self.product_status = QLabel()
+        self.product_status.setAlignment(Qt.AlignCenter)
+        self.product_Img = QLabel()
+        self.product_Img.setAlignment(Qt.AlignCenter)
+
 
         ############Tab 2 Widgets##############
         self.memberTable = QTableWidget()
@@ -178,12 +196,13 @@ class Main(QMainWindow):
         self.middleGroupBox = QGroupBox("List Box")
         self.bottomGroupBox = QGroupBox()
 
+
         ############Right Top Layout Widgets##############
         self.productRightTopLayout.addWidget(self.searchText)
         self.productRightTopLayout.addWidget(self.searchEntry)
         self.productRightTopLayout.addWidget(self.searchButton)
         self.topGroupBox.setLayout(self.productRightTopLayout)
-        self.productRightLayout.addWidget(self.topGroupBox, 20)
+        self.productRightLayout.addWidget(self.topGroupBox, 15)
 
         ############Right Middle Layout Widget##############
         self.productRightMiddleLayout.addWidget(self.allProduct)
@@ -191,11 +210,27 @@ class Main(QMainWindow):
         self.productRightMiddleLayout.addWidget(self.notAvailableProduct)
         self.productRightMiddleLayout.addWidget(self.listButton)
         self.middleGroupBox.setLayout(self.productRightMiddleLayout)
-        self.productRightLayout.addWidget(self.middleGroupBox, 20)
+        self.productRightLayout.addWidget(self.middleGroupBox, 15)
 
         ############Right Bottom Layout Widget##############
-        self.bottomGroupBox.setLayout(self.productRightBottomLayout)
+        #self.productRightBottomLayout.addWidget(self.product_Img)
+        self.productBottomForm = QFormLayout()
+        self.productBottomForm.addRow("",self.product_Img)
+        self.productBottomForm.addRow("",self.product_name)
+        self.productBottomForm.addRow("",self.product_manu)
+        self.productBottomForm.addRow("",self.product_price)
+        self.productBottomForm.addRow("",self.product_quantity)
+        self.productBottomForm.addRow("",self.product_date)
+        self.productBottomForm.addRow("",self.product_status)
+        # self.productRightBottomLayout.addWidget(self.product_name)
+        # self.productRightBottomLayout.addWidget(self.product_manu)
+        # self.productRightBottomLayout.addWidget(self.product_price)
+        # self.productRightBottomLayout.addWidget(self.product_quantity)
+        # self.productRightBottomLayout.addWidget(self.product_date)
+        # self.productRightBottomLayout.addWidget(self.product_status)
+        self.bottomGroupBox.setLayout(self.productBottomForm)
         self.productRightLayout.addWidget(self.bottomGroupBox, 60)
+
 
         ############Tab 1 Main Layouts##############
         self.productMainLayout.addLayout(self.productLeftLayout, 75)
@@ -373,6 +408,31 @@ class Main(QMainWindow):
             except:
                 QMessageBox.information(self, "Information", "History has not been deleted")
 
+    def viewProductItem(self):
+        productId = self.getProductIdFromCurrentRow()
+
+        query = ("SELECT * FROM products WHERE product_id=?")
+        product = cur.execute(query, (productId,)).fetchone()  # single item tuple = (1,)
+        productName = product[1]
+        productManufacturer = product[2]
+        productPrice = product[3]
+        productQuota = product[4]
+        productImg = product[5]
+        productDate = product[6]
+        productStatus = product[7]
+
+
+        self.product_name.setText("Name: " + productName)
+        self.product_manu.setText("Manufacturer: " + str(productManufacturer))
+        self.product_price.setText("Price: $" + str(productPrice))
+        self.product_quantity.setText("Quota: " + str(productQuota))
+        self.product_date.setText("Date Added: " + str(productDate))
+        self.product_status.setText("Status: " + productStatus)
+        self.img = QPixmap('img/{}'.format(productImg))
+        self.product_Img.setPixmap(self.img)
+
+
+
     def tabsChanged(self):
         self.getStat()
         self.displayProduct()
@@ -409,9 +469,10 @@ class Main(QMainWindow):
 
     def getProductIdFromCurrentRow(self):
         listProduct = []
-        for i in range(0, 6):
+        for i in range(0, 7):
             listProduct.append(self.productTable.item(self.productTable.currentRow(), i).text())
         global productId
+
         productId = listProduct[0]
         return productId
 
