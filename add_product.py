@@ -27,14 +27,16 @@ class AddProduct(QWidget):
     def UI(self):
         self.widgets()
         self.layouts()
+        self.setStyleSheet("QLabel {font-size: 15px}")
 
     def widgets(self):
         ##############Widgets of top layout##############
         self.addProductImg = QLabel()
-        self.img = QPixmap('icons/addproduct.png')
+        self.img = QPixmap('icons/add.svg')
         self.addProductImg.setPixmap(self.img)
         self.addProductImg.setAlignment(Qt.AlignCenter)
         self.titleText = QLabel("Add Product")
+        self.titleText.setStyleSheet("QLabel {font-size: 30px}")
         self.titleText.setAlignment(Qt.AlignCenter)
         ##############Widgets of top layout##############
         self.nameEntry = QLineEdit()

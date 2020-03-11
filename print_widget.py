@@ -29,6 +29,7 @@ class Print(QWidget):
         self.printBtn = QPushButton("Open Print Dialog", self)
         self.printBtn.move(150, 100)
         self.printBtn.clicked.connect(self.printPreviewDialog)
+        self.setStyleSheet("QLabel {font-size: 15px} QRadioButton {font-size: 12px}")
 
     def printPreviewDialog(self):
         printer = QPrinter(QPrinter.HighResolution)

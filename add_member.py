@@ -23,14 +23,16 @@ class AddMember(QWidget):
     def UI(self):
         self.widgets()
         self.layouts()
+        self.setStyleSheet("QLabel {font-size: 15px}")
 
     def widgets(self):
         ##############widgets of top layout################
         self.addMemberImg = QLabel()
-        self.img = QPixmap('icons/addmember.png')
+        self.img = QPixmap('icons/users.svg')
         self.addMemberImg.setPixmap(self.img)
         self.addMemberImg.setAlignment(Qt.AlignCenter)
-        self.titleText = QLabel("Add Member")
+        self.titleText = QLabel("Add Membership")
+        self.titleText.setStyleSheet("QLabel {font-size: 30px}")
         self.titleText.setAlignment(Qt.AlignCenter)
 
         ##############widgets of bottom layout################

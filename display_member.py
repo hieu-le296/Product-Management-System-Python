@@ -2,7 +2,6 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import Qt
 import sqlite3
-import styles
 import main
 
 sqlConnect = sqlite3.connect("products.db")
@@ -23,12 +22,11 @@ class DisplayMember(QWidget):
         self.memberDetails()
         self.widgets()
         self.layouts()
-        self.styles()
 
     def widgets(self):
         #################Top layouts wigdets#########
         self.memberImg = QLabel()
-        self.img = QPixmap('icons/members.png')
+        self.img = QPixmap('icons/users.svg')
         self.memberImg.setPixmap(self.img)
         self.memberImg.setAlignment(Qt.AlignCenter)
         self.titleText = QLabel("Display Membership")
@@ -143,7 +141,3 @@ class DisplayMember(QWidget):
         self.main = main.Main()
         self.main.show()
         self.close()
-
-    def styles(self):
-        self.topFrame.setStyleSheet(styles.memberTopFrame())
-        self.bottomFrame.setStyleSheet(styles.memberBottomFrame())

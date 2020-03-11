@@ -29,6 +29,8 @@ class ExportPDF(QWidget):
         self.exportBtn = QPushButton("Export PDF", self)
         self.exportBtn.move(150, 100)
         self.exportBtn.clicked.connect(self.export)
+        self.setStyleSheet("QLabel {font-size: 15px} QRadioButton {font-size: 12px}")
+
 
     def export(self):
         self.textEdit = QTextEdit(self)

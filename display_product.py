@@ -5,7 +5,6 @@ from PIL import Image
 from datetime import datetime
 import os
 import sqlite3
-import styles
 import main
 
 sqlConnect = sqlite3.connect("products.db")
@@ -27,7 +26,7 @@ class DisplayProduct(QWidget):
         self.productDetails()
         self.widgets()
         self.layouts()
-        self.styles()
+        self.setStyleSheet("QLabel {font-size: 15px}")
 
     def widgets(self):
         #################Top layouts wigdets#########
@@ -36,6 +35,7 @@ class DisplayProduct(QWidget):
         self.product_Img.setPixmap(self.img)
         self.product_Img.setAlignment(Qt.AlignCenter)
         self.titleText = QLabel("Update Product")
+        self.titleText.setStyleSheet("QLabel {font-size: 30px}")
         self.titleText.setAlignment(Qt.AlignCenter)
 
         ##############Bottom Layout's widgets###########

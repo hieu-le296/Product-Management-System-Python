@@ -4,7 +4,6 @@ from PyQt5.QtGui import *
 from PyQt5.QtCore import Qt
 from datetime import datetime
 import sqlite3
-import styles
 import main
 
 sqlConnect = sqlite3.connect("products.db")
@@ -27,15 +26,17 @@ class SellProduct(QWidget):
         self.widgets()
         self.layouts()
         self.fetchData()
-        self.styles()
+        self.setStyleSheet("QLabel {font-size: 15px}")
+
 
     def widgets(self):
         ##############Widgets of Top Layout##############
         self.productImg = QLabel(self)
-        self.img = QPixmap('icons/shop.png')
+        self.img = QPixmap('icons/sell.svg')
         self.productImg.setPixmap(self.img)
         self.productImg.setAlignment(Qt.AlignCenter)
         self.titleText = QLabel("Sell Product")
+        self.titleText.setStyleSheet("QLabel {font-size: 30px}")
         self.titleText.setAlignment(Qt.AlignCenter)
         ##############Widgets of Bottom Layout##############
         self.productCombo = QComboBox()
@@ -56,8 +57,8 @@ class SellProduct(QWidget):
         self.bottomFrame = QFrame()
         ##############Add Widgets##############
         ##############Widgets of Top Layout##############
-        self.topLayout.addWidget(self.titleText)
         self.topLayout.addWidget(self.productImg)
+        self.topLayout.addWidget(self.titleText)
         self.topFrame.setLayout(self.topLayout)
 
         ##############Widgets of Bottom Layout##############
@@ -114,10 +115,6 @@ class SellProduct(QWidget):
         self.main.show()
         self.close()
 
-    def styles(self):
-        self.topFrame.setStyleSheet(styles.sellProductTopFrame())
-        self.bottomFrame.setStyleSheet(styles.sellProductBottomFrame())
-
 
 class ConfirmWindow(QWidget):
     def __init__(self):
@@ -132,15 +129,16 @@ class ConfirmWindow(QWidget):
     def UI(self):
         self.widgets()
         self.layouts()
-        self.styles()
+        self.setStyleSheet("QLabel {font-size: 15px} QTextEdit {font-size: 15px}")
 
     def widgets(self):
         ##############widgets of top layout################
         self.productImg = QLabel()
-        self.img = QPixmap('icons/shop.png')
+        self.img = QPixmap('icons/sell.svg')
         self.productImg.setPixmap(self.img)
         self.productImg.setAlignment(Qt.AlignCenter)
         self.titleText = QLabel("Sell Product")
+        self.titleText.setStyleSheet("QLabel {font-size: 30px}")
         self.titleText.setAlignment(Qt.AlignCenter)
 
         ##############widgets of bottom layout################
@@ -226,6 +224,3 @@ class ConfirmWindow(QWidget):
         dialog = QtPrintSupport.QPrintDialog()
         if dialog.exec_() == QtWidgets.QDialog.Accepted:
             self.textEdit.document().print_(dialog.printer())
-    def styles(self):
-        self.topFrame.setStyleSheet(styles.confirmProductTopFrame())
-        self.bottomFrame.setStyleSheet(styles.confirmProductBottomFrame())

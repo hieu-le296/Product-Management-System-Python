@@ -1,6 +1,7 @@
 import sqlite3
 import sys
-from PIL import Image
+
+import qdarkstyle
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
@@ -14,7 +15,6 @@ import print_widget
 import calendar_class
 import info
 import selling
-import styles
 
 sqlConnect = sqlite3.connect("products.db")
 cur = sqlConnect.cursor()
@@ -41,44 +41,43 @@ class Main(QMainWindow):
         self.displayMember()
         self.getStat()
         self.getSellingHistory()
-        self.styles()
 
     def toolBar(self):
         self.tb = self.addToolBar("Tool Bar")
         self.tb.setToolButtonStyle(Qt.ToolButtonTextUnderIcon)
         ############Toolbar Buttons##########
         ############Add Product##############
-        self.addProduct = QAction(QIcon('icons/add.png'), "Add Product", self)
+        self.addProduct = QAction(QIcon('icons/add.svg'), "Add Product", self)
         self.addProduct.triggered.connect(self.funcAddProduct)
         self.tb.addAction(self.addProduct)
         self.tb.addSeparator()
         ############Add Member##############
-        self.addMember = QAction(QIcon('icons/users.png'), "Add Membership", self)
+        self.addMember = QAction(QIcon('icons/users.svg'), "Add Membership", self)
         self.tb.addAction(self.addMember)
         self.addMember.triggered.connect(self.funcAddMember)
         self.tb.addSeparator()
         ############Selling##############
-        self.sellProduct = QAction(QIcon('icons/sell.png'), "Sell Product", self)
+        self.sellProduct = QAction(QIcon('icons/sell.svg'), "Sell Product", self)
         self.sellProduct.triggered.connect(self.funcSellProduct)
         self.tb.addAction(self.sellProduct)
         self.tb.addSeparator()
         ############Printer##############
-        self.print = QAction(QIcon('icons/printer.png'), "Print", self)
+        self.print = QAction(QIcon('icons/printer.svg'), "Print", self)
         self.print.triggered.connect(self.funcPrintPreview)
         self.tb.addAction(self.print)
         self.tb.addSeparator()
         ############Export PDF##############
-        self.exportPDF = QAction(QIcon('icons/pdf.png'), "Export PDF", self)
+        self.exportPDF = QAction(QIcon('icons/pdf.svg'), "Export PDF", self)
         self.exportPDF.triggered.connect(self.funcExportPdf)
         self.tb.addAction(self.exportPDF)
         self.tb.addSeparator()
         ############Calendar##############
-        self.calendarToolBar = QAction(QIcon('icons/calendar.png'), "Calendar", self)
+        self.calendarToolBar = QAction(QIcon('icons/calendar.svg'), "Calendar", self)
         self.calendarToolBar.triggered.connect(self.funcCalendar)
         self.tb.addAction(self.calendarToolBar)
         self.tb.addSeparator()
         ############Information##############
-        self.infoToolBar = QAction(QIcon('icons/info.png'), "Info", self)
+        self.infoToolBar = QAction(QIcon('icons/info.svg'), "Info", self)
         self.infoToolBar.triggered.connect(self.funcInfo)
         self.tb.addAction(self.infoToolBar)
         self.tb.addSeparator()
@@ -169,7 +168,7 @@ class Main(QMainWindow):
         ############Tab 3 Widgets##############
         self.totalProductLabel = QLabel()
         self.totalMemberLabel = QLabel()
-        self.soldProductLabel = QLabel()
+        self.soldItemLabel = QLabel()
         self.totalAmountLabel = QLabel()
 
         ############Tab 4 Widgets##############
@@ -264,14 +263,14 @@ class Main(QMainWindow):
         ############Tab3 Layout##############
         self.statMainLayout = QVBoxLayout()
         self.statLayout = QFormLayout()
-        self.statGroupBox = QGroupBox("Statistics")
+        self.statGroupBox = QGroupBox()
         self.statLayout.addRow("Total Products: ", self.totalProductLabel)
         self.statLayout.addRow("Total Members: ", self.totalMemberLabel)
-        self.statLayout.addRow("Sold Products: ", self.soldProductLabel)
+        self.statLayout.addRow("Total Sold: ", self.soldItemLabel)
         self.statLayout.addRow("Total Amount: ", self.totalAmountLabel)
 
         self.statGroupBox.setLayout(self.statLayout)
-        self.statGroupBox.setFont(QFont("Times", 30))
+        self.statGroupBox.setStyleSheet("QLabel {font-size: 30px}")
         self.statMainLayout.addWidget(self.statGroupBox)
         self.statMainLayout.setAlignment(Qt.AlignCenter)
         self.tab3.setLayout(self.statMainLayout)
@@ -284,7 +283,7 @@ class Main(QMainWindow):
         self.historyLayout.addWidget(self.deleteBtn)
 
         self.historyGroupBox.setLayout(self.historyLayout)
-        self.historyGroupBox.setFont(QFont("Times", 14))
+        self.historyGroupBox.setStyleSheet("QTextEdit {font-size: 20px}")
         self.historyMainLayout.addWidget(self.historyGroupBox)
         self.historyMainLayout.setAlignment(Qt.AlignCenter)
         self.tab4.setLayout(self.historyMainLayout)
@@ -300,31 +299,32 @@ class Main(QMainWindow):
         help = menuBar.addMenu("About")
         ########Sub Menu########
         addProductMenu = QAction("Add Product", self)
-        addProductMenu.setIcon(QIcon("icons/add.png"))
+        addProductMenu.setIcon(QIcon("icons/add.svg"))
         addProductMenu.setShortcut("Ctrl+A")
         addProductMenu.triggered.connect(self.funcAddProduct)
 
         addMemberMenu = QAction("Add Membership", self)
-        addMemberMenu.setIcon(QIcon('icons/users.png'))
+        addMemberMenu.setIcon(QIcon('icons/users.svg'))
         addMemberMenu.setShortcut("Ctrl+M")
         addMemberMenu.triggered.connect(self.funcAddMember)
 
         printMenu = QAction("Print", self)
-        printMenu.setIcon(QIcon('icons/printer.png'))
+        printMenu.setIcon(QIcon('icons/print_menu.svg'))
         printMenu.setShortcut("Ctrl+P")
         printMenu.triggered.connect(self.funcPrintPreview)
 
         exportPDF = QAction("ExportPDF", self)
         exportPDF.setShortcut("Ctrl+E")
+        exportPDF.setIcon(QIcon('icons/pdf.svg'))
         exportPDF.triggered.connect(self.funcExportPdf)
 
         sellProductMenu = QAction("Sell Product", self)
-        sellProductMenu.setIcon(QIcon('icons/sell.png'))
+        sellProductMenu.setIcon(QIcon('icons/sell.svg'))
         sellProductMenu.setShortcut("Ctrl+S")
         sellProductMenu.triggered.connect(self.funcSellProduct)
 
         infoMenu = QAction("Information", self)
-        infoMenu.setIcon(QIcon('icons/info.png'))
+        infoMenu.setIcon(QIcon('icons/info.svg'))
         infoMenu.triggered.connect(self.funcInfo)
 
         file.addAction(addProductMenu)
@@ -365,15 +365,15 @@ class Main(QMainWindow):
         countMember = cur.execute("SELECT count(member_id) FROM members").fetchall()
         countMember = countMember[0][0]
 
-        soldProducts = cur.execute("SELECT sum(selling_quantity) FROM sellings").fetchall()
-        soldProducts = soldProducts[0][0]
+        soldItems = cur.execute("SELECT sum(selling_quantity) FROM sellings").fetchall()
+        soldItems = soldItems[0][0]
 
         totalAmount = cur.execute("SELECT sum(selling_amount) FROM sellings").fetchall()
         totalAmount = totalAmount[0][0]
 
-        self.totalProductLabel.setText(str(countProducts))
-        self.totalMemberLabel.setText(str(countMember))
-        self.soldProductLabel.setText(str(soldProducts))
+        self.totalProductLabel.setText(str(countProducts) + " items")
+        self.totalMemberLabel.setText(str(countMember) + " members")
+        self.soldItemLabel.setText(str(soldItems) + " units")
         self.totalAmountLabel.setText("$ " + str(totalAmount))
 
     def getSellingHistory(self):
@@ -565,16 +565,11 @@ class Main(QMainWindow):
                     for column_number, data in enumerate(row_data):
                         self.memberTable.setItem(row_number, column_number, QTableWidgetItem(str(data)))
 
-    def styles(self):
-        self.topGroupBox.setStyleSheet(styles.searchBoxStyle())
-        self.middleGroupBox.setStyleSheet(styles.listBoxStyle())
-        self.searchButton.setStyleSheet(styles.searchButtonStyle())
-        self.listButton.setStyleSheet(styles.listButtonStyle())
-
 
 def main():
     App = QApplication(sys.argv)
     window = Main()
+    App.setStyleSheet(qdarkstyle.load_stylesheet())
     sys.exit(App.exec_())
 
 
