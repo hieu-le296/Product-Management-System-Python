@@ -81,6 +81,10 @@ class Main(QMainWindow):
         self.infoToolBar.triggered.connect(self.funcInfo)
         self.tb.addAction(self.infoToolBar)
         self.tb.addSeparator()
+        self.logout = QAction(QIcon('icons/logout.svg'), "Logout", self)
+        self.logout.triggered.connect(self.funcLogout)
+        self.tb.addAction(self.logout)
+        self.tb.addSeparator()
 
     def tabWidget(self):
         self.tabs = QTabWidget()
@@ -149,7 +153,6 @@ class Main(QMainWindow):
         self.product_Img = QLabel()
         self.product_Img.setAlignment(Qt.AlignCenter)
 
-
         ############Tab 2 Widgets##############
         self.memberTable = QTableWidget()
         self.memberTable.setColumnCount(5)
@@ -195,7 +198,6 @@ class Main(QMainWindow):
         self.middleGroupBox = QGroupBox("List Box")
         self.bottomGroupBox = QGroupBox()
 
-
         ############Right Top Layout Widgets##############
         self.productRightTopLayout.addWidget(self.searchText)
         self.productRightTopLayout.addWidget(self.searchEntry)
@@ -212,15 +214,15 @@ class Main(QMainWindow):
         self.productRightLayout.addWidget(self.middleGroupBox, 15)
 
         ############Right Bottom Layout Widget##############
-        #self.productRightBottomLayout.addWidget(self.product_Img)
+        # self.productRightBottomLayout.addWidget(self.product_Img)
         self.productBottomForm = QFormLayout()
-        self.productBottomForm.addRow("",self.product_Img)
-        self.productBottomForm.addRow("",self.product_name)
-        self.productBottomForm.addRow("",self.product_manu)
-        self.productBottomForm.addRow("",self.product_price)
-        self.productBottomForm.addRow("",self.product_quantity)
-        self.productBottomForm.addRow("",self.product_date)
-        self.productBottomForm.addRow("",self.product_status)
+        self.productBottomForm.addRow("", self.product_Img)
+        self.productBottomForm.addRow("", self.product_name)
+        self.productBottomForm.addRow("", self.product_manu)
+        self.productBottomForm.addRow("", self.product_price)
+        self.productBottomForm.addRow("", self.product_quantity)
+        self.productBottomForm.addRow("", self.product_date)
+        self.productBottomForm.addRow("", self.product_status)
         # self.productRightBottomLayout.addWidget(self.product_name)
         # self.productRightBottomLayout.addWidget(self.product_manu)
         # self.productRightBottomLayout.addWidget(self.product_price)
@@ -229,7 +231,6 @@ class Main(QMainWindow):
         # self.productRightBottomLayout.addWidget(self.product_status)
         self.bottomGroupBox.setLayout(self.productBottomForm)
         self.productRightLayout.addWidget(self.bottomGroupBox, 60)
-
 
         ############Tab 1 Main Layouts##############
         self.productMainLayout.addLayout(self.productLeftLayout, 75)
@@ -296,7 +297,7 @@ class Main(QMainWindow):
         menuBar = self.menuBar()
         file = menuBar.addMenu("File")
         product = menuBar.addMenu("Product")
-        help = menuBar.addMenu("About")
+        setting = menuBar.addMenu("Setting")
         ########Sub Menu########
         addProductMenu = QAction("Add Product", self)
         addProductMenu.setIcon(QIcon("icons/add.svg"))
@@ -323,16 +324,21 @@ class Main(QMainWindow):
         sellProductMenu.setShortcut("Ctrl+S")
         sellProductMenu.triggered.connect(self.funcSellProduct)
 
-        infoMenu = QAction("Information", self)
+        infoMenu = QAction("About", self)
         infoMenu.setIcon(QIcon('icons/info.svg'))
         infoMenu.triggered.connect(self.funcInfo)
+
+        logoutMenu = QAction("Logout", self)
+        logoutMenu.setIcon(QIcon('icons/logout.svg'))
+        logoutMenu.triggered.connect(self.funcLogout)
 
         file.addAction(addProductMenu)
         file.addAction(addMemberMenu)
         file.addAction(printMenu)
         file.addAction(exportPDF)
         product.addAction(sellProductMenu)
-        help.addAction(infoMenu)
+        setting.addAction(infoMenu)
+        setting.addAction(logoutMenu)
 
     def funcAddProduct(self):
         self.newProduct = add_product.AddProduct()
@@ -357,6 +363,11 @@ class Main(QMainWindow):
 
     def funcInfo(self):
         self.info = info.Info()
+
+    def funcLogout(self):
+        self.logoutWindow = Login()
+        self.logoutWindow.show()
+        self.close()
 
     def getStat(self):
         countProducts = cur.execute("SELECT count(product_id) FROM products").fetchall()
@@ -421,7 +432,6 @@ class Main(QMainWindow):
         productDate = product[6]
         productStatus = product[7]
 
-
         self.product_name.setText("Name: " + productName)
         self.product_manu.setText("Manufacturer: " + str(productManufacturer))
         self.product_price.setText("Price: $" + str(productPrice))
@@ -430,8 +440,6 @@ class Main(QMainWindow):
         self.product_status.setText("Status: " + productStatus)
         self.img = QPixmap('img/{}'.format(productImg))
         self.product_Img.setPixmap(self.img)
-
-
 
     def tabsChanged(self):
         self.getStat()
@@ -552,7 +560,7 @@ class Main(QMainWindow):
             self.memberSearchEntry.setText("")
             query = "SELECT * FROM members WHERE member_fname LIKE ? or member_lname LIKE ? or member_phone LIKE ? or member_address LIKE ?"
             results = cur.execute(query, (
-            '%' + value + '%', '%' + value + '%', '%' + value + '%', '%' + value + '%')).fetchall()
+                '%' + value + '%', '%' + value + '%', '%' + value + '%', '%' + value + '%')).fetchall()
             if results == []:
                 QMessageBox.information(self, "Warning", "There is no such a member")
             else:
@@ -566,9 +574,57 @@ class Main(QMainWindow):
                         self.memberTable.setItem(row_number, column_number, QTableWidgetItem(str(data)))
 
 
+class Login(QDialog):
+    def __init__(self, parent=None):
+        super().__init__()
+        self.setWindowTitle("Login")
+        self.infoImg = QLabel()
+        self.img = QPixmap('icons/ufv.png')
+        self.infoImg.setPixmap(self.img)
+        self.infoImg.setAlignment(Qt.AlignCenter)
+        self.username = QLineEdit(self)
+        self.QUserLabel = QLabel("Username")
+
+        self.password = QLineEdit(self)
+        self.QPasswordLabel = QLabel("Password")
+        self.password.setEchoMode(QLineEdit.Password)
+
+        self.btn_Submit = QPushButton("LOGIN")
+
+        layout = QFormLayout()
+        layout.addWidget(self.infoImg)
+        layout.addRow(self.QUserLabel, self.username)
+        layout.addRow(self.QPasswordLabel, self.password)
+        layout.addRow(self.btn_Submit)
+        self.btn_Submit.clicked.connect(self.Submit_btn)
+
+        self.setLayout(layout)
+
+    def Submit_btn(self):
+        USERNAME = self.username.text()
+        PASSWORD = self.password.text()
+
+        try:
+            query = "SELECT username, password FROM users WHERE username = ? AND password = ?"
+            records = cur.execute(query, (USERNAME, PASSWORD)).fetchone()
+
+            username = records[0]
+            password = records[1]
+
+            if USERNAME == username and PASSWORD == password:
+                QMessageBox.information(self, "Success", "Login Successfully")
+                self.close()
+                self.main = Main()
+                self.main.show()
+
+        except:
+            QMessageBox.information(self, "Warning", "Login Failed")
+
+
 def main():
     App = QApplication(sys.argv)
-    window = Main()
+    window = Login()
+    window.show()
     App.setStyleSheet(qdarkstyle.load_stylesheet())
     sys.exit(App.exec_())
 
