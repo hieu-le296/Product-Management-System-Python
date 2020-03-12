@@ -14,20 +14,15 @@ class Login(QDialog):
     def __init__(self, parent=None):
         super().__init__()
         self.setWindowTitle("Login")
+        self.widgets()
+        self.layouts()
 
-        self.mainLayout = QVBoxLayout()
-        self.topLayout = QVBoxLayout()
-        self.bottomLayout = QFormLayout()
-        self.topFrame = QFrame()
-        self.bottomFrame = QFrame()
-
-
+    def widgets(self):
         self.infoImg = QLabel()
         self.img = QPixmap('icons/ufv.png')
         self.infoImg.setPixmap(self.img)
         self.infoImg.setAlignment(Qt.AlignCenter)
-        self.topLayout.addWidget(self.infoImg)
-        self.topFrame.setLayout(self.topLayout)
+
 
         self.username = QLineEdit(self)
         self.QUserLabel = QLabel("Username")
@@ -37,12 +32,20 @@ class Login(QDialog):
         self.btn_Submit = QPushButton("LOGIN")
         self.btn_Submit.clicked.connect(self.Submit_btn)
 
+    def layouts(self):
+        self.mainLayout = QVBoxLayout()
+        self.topLayout = QVBoxLayout()
+        self.bottomLayout = QFormLayout()
+        self.topFrame = QFrame()
+        self.bottomFrame = QFrame()
+
+        self.topLayout.addWidget(self.infoImg)
+        self.topFrame.setLayout(self.topLayout)
 
         self.bottomLayout.addRow("Username: ", self.username)
         self.bottomLayout.addRow("Password: ", self.password)
         self.bottomLayout.addRow("", self.btn_Submit)
         self.bottomFrame.setLayout(self.bottomLayout)
-
 
         self.mainLayout.addWidget(self.topFrame)
         self.mainLayout.addWidget(self.bottomFrame)

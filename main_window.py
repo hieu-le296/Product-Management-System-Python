@@ -28,10 +28,7 @@ class Main(QMainWindow):
         self.setWindowTitle("Product Management")
         self.setWindowIcon(QIcon('icons/icon.ico'))
         self.setGeometry(450, 150, 1350, 750)
-        # self.setFixedSize(self.size())
-
         self.UI()
-        self.show()
 
     def UI(self):
         self.toolBar()

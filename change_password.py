@@ -12,22 +12,16 @@ class ChangePassword(QDialog):
     def __init__(self, parent=None):
         super().__init__()
         self.setWindowTitle("Change Password")
+        self.widgets()
+        self.layout()
+        self.show()
 
-        self.mainLayout = QVBoxLayout()
-        self.topLayout = QVBoxLayout()
-        self.bottomLayout = QFormLayout()
-        self.topFrame = QFrame()
-        self.bottomFrame = QFrame()
-
+    def widgets(self):
         self.infoImg = QLabel()
         self.img = QPixmap('icons/ufv.png')
         self.infoImg.setPixmap(self.img)
         self.infoImg.setAlignment(Qt.AlignCenter)
-        self.topLayout.addWidget(self.infoImg)
-        self.topFrame.setLayout(self.topLayout)
 
-        self.username = QLineEdit(self)
-        self.QUserLabel = QLabel("Username")
         self.currentPassword = QLineEdit(self)
         self.currentPassword.setEchoMode(QLineEdit.Password)
         self.newPassword = QLineEdit()
@@ -36,6 +30,16 @@ class ChangePassword(QDialog):
         self.confirmNewPassword.setEchoMode(QLineEdit.Password)
         self.btn_Submit = QPushButton("Change Password")
         self.btn_Submit.clicked.connect(self.Submit_btn)
+
+    def layout(self):
+        self.mainLayout = QVBoxLayout()
+        self.topLayout = QVBoxLayout()
+        self.bottomLayout = QFormLayout()
+        self.topFrame = QFrame()
+        self.bottomFrame = QFrame()
+
+        self.topLayout.addWidget(self.infoImg)
+        self.topFrame.setLayout(self.topLayout)
 
         self.bottomLayout.addRow("Current Password: ", self.currentPassword)
         self.bottomLayout.addRow("New Password: ", self.newPassword)

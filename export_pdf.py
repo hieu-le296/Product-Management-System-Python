@@ -1,3 +1,4 @@
+from PyQt5.QtCore import Qt
 from PyQt5.QtPrintSupport import QPrinter
 from PyQt5.Qt import QFileInfo
 from PyQt5.QtWidgets import *
@@ -7,30 +8,41 @@ import sqlite3
 sqlConnect = sqlite3.connect("products.db")
 cur = sqlConnect.cursor()
 
-class ExportPDF(QWidget):
+class ExportPDF(QDialog):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Export to PDF")
         self.setWindowIcon(QIcon('icons/icon.ico'))
-        self.setGeometry(850, 450, 370, 150)
-        self.setFixedSize(self.size())
-        self.UI()
+        self.widgets()
+        self.layouts()
         self.show()
 
-    def UI(self):
+    def widgets(self):
         self.text = QLabel("Select one option", self)
-        self.text.move(150, 20)
         self.product = QRadioButton("Products", self)
-        self.product.move(40, 50)
         self.member = QRadioButton("Membership", self)
-        self.member.move(140, 50)
         self.selling = QRadioButton('Selling History', self)
-        self.selling.move(240, 50)
         self.exportBtn = QPushButton("Export PDF", self)
-        self.exportBtn.move(150, 100)
         self.exportBtn.clicked.connect(self.export)
         self.setStyleSheet("QLabel {font-size: 15px} QRadioButton {font-size: 12px}")
 
+    def layouts(self):
+        self.mainLayout = QVBoxLayout()
+        self.topLayout = QVBoxLayout()
+        self.bottomLayout = QFormLayout()
+        self.topFrame = QFrame()
+
+        self.topLayout.addWidget(self.text)
+        self.topLayout.addWidget(self.product)
+        self.topLayout.addWidget(self.member)
+        self.topLayout.addWidget(self.selling)
+        self.topLayout.addWidget(self.exportBtn)
+        self.topLayout.setAlignment(Qt.AlignCenter)
+        self.topFrame.setLayout(self.topLayout)
+
+
+        self.mainLayout.addWidget(self.topFrame)
+        self.setLayout(self.mainLayout)
 
     def export(self):
         self.textEdit = QTextEdit(self)
