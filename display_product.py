@@ -11,14 +11,14 @@ sqlConnect = sqlite3.connect("products.db")
 cur = sqlConnect.cursor()
 
 
-class DisplayProduct(QWidget):
+class DisplayProduct(QDialog):
     productId = 0
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Product Detail")
         self.setWindowIcon(QIcon("icons/icon.ico"))
-        self.setGeometry(800, 150, 400, 700)
-        self.setFixedSize(self.size())
+        #self.setGeometry(800, 150, 400, 700)
+        #self.setFixedSize(self.size())
         self.UI()
         self.show()
 

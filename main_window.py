@@ -202,7 +202,7 @@ class Main(QMainWindow):
         self.productRightTopLayout.addWidget(self.searchEntry)
         self.productRightTopLayout.addWidget(self.searchButton)
         self.topGroupBox.setLayout(self.productRightTopLayout)
-        self.productRightLayout.addWidget(self.topGroupBox, 15)
+        self.productRightLayout.addWidget(self.topGroupBox, 10)
 
         ############Right Middle Layout Widget##############
         self.productRightMiddleLayout.addWidget(self.allProduct)
@@ -210,7 +210,7 @@ class Main(QMainWindow):
         self.productRightMiddleLayout.addWidget(self.notAvailableProduct)
         self.productRightMiddleLayout.addWidget(self.listButton)
         self.middleGroupBox.setLayout(self.productRightMiddleLayout)
-        self.productRightLayout.addWidget(self.middleGroupBox, 15)
+        self.productRightLayout.addWidget(self.middleGroupBox, 10)
 
         ############Right Bottom Layout Widget##############
         # self.productRightBottomLayout.addWidget(self.product_Img)
@@ -229,7 +229,7 @@ class Main(QMainWindow):
         # self.productRightBottomLayout.addWidget(self.product_date)
         # self.productRightBottomLayout.addWidget(self.product_status)
         self.bottomGroupBox.setLayout(self.productBottomForm)
-        self.productRightLayout.addWidget(self.bottomGroupBox, 60)
+        self.productRightLayout.addWidget(self.bottomGroupBox, 80)
 
         ############Tab 1 Main Layouts##############
         self.productMainLayout.addLayout(self.productLeftLayout, 75)

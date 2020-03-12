@@ -12,13 +12,11 @@ cur = sqlConnect.cursor()
 defaultImg = 'img/store.png'
 
 
-class SellProduct(QWidget):
+class SellProduct(QDialog):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Selling Product")
         self.setWindowIcon(QIcon('icons/icon.ico'))
-        self.setGeometry(800, 150, 350, 600)
-        self.setFixedSize(self.size())
         self.UI()
         self.show()
 
@@ -116,13 +114,13 @@ class SellProduct(QWidget):
         self.close()
 
 
-class ConfirmWindow(QWidget):
+class ConfirmWindow(QDialog):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Sell Product")
         self.setWindowIcon(QIcon("icons/icon.ico"))
-        self.setGeometry(850, 150, 350, 600)
-        self.setFixedSize(self.size())
+        #self.setGeometry(850, 150, 350, 600)
+        #self.setFixedSize(self.size())
         self.UI()
         self.show()
 
