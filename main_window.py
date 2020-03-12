@@ -109,6 +109,7 @@ class Main(QMainWindow):
         self.productTable.setColumnCount(7)
         # Hide the column product id
         self.productTable.setColumnHidden(0, True)
+        self.productTable.setStyleSheet("font-size: 15px")
         self.productTable.setHorizontalHeaderItem(0, QTableWidgetItem("Product ID"))
         self.productTable.setHorizontalHeaderItem(1, QTableWidgetItem("Product Name"))
         self.productTable.setHorizontalHeaderItem(2, QTableWidgetItem("Manufacture"))
@@ -138,23 +139,17 @@ class Main(QMainWindow):
 
         ############Right Bottom Layout Widget##############
         self.product_name = QLabel()
-        self.product_name.setAlignment(Qt.AlignCenter)
         self.product_manu = QLabel()
-        self.product_manu.setAlignment(Qt.AlignCenter)
         self.product_price = QLabel()
-        self.product_price.setAlignment(Qt.AlignCenter)
         self.product_quantity = QLabel()
-        self.product_quantity.setAlignment(Qt.AlignCenter)
         self.product_date = QLabel()
-        self.product_date.setAlignment(Qt.AlignCenter)
         self.product_status = QLabel()
-        self.product_status.setAlignment(Qt.AlignCenter)
         self.product_Img = QLabel()
-        self.product_Img.setAlignment(Qt.AlignCenter)
 
         ############Tab 2 Widgets##############
         self.memberTable = QTableWidget()
         self.memberTable.setColumnCount(5)
+        self.memberTable.setStyleSheet("font-size: 15px")
         self.memberTable.setHorizontalHeaderItem(0, QTableWidgetItem("Member ID"))
         self.memberTable.setHorizontalHeaderItem(1, QTableWidgetItem("First Name"))
         self.memberTable.setHorizontalHeaderItem(2, QTableWidgetItem("Last Name"))
@@ -162,10 +157,19 @@ class Main(QMainWindow):
         self.memberTable.setHorizontalHeaderItem(4, QTableWidgetItem("Address"))
         self.memberTable.horizontalHeader().setSectionResizeMode(4, QHeaderView.Stretch)
         self.memberTable.doubleClicked.connect(self.selectedMember)
+        self.memberTable.clicked.connect(self.viewSelectedMember)
+
+        ############Right Top Layout Widget##############
         self.memberSearchText = QLabel("Search Member")
         self.memberSearchEntry = QLineEdit()
         self.memberSearchButton = QPushButton("Search")
         self.memberSearchButton.clicked.connect(self.searchMember)
+
+        ############Right Bottom Layout Widget##############
+        self.member_fname = QLabel()
+        self.member_lname = QLabel()
+        self.member_phone = QLabel()
+        self.member_address = QLabel()
 
         ############Tab 3 Widgets##############
         self.totalProductLabel = QLabel()
@@ -194,8 +198,11 @@ class Main(QMainWindow):
 
         ############Right Layouts##############
         self.topGroupBox = QGroupBox("Search Box")
+        self.topGroupBox.setStyleSheet("QLabel {font-size: 20px}")
         self.middleGroupBox = QGroupBox("List Box")
+        self.middleGroupBox.setStyleSheet("QLabel {font-size: 20px}")
         self.bottomGroupBox = QGroupBox()
+        self.bottomGroupBox.setStyleSheet("QLabel {font-size: 20px}")
 
         ############Right Top Layout Widgets##############
         self.productRightTopLayout.addWidget(self.searchText)
@@ -213,7 +220,6 @@ class Main(QMainWindow):
         self.productRightLayout.addWidget(self.middleGroupBox, 10)
 
         ############Right Bottom Layout Widget##############
-        # self.productRightBottomLayout.addWidget(self.product_Img)
         self.productBottomForm = QFormLayout()
         self.productBottomForm.addRow("", self.product_Img)
         self.productBottomForm.addRow("", self.product_name)
@@ -222,12 +228,6 @@ class Main(QMainWindow):
         self.productBottomForm.addRow("", self.product_quantity)
         self.productBottomForm.addRow("", self.product_date)
         self.productBottomForm.addRow("", self.product_status)
-        # self.productRightBottomLayout.addWidget(self.product_name)
-        # self.productRightBottomLayout.addWidget(self.product_manu)
-        # self.productRightBottomLayout.addWidget(self.product_price)
-        # self.productRightBottomLayout.addWidget(self.product_quantity)
-        # self.productRightBottomLayout.addWidget(self.product_date)
-        # self.productRightBottomLayout.addWidget(self.product_status)
         self.bottomGroupBox.setLayout(self.productBottomForm)
         self.productRightLayout.addWidget(self.bottomGroupBox, 80)
 
@@ -241,23 +241,37 @@ class Main(QMainWindow):
         self.memberLeftLayout = QVBoxLayout()
         self.memberRightLayout = QVBoxLayout()
         self.memberRightTopLayout = QHBoxLayout()
+        self.memberRightBottomLayout = QVBoxLayout
+
+        ############Right Layouts##############
+        self.memberRightBottomGroupBox = QGroupBox()
+        self.memberRightGroupBox = QGroupBox("Search For Member")
+        #self.memberRightBottomGroupBox.setStyleSheet("QLabel {font-size: 12px}")
 
         ############Add Widgets##############
         ############Left Main Layout Widgets##############
         self.memberLeftLayout.addWidget(self.memberTable)
 
         ############Right Top Layout Widgets##############
-        self.memberRightGroupBox = QGroupBox("Search For Member")
         self.memberRightGroupBox.setContentsMargins(10, 10, 10, 580)
         self.memberRightTopLayout.addWidget(self.memberSearchText)
         self.memberRightTopLayout.addWidget(self.memberSearchEntry)
         self.memberRightTopLayout.addWidget(self.memberSearchButton)
         self.memberRightGroupBox.setLayout(self.memberRightTopLayout)
-        self.memberRightLayout.addWidget(self.memberRightGroupBox)
+        self.memberRightLayout.addWidget(self.memberRightGroupBox, 40)
+
+        ############Right Bottom Layout Widget##############
+        self.memberBottomForm = QFormLayout()
+        self.memberBottomForm.addRow("", self.member_fname)
+        self.memberBottomForm.addRow("", self.member_lname)
+        self.memberBottomForm.addRow("", self.member_phone)
+        self.memberBottomForm.addRow("", self.member_address)
+        self.memberRightBottomGroupBox.setLayout(self.memberBottomForm)
+        self.memberRightLayout.addWidget(self.memberRightBottomGroupBox, 60)
 
         ############Tab 2 Main Layouts##############
-        self.memberMainLayout.addLayout(self.memberLeftLayout, 75)
-        self.memberMainLayout.addLayout(self.memberRightLayout, 25)
+        self.memberMainLayout.addLayout(self.memberLeftLayout, 65)
+        self.memberMainLayout.addLayout(self.memberRightLayout, 35)
         self.tab2.setLayout(self.memberMainLayout)
 
         ############Tab3 Layout##############
@@ -448,6 +462,21 @@ class Main(QMainWindow):
         self.product_status.setText("Status: " + productStatus)
         self.img = QPixmap('img/{}'.format(productImg))
         self.product_Img.setPixmap(self.img)
+
+    def viewSelectedMember(self):
+        memberId = self.getMemberIdFromCurrentRow()
+
+        query = ("SELECT * FROM members WHERE member_id=?")
+        member = cur.execute(query, (memberId,)).fetchone()  # single item tuple = (1,)
+        memberFName = member[1]
+        memberLName = member[2]
+        memberPhone = member[3]
+        memberAddr = member[4]
+
+        self.member_fname.setText("First name: " + memberFName)
+        self.member_lname.setText("Last name: " + str(memberLName))
+        self.member_phone.setText("Phone Number: " + str(memberPhone))
+        self.member_address.setText("Full Address: " + str(memberAddr))
 
     def tabsChanged(self):
         self.getStat()
