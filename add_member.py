@@ -2,7 +2,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import Qt
 import sqlite3
-import main
+import main_window
 
 sqlConnect = sqlite3.connect("products.db")
 cur = sqlConnect.cursor()
@@ -106,6 +106,6 @@ class AddMember(QWidget):
             QMessageBox.information(self, "Info", "Fields cannot be empty!")
 
     def backToMain(self):
-        self.main = main.Main()
+        self.main = main_window.Main()
         self.main.show()
         self.close()

@@ -6,7 +6,7 @@ from datetime import datetime
 
 import sqlite3
 from PIL import Image
-import main
+import main_window
 
 sqlConnect = sqlite3.connect("products.db")
 cur = sqlConnect.cursor()
@@ -95,7 +95,7 @@ class AddProduct(QWidget):
 
     def uploadImg(self):
         global defaultImg
-        size = (300, 300)
+        size = (320, 240)
         self.filename, ok = QFileDialog.getOpenFileName(self, "Upload Image", "", "Image File (*.jpg *.png)")
         if ok:
             print(self.filename)
@@ -134,11 +134,8 @@ class AddProduct(QWidget):
     def openCalendar(self):
         self.open = Calendar()
 
-
-
-
     def backToMain(self):
-        self.main = main.Main()
+        self.main = main_window.Main()
         self.main.show()
         self.close()
 

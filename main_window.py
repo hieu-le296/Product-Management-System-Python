@@ -11,10 +11,12 @@ import add_product
 import display_product
 import display_member
 import export_pdf
+import login_class
 import print_widget
 import calendar_class
 import info
 import selling
+from change_password import ChangePassword
 
 sqlConnect = sqlite3.connect("products.db")
 cur = sqlConnect.cursor()
@@ -332,11 +334,16 @@ class Main(QMainWindow):
         logoutMenu.setIcon(QIcon('icons/logout.svg'))
         logoutMenu.triggered.connect(self.funcLogout)
 
+        changePasswordMenu = QAction("Change Password", self)
+        changePasswordMenu.triggered.connect(self.funcChangePassword)
+
+        #add submenu to main menu
         file.addAction(addProductMenu)
         file.addAction(addMemberMenu)
         file.addAction(printMenu)
         file.addAction(exportPDF)
         product.addAction(sellProductMenu)
+        setting.addAction(changePasswordMenu)
         setting.addAction(infoMenu)
         setting.addAction(logoutMenu)
 
@@ -365,9 +372,13 @@ class Main(QMainWindow):
         self.info = info.Info()
 
     def funcLogout(self):
-        self.logoutWindow = Login()
+        self.logoutWindow = login_class.Login()
         self.logoutWindow.show()
         self.close()
+
+    def funcChangePassword(self):
+        self.changePassword = ChangePassword()
+        self.changePassword.show()
 
     def getStat(self):
         countProducts = cur.execute("SELECT count(product_id) FROM products").fetchall()
@@ -573,74 +584,3 @@ class Main(QMainWindow):
                     for column_number, data in enumerate(row_data):
                         self.memberTable.setItem(row_number, column_number, QTableWidgetItem(str(data)))
 
-
-class Login(QDialog):
-    def __init__(self, parent=None):
-        super().__init__()
-        self.setWindowTitle("Login")
-
-        self.mainLayout = QVBoxLayout()
-        self.topLayout = QVBoxLayout()
-        self.bottomLayout = QFormLayout()
-        self.topFrame = QFrame()
-        self.bottomFrame = QFrame()
-
-
-        self.infoImg = QLabel()
-        self.img = QPixmap('icons/ufv.png')
-        self.infoImg.setPixmap(self.img)
-        self.infoImg.setAlignment(Qt.AlignCenter)
-        self.topLayout.addWidget(self.infoImg)
-        self.topFrame.setLayout(self.topLayout)
-
-        self.username = QLineEdit(self)
-        self.QUserLabel = QLabel("Username")
-        self.password = QLineEdit(self)
-        self.QPasswordLabel = QLabel("Password")
-        self.password.setEchoMode(QLineEdit.Password)
-        self.btn_Submit = QPushButton("LOGIN")
-        self.btn_Submit.clicked.connect(self.Submit_btn)
-
-
-        self.bottomLayout.addRow("Username: ", self.username)
-        self.bottomLayout.addRow("Password: ", self.password)
-        self.bottomLayout.addRow("", self.btn_Submit)
-        self.bottomFrame.setLayout(self.bottomLayout)
-
-
-        self.mainLayout.addWidget(self.topFrame)
-        self.mainLayout.addWidget(self.bottomFrame)
-
-        self.setLayout(self.mainLayout)
-
-    def Submit_btn(self):
-        USERNAME = self.username.text()
-        PASSWORD = self.password.text()
-
-        try:
-            query = "SELECT username, password FROM users WHERE username = ? AND password = ?"
-            records = cur.execute(query, (USERNAME, PASSWORD)).fetchone()
-
-            username = records[0]
-            password = records[1]
-
-            if USERNAME == username and PASSWORD == password:
-                QMessageBox.information(self, "Success", "Login Successfully")
-                self.close()
-                self.main = Main()
-                self.main.show()
-
-        except:
-            QMessageBox.information(self, "Warning", "Login Failed")
-
-
-def main():
-    App = QApplication(sys.argv)
-    window = Login()
-    window.show()
-    App.setStyleSheet(qdarkstyle.load_stylesheet())
-    sys.exit(App.exec_())
-
-
-if __name__ == '__main__':
-    main()

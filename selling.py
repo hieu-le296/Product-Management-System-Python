@@ -4,7 +4,7 @@ from PyQt5.QtGui import *
 from PyQt5.QtCore import Qt
 from datetime import datetime
 import sqlite3
-import main
+import main_window
 
 sqlConnect = sqlite3.connect("products.db")
 cur = sqlConnect.cursor()
@@ -111,7 +111,7 @@ class SellProduct(QWidget):
         self.close()
 
     def backToMain(self):
-        self.main = main.Main()
+        self.main = main_window.Main()
         self.main.show()
         self.close()
 
@@ -214,7 +214,7 @@ class ConfirmWindow(QWidget):
                 self.printReceipt()
 
             self.close()
-            self.main = main.Main()
+            self.main = main_window.Main()
             self.main.show()
         except:
             QMessageBox.information(self, "Info", "Something went wrong")

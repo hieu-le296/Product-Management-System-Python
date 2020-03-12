@@ -5,7 +5,7 @@ from PIL import Image
 from datetime import datetime
 import os
 import sqlite3
-import main
+import main_window
 
 sqlConnect = sqlite3.connect("products.db")
 cur = sqlConnect.cursor()
@@ -112,7 +112,7 @@ class DisplayProduct(QWidget):
             QMessageBox.information(self, "Error", "This product has been deleted.")
 
     def uploadImg(self):
-        size = (256, 256)
+        size = (320, 240)
         self.filename, ok = QFileDialog.getOpenFileName(self, 'Upload Image', '', 'Image files (*.jpg *.png)')
         if ok:
             self.productImg = os.path.basename(self.filename)
@@ -143,7 +143,7 @@ class DisplayProduct(QWidget):
                 sqlConnect.commit()
                 QMessageBox.information(self, "Info", "Product has been updated")
                 self.close()
-                self.main = main.Main()
+                self.main = main_window.Main()
                 self.main.show()
             except:
                 QMessageBox.information(self, "Info", "Product has not been updated")
@@ -159,19 +159,15 @@ class DisplayProduct(QWidget):
                 sqlConnect.commit()
                 QMessageBox.information(self, "Information", "Product has been deleted")
                 self.close()
-                self.main = main.Main()
+                self.main = main_window.Main()
                 self.main.show()
             except:
                 QMessageBox.information(self, "Information", "Product has not been deleted")
 
     def backToMain(self):
-        self.main = main.Main()
+        self.main = main_window.Main()
         self.main.show()
         self.close()
-
-    def styles(self):
-        self.bottomFrame.setStyleSheet(styles.productBottomFrame())
-        self.topFrame.setStyleSheet(styles.productTopFrame())
 
 class Calendar(QWidget):
     def __init__(self):
