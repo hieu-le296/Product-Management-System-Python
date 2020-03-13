@@ -9,6 +9,7 @@ import add_product
 import display_product
 import display_member
 import export_pdf
+import help_class
 import login_class
 import print_widget
 import calendar_class
@@ -341,6 +342,7 @@ class Main(QMainWindow):
         sellProductMenu.triggered.connect(self.funcSellProduct)
 
         refreshMenu = QAction("Refresh", self)
+        refreshMenu.setIcon(QIcon('icons/refresh.svg'))
         refreshMenu.setShortcut("Ctrl+R")
         refreshMenu.triggered.connect(self.funcRefresh)
 
@@ -350,6 +352,9 @@ class Main(QMainWindow):
         infoMenu = QAction("About", self)
         infoMenu.setIcon(QIcon('icons/info.svg'))
         infoMenu.triggered.connect(self.funcInfo)
+
+        helpMenu = QAction("Help", self)
+        helpMenu.triggered.connect(self.funcHelp)
 
         logoutMenu = QAction("Logout", self)
         logoutMenu.setShortcut("Ctrl+O")
@@ -365,6 +370,7 @@ class Main(QMainWindow):
         setting.addAction(refreshMenu)
         setting.addAction(changePasswordMenu)
         setting.addAction(infoMenu)
+        setting.addAction(helpMenu)
         setting.addAction(logoutMenu)
 
     def funcAddProduct(self):
@@ -387,6 +393,10 @@ class Main(QMainWindow):
 
     def funcInfo(self):
         self.info = info.Info()
+
+    def funcHelp(self):
+        self.help = help_class.Help()
+        self.help.show()
 
     def funcLogout(self):
         self.logoutWindow = login_class.Login()
@@ -620,4 +630,3 @@ class Main(QMainWindow):
                     self.memberTable.insertRow(row_number)
                     for column_number, data in enumerate(row_data):
                         self.memberTable.setItem(row_number, column_number, QTableWidgetItem(str(data)))
-
