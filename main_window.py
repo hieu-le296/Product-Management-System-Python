@@ -58,6 +58,11 @@ class Main(QMainWindow):
         self.sellProduct.triggered.connect(self.funcSellProduct)
         self.tb.addAction(self.sellProduct)
         self.tb.addSeparator()
+        ############Refresh##############
+        self.refresh = QAction(QIcon('icons/refresh.svg'), "Refresh", self)
+        self.refresh.triggered.connect(self.funcRefresh)
+        self.tb.addAction(self.refresh)
+        self.tb.addSeparator()
         ############Printer##############
         self.print = QAction(QIcon('icons/printer.svg'), "Print", self)
         self.print.triggered.connect(self.funcPrintPreview)

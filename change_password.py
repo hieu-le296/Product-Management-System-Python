@@ -2,6 +2,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QDialog, QVBoxLayout, QFormLayout, QFrame, QLabel, QLineEdit, QPushButton, QMessageBox
 import sqlite3
+import hashlib
 
 
 sqlConnect = sqlite3.connect("products.db")
@@ -52,22 +53,32 @@ class ChangePassword(QDialog):
 
         self.setLayout(self.mainLayout)
 
+    def hash_password(self, password):
+        return hashlib.sha256(password.encode()).hexdigest()
+
+    def check_password(self, hashed_password, user_password):
+        password, salt = hashed_password.split(':')
+        print(user_password)
+        return password == hashlib.sha256(salt.encode() + user_password.encode()).hexdigest()
+
     def Submit_btn(self):
         current_password = self.currentPassword.text()
         new_password = self.newPassword.text()
         confirm_password = self.confirmNewPassword.text()
+        current_password_hashed = self.hash_password(current_password)
 
         try:
             query = "SELECT user_id, password FROM users WHERE password = ?"
-            records = cur.execute(query, (current_password,)).fetchone()
+            records = cur.execute(query, (current_password_hashed,)).fetchone()
 
             userId = records[0]
             oldPassword = records[1]
 
-            if current_password == oldPassword:
+            if current_password_hashed == oldPassword:
                 if new_password == confirm_password:
+                    confirm_password_hashed = self.hash_password(confirm_password)
                     passwordQuery = "UPDATE users set password = ? WHERE user_id = ?"
-                    cur.execute(passwordQuery, (confirm_password, userId))
+                    cur.execute(passwordQuery, (confirm_password_hashed, userId))
                     sqlConnect.commit()
                     QMessageBox.information(self, "Info", "Password Updated Successfully!")
                     self.close()

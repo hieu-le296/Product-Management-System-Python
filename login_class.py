@@ -5,6 +5,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QDialog, QVBoxLayout, QFormLayout, QFrame, QLabel, QLineEdit, QPushButton, QMessageBox, \
     QApplication
+import hashlib
 import main_window
 
 sqlConnect = sqlite3.connect("products.db")
@@ -52,18 +53,22 @@ class Login(QDialog):
 
         self.setLayout(self.mainLayout)
 
+    def hash_password(self, password):
+        return hashlib.sha256(password.encode()).hexdigest()
+
     def Submit_btn(self):
         USERNAME = self.username.text()
         PASSWORD = self.password.text()
+        PASSWORD_HASHED = self.hash_password(PASSWORD)
 
         try:
             query = "SELECT username, password FROM users WHERE username = ? AND password = ?"
-            records = cur.execute(query, (USERNAME, PASSWORD)).fetchone()
+            records = cur.execute(query, (USERNAME, PASSWORD_HASHED)).fetchone()
 
             username = records[0]
             password = records[1]
 
-            if USERNAME == username and PASSWORD == password:
+            if USERNAME == username and PASSWORD_HASHED == password:
                 QMessageBox.information(self, "Success", "Login Successfully")
                 self.close()
                 self.main = main_window.Main()
