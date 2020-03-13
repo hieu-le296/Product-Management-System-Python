@@ -118,3 +118,4 @@ class ExportPDF(QDialog):
                 self.close()
         else:
             QMessageBox.information(self, "Warning", "Please select one")
+        sqlConnect.close()

@@ -75,3 +75,6 @@ class ChangePassword(QDialog):
                     QMessageBox.information(self, "Warning", "Confirmed Password does not match New Password")
         except:
             QMessageBox.information(self, "Warning", "Change Password Failed")
+            self.currentPassword.setText("")
+            self.newPassword.setText("")
+            self.confirmNewPassword.setText("")

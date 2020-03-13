@@ -5,7 +5,6 @@ from PIL import Image
 from datetime import datetime
 import os
 import sqlite3
-import main_window
 
 sqlConnect = sqlite3.connect("products.db")
 cur = sqlConnect.cursor()
@@ -17,8 +16,6 @@ class DisplayProduct(QDialog):
         super().__init__()
         self.setWindowTitle("Product Detail")
         self.setWindowIcon(QIcon("icons/icon.ico"))
-        #self.setGeometry(800, 150, 400, 700)
-        #self.setFixedSize(self.size())
         self.UI()
         self.show()
 
@@ -64,8 +61,6 @@ class DisplayProduct(QDialog):
         self.deleteBtn.clicked.connect(self.deleteProduct)
         self.updateBtn = QPushButton("Update")
         self.updateBtn.clicked.connect(self.updateProduct)
-        self.backBtn = QPushButton("Back to Main")
-        self.backBtn.clicked.connect(self.backToMain)
 
 
     def layouts(self):
@@ -87,7 +82,6 @@ class DisplayProduct(QDialog):
         self.bottomLayout.addRow("", self.dateBtn)
         self.bottomLayout.addRow(QLabel("Image: "), self.uploadBtn)
         self.bottomLayout.addRow(QLabel(""), self.deleteBtn)
-        self.bottomLayout.addRow(QLabel(""), self.backBtn)
         self.bottomLayout.addRow(QLabel(""), self.updateBtn)
 
         ###########Set Layouts##########
@@ -142,14 +136,14 @@ class DisplayProduct(QDialog):
                 cur.execute(query, (name, manufacturer, price, quota, defaultImg, productDate, status, self.productId))
                 sqlConnect.commit()
                 QMessageBox.information(self, "Info", "Product has been updated")
+                sqlConnect.close()
                 self.close()
-                self.main = main_window.Main()
-                self.main.show()
             except:
                 QMessageBox.information(self, "Info", "Product has not been updated")
 
         else:
             QMessageBox.information(self, "Info", "Fields cannot be empty")
+        sqlConnect.close()
 
     def deleteProduct(self):
         mbox = QMessageBox.question(self, "Wanrning", "Are you sure to delete this product?", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
@@ -158,16 +152,11 @@ class DisplayProduct(QDialog):
                 cur.execute("DELETE FROM products WHERE product_id=?", (self.productId,))
                 sqlConnect.commit()
                 QMessageBox.information(self, "Information", "Product has been deleted")
+                sqlConnect.close()
                 self.close()
-                self.main = main_window.Main()
-                self.main.show()
             except:
                 QMessageBox.information(self, "Information", "Product has not been deleted")
 
-    def backToMain(self):
-        self.main = main_window.Main()
-        self.main.show()
-        self.close()
 
 class Calendar(QWidget):
     def __init__(self):

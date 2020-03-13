@@ -116,6 +116,6 @@ class Print(QDialog):
                 self.textEdit.append("-----------------------------------------------------")
 
         self.textEdit.document().print_(printer)
-
+        sqlConnect.close()
 
 

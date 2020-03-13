@@ -71,6 +71,8 @@ class Login(QDialog):
 
         except:
             QMessageBox.information(self, "Warning", "Login Failed")
+            self.username.setText("")
+            self.password.setText("")
 
 
 def main():

@@ -4,7 +4,6 @@ from PyQt5.QtGui import *
 from PyQt5.QtCore import Qt
 from datetime import datetime
 import sqlite3
-import main_window
 
 sqlConnect = sqlite3.connect("products.db")
 cur = sqlConnect.cursor()
@@ -43,8 +42,6 @@ class SellProduct(QDialog):
         self.quantityCombo = QComboBox()
         self.submitBtn = QPushButton("Submit")
         self.submitBtn.clicked.connect(self.sellProduct)
-        self.backBtn = QPushButton("Back to Main")
-        self.backBtn.clicked.connect(self.backToMain)
 
     def layouts(self):
         ##############Main Layout##############
@@ -63,7 +60,6 @@ class SellProduct(QDialog):
         self.bottomLayout.addRow(QLabel("Product: "), self.productCombo)
         self.bottomLayout.addRow(QLabel("Selling to: "), self.memberCombo)
         self.bottomLayout.addRow(QLabel("Quantity: "), self.quantityCombo)
-        self.bottomLayout.addRow(QLabel(""), self.backBtn)
         self.bottomLayout.addRow(QLabel(""), self.submitBtn)
         self.bottomFrame.setLayout(self.bottomLayout)
 
@@ -108,19 +104,12 @@ class SellProduct(QDialog):
         self.confirm = ConfirmWindow()
         self.close()
 
-    def backToMain(self):
-        self.main = main_window.Main()
-        self.main.show()
-        self.close()
-
 
 class ConfirmWindow(QDialog):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Sell Product")
         self.setWindowIcon(QIcon("icons/icon.ico"))
-        #self.setGeometry(850, 150, 350, 600)
-        #self.setFixedSize(self.size())
         self.UI()
         self.show()
 
@@ -212,8 +201,7 @@ class ConfirmWindow(QDialog):
                 self.printReceipt()
 
             self.close()
-            self.main = main_window.Main()
-            self.main.show()
+            sqlConnect.close()
         except:
             QMessageBox.information(self, "Info", "Something went wrong")
 

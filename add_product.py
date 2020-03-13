@@ -6,7 +6,6 @@ from datetime import datetime
 
 import sqlite3
 from PIL import Image
-import main_window
 
 sqlConnect = sqlite3.connect("products.db")
 cur = sqlConnect.cursor()
@@ -58,8 +57,6 @@ class AddProduct(QDialog):
         self.uploadBtn.clicked.connect(self.uploadImg)
         self.submitBtn = QPushButton("Submit")
         self.submitBtn.clicked.connect(self.addProduct)
-        self.backBtn = QPushButton("Back to Main")
-        self.backBtn.clicked.connect(self.backToMain)
 
     def layouts(self):
         ##############Main Layout##############
@@ -82,7 +79,6 @@ class AddProduct(QDialog):
         self.bottomLayout.addRow("Date: ", datePickEntry)
         self.bottomLayout.addRow("", self.dateBtn)
         self.bottomLayout.addRow("Product Image: ", self.uploadBtn)
-        self.bottomLayout.addRow("", self.backBtn)
         self.bottomLayout.addRow("", self.submitBtn)
         self.bottomFrame.setLayout(self.bottomLayout)
 
@@ -120,7 +116,7 @@ class AddProduct(QDialog):
                 cur.execute(query, (name, manufacturer, price, quota, defaultImg, productDate))
                 sqlConnect.commit()
                 QMessageBox.information(self, "Info", "New product has been added")
-                self.backToMain()
+                sqlConnect.close()
                 self.close()
 
             except:
@@ -131,12 +127,6 @@ class AddProduct(QDialog):
 
     def openCalendar(self):
         self.open = Calendar()
-
-    def backToMain(self):
-        self.main = main_window.Main()
-        self.main.show()
-        self.close()
-
 
 
 class Calendar(QWidget):

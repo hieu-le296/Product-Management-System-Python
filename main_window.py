@@ -1,7 +1,5 @@
 import sqlite3
-import sys
 
-import qdarkstyle
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
@@ -27,7 +25,7 @@ class Main(QMainWindow):
         super().__init__()
         self.setWindowTitle("Product Management")
         self.setWindowIcon(QIcon('icons/icon.ico'))
-        self.setGeometry(450, 150, 1350, 750)
+        self.setGeometry(450, 150, 1500, 800)
         self.UI()
 
     def UI(self):
@@ -202,7 +200,7 @@ class Main(QMainWindow):
         self.middleGroupBox = QGroupBox("List Box")
         self.middleGroupBox.setStyleSheet("QLabel {font-size: 20px}")
         self.bottomGroupBox = QGroupBox()
-        self.bottomGroupBox.setStyleSheet("QLabel {font-size: 20px}")
+        self.bottomGroupBox.setStyleSheet("QLabel {font-size: 16px}")
 
         ############Right Top Layout Widgets##############
         self.productRightTopLayout.addWidget(self.searchText)
@@ -328,25 +326,30 @@ class Main(QMainWindow):
         printMenu.triggered.connect(self.funcPrintPreview)
 
         exportPDF = QAction("ExportPDF", self)
-        exportPDF.setShortcut("Ctrl+E")
+        exportPDF.setShortcut("Ctrl+S")
         exportPDF.setIcon(QIcon('icons/pdf.svg'))
         exportPDF.triggered.connect(self.funcExportPdf)
 
         sellProductMenu = QAction("Sell Product", self)
         sellProductMenu.setIcon(QIcon('icons/sell.svg'))
-        sellProductMenu.setShortcut("Ctrl+S")
+        sellProductMenu.setShortcut("Ctrl+E")
         sellProductMenu.triggered.connect(self.funcSellProduct)
+
+        refreshMenu = QAction("Refresh", self)
+        refreshMenu.setShortcut("Ctrl+R")
+        refreshMenu.triggered.connect(self.funcRefresh)
+
+        changePasswordMenu = QAction("Change Password", self)
+        changePasswordMenu.triggered.connect(self.funcChangePassword)
 
         infoMenu = QAction("About", self)
         infoMenu.setIcon(QIcon('icons/info.svg'))
         infoMenu.triggered.connect(self.funcInfo)
 
         logoutMenu = QAction("Logout", self)
+        logoutMenu.setShortcut("Ctrl+O")
         logoutMenu.setIcon(QIcon('icons/logout.svg'))
         logoutMenu.triggered.connect(self.funcLogout)
-
-        changePasswordMenu = QAction("Change Password", self)
-        changePasswordMenu.triggered.connect(self.funcChangePassword)
 
         #add submenu to main menu
         file.addAction(addProductMenu)
@@ -354,21 +357,19 @@ class Main(QMainWindow):
         file.addAction(printMenu)
         file.addAction(exportPDF)
         product.addAction(sellProductMenu)
+        setting.addAction(refreshMenu)
         setting.addAction(changePasswordMenu)
         setting.addAction(infoMenu)
         setting.addAction(logoutMenu)
 
     def funcAddProduct(self):
         self.newProduct = add_product.AddProduct()
-        self.close()
 
     def funcAddMember(self):
         self.newMember = add_member.AddMember()
-        self.close()
 
     def funcSellProduct(self):
         self.sell = selling.SellProduct()
-        self.close()
 
     def funcExportPdf(self):
         self.export = export_pdf.ExportPDF()
@@ -390,6 +391,13 @@ class Main(QMainWindow):
     def funcChangePassword(self):
         self.changePassword = ChangePassword()
         self.changePassword.show()
+
+    def funcRefresh(self):
+        self.displayProduct()
+        self.displayMember()
+        self.getStat()
+        self.historyShow.setText("")
+        self.getSellingHistory()
 
     def getStat(self):
         countProducts = cur.execute("SELECT count(product_id) FROM products").fetchall()
@@ -526,7 +534,6 @@ class Main(QMainWindow):
         display_product.DisplayProduct.productId = productId
         self.displayP = display_product.DisplayProduct()
         self.displayP.show()
-        self.close()
 
     def getMemberIdFromCurrentRow(self):
         listMember = []
@@ -541,7 +548,6 @@ class Main(QMainWindow):
         display_member.DisplayMember.memberId = memberId
         self.displayM = display_member.DisplayMember()
         self.displayM.show()
-        self.close()
 
     def searchProduct(self):
         value = self.searchEntry.text()

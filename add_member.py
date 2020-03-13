@@ -2,7 +2,6 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import Qt
 import sqlite3
-import main_window
 
 sqlConnect = sqlite3.connect("products.db")
 cur = sqlConnect.cursor()
@@ -44,8 +43,6 @@ class AddMember(QDialog):
         self.addressEntry.setPlaceholderText("Enter member full address")
         self.submitBtn = QPushButton("Submit")
         self.submitBtn.clicked.connect(self.addMember)
-        self.backBtn = QPushButton("Back to Main")
-        self.backBtn.clicked.connect(self.backToMain)
 
     def layouts(self):
         self.mainLayout = QVBoxLayout()
@@ -63,7 +60,6 @@ class AddMember(QDialog):
         self.bottomLayout.addRow(QLabel("Last Name: "), self.lnameEntry)
         self.bottomLayout.addRow(QLabel("Phone Number: "), self.phoneEntry)
         self.bottomLayout.addRow(QLabel("Full Address: "), self.addressEntry)
-        self.bottomLayout.addRow(QLabel(""), self.backBtn)
         self.bottomLayout.addRow(QLabel(""), self.submitBtn)
         self.bottomFrame.setLayout(self.bottomLayout)
 
@@ -85,7 +81,6 @@ class AddMember(QDialog):
                 cur.execute(query, (fname, emptyString, emptyString, emptyString))
                 sqlConnect.commit()
                 QMessageBox.information(self, "Info", "New member has been added")
-                self.backToMain()
                 self.close()
             except:
                 QMessageBox.information(self, "Info", "New member has not been added")
@@ -95,15 +90,10 @@ class AddMember(QDialog):
                 cur.execute(query, (fname, lname, phone, address))
                 sqlConnect.commit()
                 QMessageBox.information(self, "Info", "New member has been added")
-                self.backToMain()
                 self.close()
             except:
                 QMessageBox.information(self, "Info", "New member has not been added")
 
         else:
             QMessageBox.information(self, "Info", "Fields cannot be empty!")
-
-    def backToMain(self):
-        self.main = main_window.Main()
-        self.main.show()
-        self.close()
+        sqlConnect.close()
