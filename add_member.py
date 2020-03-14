@@ -96,4 +96,3 @@ class AddMember(QDialog):
 
         else:
             QMessageBox.information(self, "Info", "Fields cannot be empty!")
-        sqlConnect.close()

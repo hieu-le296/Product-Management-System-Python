@@ -1,10 +1,7 @@
 import sqlite3
-import sys
-import qdarkstyle
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPixmap
-from PyQt5.QtWidgets import QDialog, QVBoxLayout, QFormLayout, QFrame, QLabel, QLineEdit, QPushButton, QMessageBox, \
-    QApplication
+from PyQt5.QtWidgets import QDialog, QVBoxLayout, QFormLayout, QFrame, QLabel, QLineEdit, QPushButton, QMessageBox
 import hashlib
 import main_window
 
@@ -78,15 +75,3 @@ class Login(QDialog):
             QMessageBox.information(self, "Warning", "Login Failed")
             self.username.setText("")
             self.password.setText("")
-
-
-def main():
-    App = QApplication(sys.argv)
-    window = Login()
-    window.show()
-    App.setStyleSheet(qdarkstyle.load_stylesheet())
-    sys.exit(App.exec_())
-
-
-if __name__ == '__main__':
-    main()

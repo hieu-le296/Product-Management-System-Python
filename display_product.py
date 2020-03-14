@@ -6,6 +6,8 @@ from datetime import datetime
 import os
 import sqlite3
 
+import main_window
+
 sqlConnect = sqlite3.connect("products.db")
 cur = sqlConnect.cursor()
 
@@ -59,6 +61,8 @@ class DisplayProduct(QDialog):
         self.uploadBtn.clicked.connect(self.uploadImg)
         self.deleteBtn = QPushButton("Delete")
         self.deleteBtn.clicked.connect(self.deleteProduct)
+        self.backBtn = QPushButton("Back to Main")
+        self.backBtn.clicked.connect(self.backToMain)
         self.updateBtn = QPushButton("Update")
         self.updateBtn.clicked.connect(self.updateProduct)
 
@@ -81,6 +85,7 @@ class DisplayProduct(QDialog):
         self.bottomLayout.addRow("Date: ", datePickEntry)
         self.bottomLayout.addRow("", self.dateBtn)
         self.bottomLayout.addRow(QLabel("Image: "), self.uploadBtn)
+        self.bottomLayout.addRow("", self.backBtn)
         self.bottomLayout.addRow(QLabel(""), self.deleteBtn)
         self.bottomLayout.addRow(QLabel(""), self.updateBtn)
 
@@ -136,14 +141,12 @@ class DisplayProduct(QDialog):
                 cur.execute(query, (name, manufacturer, price, quota, defaultImg, productDate, status, self.productId))
                 sqlConnect.commit()
                 QMessageBox.information(self, "Info", "Product has been updated")
-                sqlConnect.close()
                 self.close()
             except:
                 QMessageBox.information(self, "Info", "Product has not been updated")
 
         else:
             QMessageBox.information(self, "Info", "Fields cannot be empty")
-        sqlConnect.close()
 
     def deleteProduct(self):
         mbox = QMessageBox.question(self, "Wanrning", "Are you sure to delete this product?", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
@@ -152,10 +155,14 @@ class DisplayProduct(QDialog):
                 cur.execute("DELETE FROM products WHERE product_id=?", (self.productId,))
                 sqlConnect.commit()
                 QMessageBox.information(self, "Information", "Product has been deleted")
-                sqlConnect.close()
                 self.close()
             except:
                 QMessageBox.information(self, "Information", "Product has not been deleted")
+
+    def backToMain(self):
+        self.main = main_window.Main()
+        self.main.show()
+        self.close()
 
 
 class Calendar(QWidget):
@@ -190,5 +197,3 @@ class Calendar(QWidget):
         dateSelected = '{}/{}/{}'.format(date.day(), date.month(), date.year())
         self.lbl.setText(dateSelected)
         datePickEntry.setText(dateSelected)
-
-

@@ -1,5 +1,7 @@
 import sqlite3
+import sys
 
+import qdarkstyle
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
@@ -502,12 +504,12 @@ class Main(QMainWindow):
         self.member_address.setText("Full Address: " + str(memberAddr))
 
     def tabsChanged(self):
+        self.getSellingHistory()
         self.getStat()
         self.displayProduct()
         self.displayMember()
 
     def displayProduct(self):
-        self.productTable.setFont(QFont("Times", 12))
         for i in reversed(range(self.productTable.rowCount())):
             self.productTable.removeRow(i)
 
@@ -522,7 +524,6 @@ class Main(QMainWindow):
         self.productTable.setEditTriggers(QAbstractItemView.NoEditTriggers)
 
     def displayMember(self):
-        self.memberTable.setFont(QFont("Times", 12))
         for i in reversed(range(self.memberTable.rowCount())):
             self.memberTable.removeRow(i)
 
@@ -549,6 +550,7 @@ class Main(QMainWindow):
         display_product.DisplayProduct.productId = productId
         self.displayP = display_product.DisplayProduct()
         self.displayP.show()
+        self.close()
 
     def getMemberIdFromCurrentRow(self):
         listMember = []
@@ -563,6 +565,7 @@ class Main(QMainWindow):
         display_member.DisplayMember.memberId = memberId
         self.displayM = display_member.DisplayMember()
         self.displayM.show()
+        self.close()
 
     def searchProduct(self):
         value = self.searchEntry.text()
@@ -630,3 +633,14 @@ class Main(QMainWindow):
                     self.memberTable.insertRow(row_number)
                     for column_number, data in enumerate(row_data):
                         self.memberTable.setItem(row_number, column_number, QTableWidgetItem(str(data)))
+
+def main():
+    App = QApplication(sys.argv)
+    window = login_class.Login()
+    window.show()
+    App.setStyleSheet(qdarkstyle.load_stylesheet())
+    sys.exit(App.exec_())
+
+
+if __name__ == '__main__':
+    main()

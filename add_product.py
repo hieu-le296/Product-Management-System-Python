@@ -92,9 +92,7 @@ class AddProduct(QDialog):
         size = (320, 240)
         self.filename, ok = QFileDialog.getOpenFileName(self, "Upload Image", "", "Image File (*.jpg *.png)")
         if ok:
-            print(self.filename)
             defaultImg = os.path.basename(self.filename)
-            print(defaultImg)
             img = Image.open(self.filename)
             img = img.resize(size)
             img.save("img/{0}".format(defaultImg))
@@ -116,7 +114,6 @@ class AddProduct(QDialog):
                 cur.execute(query, (name, manufacturer, price, quota, defaultImg, productDate))
                 sqlConnect.commit()
                 QMessageBox.information(self, "Info", "New product has been added")
-                sqlConnect.close()
                 self.close()
 
             except:
