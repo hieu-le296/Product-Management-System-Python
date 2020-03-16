@@ -17,7 +17,7 @@ class DisplayProduct(QDialog):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Product Detail")
-        self.setWindowIcon(QIcon("icons/icon.ico"))
+        self.setWindowIcon(QIcon("icons/add.svg"))
         self.UI()
         self.show()
 
@@ -142,6 +142,7 @@ class DisplayProduct(QDialog):
                 sqlConnect.commit()
                 QMessageBox.information(self, "Info", "Product has been updated")
                 self.close()
+                self.backToMain()
             except:
                 QMessageBox.information(self, "Info", "Product has not been updated")
 
@@ -156,6 +157,7 @@ class DisplayProduct(QDialog):
                 sqlConnect.commit()
                 QMessageBox.information(self, "Information", "Product has been deleted")
                 self.close()
+                self.backToMain()
             except:
                 QMessageBox.information(self, "Information", "Product has not been deleted")
 

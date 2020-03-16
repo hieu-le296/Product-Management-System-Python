@@ -13,7 +13,7 @@ class DisplayMember(QDialog):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Membership Detail")
-        self.setWindowIcon(QIcon("icons/icon.ico"))
+        self.setWindowIcon(QIcon("icons/users.png"))
         self.UI()
         self.show()
 
@@ -121,6 +121,7 @@ class DisplayMember(QDialog):
                 sqlConnect.commit()
                 QMessageBox.information(self, "Info", "Membership has been updated")
                 self.close()
+                self.backToMain()
             except:
                 QMessageBox.information(self, "Info", "Membership has not been updated")
 
@@ -132,6 +133,7 @@ class DisplayMember(QDialog):
                 sqlConnect.commit()
                 QMessageBox.information(self, "Info", "Membership has been updated")
                 self.close()
+                self.backToMain()
             except:
                 QMessageBox.information(self, "Info", "Membership has not been updated")
         else:

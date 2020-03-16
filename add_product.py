@@ -17,7 +17,7 @@ class AddProduct(QDialog):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Add Product")
-        self.setWindowIcon(QIcon('icons/icon.ico'))
+        self.setWindowIcon(QIcon('icons/add.svg'))
         self.UI()
         self.show()
 

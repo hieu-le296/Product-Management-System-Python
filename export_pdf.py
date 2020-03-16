@@ -12,7 +12,7 @@ class ExportPDF(QDialog):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Export to PDF")
-        self.setWindowIcon(QIcon('icons/icon.ico'))
+        self.setWindowIcon(QIcon('icons/pdf.svg'))
         self.widgets()
         self.layouts()
         self.show()

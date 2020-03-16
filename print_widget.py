@@ -14,6 +14,7 @@ class Print(QDialog):
         self.setWindowIcon(QIcon('icons/icon.ico'))
         self.widgets()
         self.layouts()
+        self.setWindowIcon(QIcon('icons/printer.svg'))
         self.show()
 
     def widgets(self):

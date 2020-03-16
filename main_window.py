@@ -145,12 +145,19 @@ class Main(QMainWindow):
 
         ############Right Bottom Layout Widget##############
         self.product_name = QLabel()
+        self.product_name.setAlignment(Qt.AlignCenter)
         self.product_manu = QLabel()
+        self.product_manu.setAlignment(Qt.AlignCenter)
         self.product_price = QLabel()
+        self.product_price.setAlignment(Qt.AlignCenter)
         self.product_quantity = QLabel()
+        self.product_quantity.setAlignment(Qt.AlignCenter)
         self.product_date = QLabel()
+        self.product_date.setAlignment(Qt.AlignCenter)
         self.product_status = QLabel()
+        self.product_status.setAlignment(Qt.AlignCenter)
         self.product_Img = QLabel()
+        self.product_Img.setAlignment(Qt.AlignCenter)
 
         ############Tab 2 Widgets##############
         self.memberTable = QTableWidget()
@@ -173,9 +180,13 @@ class Main(QMainWindow):
 
         ############Right Bottom Layout Widget##############
         self.member_fname = QLabel()
+        self.member_fname.setAlignment(Qt.AlignCenter)
         self.member_lname = QLabel()
+        self.member_lname.setAlignment(Qt.AlignCenter)
         self.member_phone = QLabel()
+        self.member_phone.setAlignment(Qt.AlignCenter)
         self.member_address = QLabel()
+        self.member_address.setAlignment(Qt.AlignCenter)
 
         ############Tab 3 Widgets##############
         self.totalProductLabel = QLabel()
@@ -252,7 +263,7 @@ class Main(QMainWindow):
         ############Right Layouts##############
         self.memberRightBottomGroupBox = QGroupBox()
         self.memberRightGroupBox = QGroupBox("Search For Member")
-        #self.memberRightBottomGroupBox.setStyleSheet("QLabel {font-size: 12px}")
+        self.memberRightBottomGroupBox.setStyleSheet("QLabel {font-size: 14px}")
 
         ############Add Widgets##############
         ############Left Main Layout Widgets##############
@@ -329,7 +340,7 @@ class Main(QMainWindow):
         addMemberMenu.triggered.connect(self.funcAddMember)
 
         printMenu = QAction("Print", self)
-        printMenu.setIcon(QIcon('icons/print_menu.svg'))
+        printMenu.setIcon(QIcon('icons/printer.svg'))
         printMenu.setShortcut("Ctrl+P")
         printMenu.triggered.connect(self.funcPrintPreview)
 
@@ -636,7 +647,7 @@ class Main(QMainWindow):
 
 def main():
     App = QApplication(sys.argv)
-    window = login_class.Login()
+    window = Main()
     window.show()
     App.setStyleSheet(qdarkstyle.load_stylesheet())
     sys.exit(App.exec_())

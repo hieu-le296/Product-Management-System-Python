@@ -13,7 +13,7 @@ class AddMember(QDialog):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Add Member")
-        self.setWindowIcon(QIcon('icons/icon.ico'))
+        self.setWindowIcon(QIcon('icons/users.svg'))
         self.UI()
         self.show()
 
