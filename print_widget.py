@@ -7,11 +7,13 @@ import sqlite3
 sqlConnect = sqlite3.connect("products.db")
 cur = sqlConnect.cursor()
 
-class Print(QDialog):
+class Print(QWidget):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Print Preview")
-        self.setWindowIcon(QIcon('icons/icon.ico'))
+        self.setWindowIcon(QIcon('icons/printer.svg'))
+        self.setGeometry(850, 450, 250, 180)
+        self.setFixedSize(self.size())
         self.widgets()
         self.layouts()
         self.setWindowIcon(QIcon('icons/printer.svg'))

@@ -28,7 +28,7 @@ class DisplayProduct(QDialog):
         self.setStyleSheet("QLabel {font-size: 15px}")
 
     def widgets(self):
-        #################Top layouts wigdets#########
+        #################Top layouts widgets#########
         self.product_Img = QLabel()
         self.img = QPixmap('img/{}'.format(self.productImg))
         self.product_Img.setPixmap(self.img)

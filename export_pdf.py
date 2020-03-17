@@ -8,11 +8,13 @@ import sqlite3
 sqlConnect = sqlite3.connect("products.db")
 cur = sqlConnect.cursor()
 
-class ExportPDF(QDialog):
+class ExportPDF(QWidget):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Export to PDF")
         self.setWindowIcon(QIcon('icons/pdf.svg'))
+        self.setGeometry(850, 450, 250, 180)
+        self.setFixedSize(self.size())
         self.widgets()
         self.layouts()
         self.show()

@@ -27,7 +27,7 @@ class Main(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Product Management")
-        self.setWindowIcon(QIcon('icons/icon.ico'))
+        self.setWindowIcon(QIcon('icons/logo.png'))
         self.setGeometry(450, 150, 1500, 800)
         self.UI()
 
@@ -191,8 +191,10 @@ class Main(QMainWindow):
         ############Tab 3 Widgets##############
         self.totalProductLabel = QLabel()
         self.totalMemberLabel = QLabel()
+        self.totalInStockLabel = QLabel()
         self.soldItemLabel = QLabel()
         self.totalAmountLabel = QLabel()
+        self.totalAmountEarnedLabel = QLabel()
 
         ############Tab 4 Widgets##############
         self.historyShow = QTextEdit()
@@ -297,8 +299,11 @@ class Main(QMainWindow):
         self.statGroupBox = QGroupBox()
         self.statLayout.addRow("Total Products: ", self.totalProductLabel)
         self.statLayout.addRow("Total Members: ", self.totalMemberLabel)
+        self.statLayout.addRow("Total In stock: ", self.totalInStockLabel)
         self.statLayout.addRow("Total Sold: ", self.soldItemLabel)
         self.statLayout.addRow("Total Amount: ", self.totalAmountLabel)
+        self.statLayout.addRow("Amount Earned: ", self.totalAmountEarnedLabel)
+
 
         self.statGroupBox.setLayout(self.statLayout)
         self.statGroupBox.setStyleSheet("QLabel {font-size: 30px}")
@@ -434,19 +439,28 @@ class Main(QMainWindow):
         countMember = cur.execute("SELECT count(member_id) FROM members").fetchall()
         countMember = countMember[0][0]
 
+        productInstock = cur.execute("SELECT sum(product_quota) FROM products").fetchall()
+        productInstock = productInstock[0][0]
+
         soldItems = cur.execute("SELECT sum(selling_quantity) FROM sellings").fetchall()
         soldItems = soldItems[0][0]
 
-        totalAmount = cur.execute("SELECT sum(selling_amount) FROM sellings").fetchall()
-        totalAmount = totalAmount[0][0]
+        totalAmount = cur.execute("SELECT sum(product_price), sum(product_quota) FROM products").fetchall()
+        totalAmount = totalAmount[0][0] * totalAmount[0][1]
+
+        amountEarned = cur.execute("SELECT sum(selling_amount) FROM sellings").fetchall()
+        amountEarned = amountEarned[0][0]
 
         self.totalProductLabel.setText(str(countProducts) + " items")
         self.totalMemberLabel.setText(str(countMember) + " members")
+        self.totalInStockLabel.setText(str(productInstock) + " units")
         self.soldItemLabel.setText(str(soldItems) + " units")
-        self.totalAmountLabel.setText("$ " + str(totalAmount))
+        self.totalAmountLabel.setText("$" + str(totalAmount))
+        self.totalAmountEarnedLabel.setText("$" + str(amountEarned))
 
     def getSellingHistory(self):
-        query = "SELECT products.product_name, products.product_manufacturer, products.product_price, members.member_fname, sellings.selling_quantity, sellings.selling_amount, sellings.selling_date FROM products, members, sellings WHERE products.product_id = sellings.selling_product_id AND members.member_id = sellings.selling_member_id"
+        query = "SELECT products.product_name, products.product_manufacturer, products.product_price, members.member_fname, sellings.selling_quantity, sellings.selling_amount, sellings.selling_date FROM products, members, sellings" \
+                " WHERE products.product_id = sellings.selling_product_id AND members.member_id = sellings.selling_member_id"
         history = cur.execute(query).fetchall()
         if history is not None:
             for record in history:
@@ -647,7 +661,7 @@ class Main(QMainWindow):
 
 def main():
     App = QApplication(sys.argv)
-    window = Main()
+    window = login_class.Login()
     window.show()
     App.setStyleSheet(qdarkstyle.load_stylesheet())
     sys.exit(App.exec_())

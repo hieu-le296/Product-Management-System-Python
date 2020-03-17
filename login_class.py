@@ -1,6 +1,6 @@
 import sqlite3
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QPixmap
+from PyQt5.QtGui import QPixmap, QIcon
 from PyQt5.QtWidgets import QDialog, QVBoxLayout, QFormLayout, QFrame, QLabel, QLineEdit, QPushButton, QMessageBox
 import hashlib
 import main_window
@@ -12,6 +12,7 @@ class Login(QDialog):
     def __init__(self, parent=None):
         super().__init__()
         self.setWindowTitle("Login")
+        self.setWindowIcon(QIcon('icons/logo.png'))
         self.widgets()
         self.layouts()
 

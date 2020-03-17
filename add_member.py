@@ -9,11 +9,13 @@ cur = sqlConnect.cursor()
 defaultImg = 'img/store.png'
 
 
-class AddMember(QDialog):
+class AddMember(QWidget):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Add Member")
         self.setWindowIcon(QIcon('icons/users.svg'))
+        self.setGeometry(850, 450, 350, 550)
+        self.setFixedSize(self.size())
         self.UI()
         self.show()
 

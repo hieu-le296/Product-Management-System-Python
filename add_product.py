@@ -12,11 +12,14 @@ cur = sqlConnect.cursor()
 
 defaultImg = 'store.png'
 
-class AddProduct(QDialog):
+class AddProduct(QWidget):
     date = ''
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Add Product")
+        self.setGeometry(850, 450, 350, 550)
+        self.setFixedSize(self.size())
+
         self.setWindowIcon(QIcon('icons/add.svg'))
         self.UI()
         self.show()
