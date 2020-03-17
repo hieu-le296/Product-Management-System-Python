@@ -14,7 +14,7 @@ class AddMember(QWidget):
         super().__init__()
         self.setWindowTitle("Add Member")
         self.setWindowIcon(QIcon('icons/users.svg'))
-        self.setGeometry(850, 450, 350, 550)
+        self.setGeometry(850, 450, 350, 600)
         self.setFixedSize(self.size())
         self.UI()
         self.show()

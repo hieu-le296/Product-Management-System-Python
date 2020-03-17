@@ -14,7 +14,7 @@ class DisplayMember(QWidget):
         super().__init__()
         self.setWindowTitle("Membership Detail")
         self.setWindowIcon(QIcon("icons/users.png"))
-        self.setGeometry(850, 450, 350, 550)
+        self.setGeometry(850, 450, 350, 650)
         self.setFixedSize(self.size())
         self.UI()
         self.show()

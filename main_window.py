@@ -304,7 +304,7 @@ class Main(QMainWindow):
         self.statGroupBox = QGroupBox()
         self.statLayout.addRow("Total Products: ", self.totalProductLabel)
         self.statLayout.addRow("Total Members: ", self.totalMemberLabel)
-        self.statLayout.addRow("Total In stock: ", self.totalInStockLabel)
+        self.statLayout.addRow("Total In Stock: ", self.totalInStockLabel)
         self.statLayout.addRow("Total Sold: ", self.soldItemLabel)
         self.statLayout.addRow("Total Amount: ", self.totalAmountLabel)
         self.statLayout.addRow("Amount Earned: ", self.totalAmountEarnedLabel)
@@ -319,55 +319,55 @@ class Main(QMainWindow):
         self.series.append("Sold Items", soldItems)
 
         # adding slice
-        slice = QPieSlice()
-        slice = self.series.slices()[1]
-        slice.setExploded(True)
-        slice.setLabelVisible(True)
-        slice.setPen(QPen(Qt.darkGreen, 2))
-        slice.setBrush(Qt.green)
+        self.slice = QPieSlice()
+        self.slice = self.series.slices()[1]
+        self.slice.setExploded(True)
+        self.slice.setLabelVisible(True)
+        self.slice.setPen(QPen(Qt.darkGreen, 2))
+        self.slice.setBrush(Qt.green)
 
-        chart = QChart()
-        chart.legend().hide()
-        chart.addSeries(self.series)
-        chart.createDefaultAxes()
-        chart.setAnimationOptions(QChart.SeriesAnimations)
-        chart.setTitle("Products Sold Pie Chart")
+        self.chart = QChart()
+        self.chart.legend().hide()
+        self.chart.addSeries(self.series)
+        self.chart.createDefaultAxes()
+        self.chart.setAnimationOptions(QChart.SeriesAnimations)
+        self.chart.setTitle("Products Sold Pie Chart")
 
-        chart.legend().setVisible(True)
-        chart.legend().setAlignment(Qt.AlignBottom)
+        self.chart.legend().setVisible(True)
+        self.chart.legend().setAlignment(Qt.AlignBottom)
 
-        chartview = QChartView(chart)
-        chartview.setRenderHint(QPainter.Antialiasing)
+        self.chartview = QChartView(self.chart)
+        self.chartview.setRenderHint(QPainter.Antialiasing)
 
-        self.statRightLayout.addWidget(chartview)
+        self.statRightLayout.addWidget(self.chartview)
 
         ##############Cash Flow Pie Chart###################
         self.series1 = QPieSeries()
-        self.series1.append("Total Amount", totalAmount)
+        self.series1.append("Total Amount", (totalAmount + amountEarned))
         self.series1.append("Amount Earned", amountEarned)
 
         # adding slice
-        slice1 = QPieSlice()
-        slice1 = self.series1.slices()[1]
-        slice1.setExploded(True)
-        slice1.setLabelVisible(True)
-        slice1.setPen(QPen(Qt.darkYellow, 2))
-        slice1.setBrush(Qt.yellow)
+        self.slice1 = QPieSlice()
+        self.slice1 = self.series1.slices()[1]
+        self.slice1.setExploded(True)
+        self.slice1.setLabelVisible(True)
+        self.slice1.setPen(QPen(Qt.darkYellow, 2))
+        self.slice1.setBrush(Qt.yellow)
 
-        chart1 = QChart()
-        chart1.legend().hide()
-        chart1.addSeries(self.series1)
-        chart1.createDefaultAxes()
-        chart1.setAnimationOptions(QChart.SeriesAnimations)
-        chart1.setTitle("Cash Flow Pie Chart")
+        self.chart1 = QChart()
+        self.chart1.legend().hide()
+        self.chart1.addSeries(self.series1)
+        self.chart1.createDefaultAxes()
+        self.chart1.setAnimationOptions(QChart.SeriesAnimations)
+        self.chart1.setTitle("Cash Flow Pie Chart")
 
-        chart1.legend().setVisible(True)
-        chart1.legend().setAlignment(Qt.AlignBottom)
+        self.chart1.legend().setVisible(True)
+        self.chart1.legend().setAlignment(Qt.AlignBottom)
 
-        chartview1 = QChartView(chart1)
-        chartview1.setRenderHint(QPainter.Antialiasing)
+        self.chartview1 = QChartView(self.chart1)
+        self.chartview1.setRenderHint(QPainter.Antialiasing)
 
-        self.statRightLayout.addWidget(chartview1)
+        self.statRightLayout.addWidget(self.chartview1)
 
 
         self.statGroupBox.setLayout(self.statLayout)
@@ -499,6 +499,26 @@ class Main(QMainWindow):
         self.historyShow.setText("")
         self.getSellingHistory()
 
+        # Update pie charts
+        self.series.clear()
+        self.series.append("Product Instock", productInstock)
+        self.series.append("Sold Items", soldItems)
+        self.slice = self.series.slices()[1]
+        self.slice.setExploded(True)
+        self.slice.setLabelVisible(True)
+        self.slice.setPen(QPen(Qt.darkGreen, 2))
+        self.slice.setBrush(Qt.green)
+
+        self.series1.clear()
+        self.series1.append("Total Amount", totalAmount)
+        self.series1.append("Amount Earned", amountEarned)
+
+        self.slice1 = self.series1.slices()[1]
+        self.slice1.setExploded(True)
+        self.slice1.setLabelVisible(True)
+        self.slice1.setPen(QPen(Qt.darkYellow, 2))
+        self.slice1.setBrush(Qt.yellow)
+
     def getStat(self):
         global productInstock, soldItems, totalAmount, amountEarned
 
@@ -524,9 +544,8 @@ class Main(QMainWindow):
         self.totalMemberLabel.setText(str(countMember) + " members")
         self.totalInStockLabel.setText(str(productInstock) + " units")
         self.soldItemLabel.setText(str(soldItems) + " units")
-        self.totalAmountLabel.setText("$" + str(totalAmount))
+        self.totalAmountLabel.setText("$" + str(totalAmount + amountEarned))
         self.totalAmountEarnedLabel.setText("$" + str(amountEarned))
-
 
 
     def getSellingHistory(self):
@@ -604,6 +623,26 @@ class Main(QMainWindow):
         self.getStat()
         self.displayProduct()
         self.displayMember()
+
+        # Update pie charts
+        self.series.clear()
+        self.series.append("Product Instock", productInstock)
+        self.series.append("Sold Items", soldItems)
+        self.slice = self.series.slices()[1]
+        self.slice.setExploded(True)
+        self.slice.setLabelVisible(True)
+        self.slice.setPen(QPen(Qt.darkGreen, 2))
+        self.slice.setBrush(Qt.green)
+
+        self.series1.clear()
+        self.series1.append("Total Amount", totalAmount)
+        self.series1.append("Amount Earned", amountEarned)
+
+        self.slice1 = self.series1.slices()[1]
+        self.slice1.setExploded(True)
+        self.slice1.setLabelVisible(True)
+        self.slice1.setPen(QPen(Qt.darkYellow, 2))
+        self.slice1.setBrush(Qt.yellow)
 
     def displayProduct(self):
         for i in reversed(range(self.productTable.rowCount())):
