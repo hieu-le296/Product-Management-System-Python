@@ -8,14 +8,12 @@ import main_window
 sqlConnect = sqlite3.connect("products.db")
 cur = sqlConnect.cursor()
 
-class DisplayMember(QWidget):
+class DisplayMember(QDialog):
     memberId = 0
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Membership Detail")
         self.setWindowIcon(QIcon("icons/users.png"))
-        self.setGeometry(850, 450, 350, 650)
-        self.setFixedSize(self.size())
         self.UI()
         self.show()
 

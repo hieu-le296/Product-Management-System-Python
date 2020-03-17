@@ -12,14 +12,11 @@ cur = sqlConnect.cursor()
 
 defaultImg = 'store.png'
 
-class AddProduct(QWidget):
+class AddProduct(QDialog):
     date = ''
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Add Product")
-        self.setGeometry(850, 450, 350, 650)
-        self.setFixedSize(self.size())
-
         self.setWindowIcon(QIcon('icons/add.svg'))
         self.UI()
         self.show()
@@ -40,13 +37,13 @@ class AddProduct(QWidget):
         self.titleText.setAlignment(Qt.AlignCenter)
         ##############Widgets of top layout##############
         self.nameEntry = QLineEdit()
-        self.nameEntry.setPlaceholderText("Enter product name")
+        self.nameEntry.setPlaceholderText("Enter name")
         self.manufactureEntry = QLineEdit()
-        self.manufactureEntry.setPlaceholderText("Enter manufacture namne")
+        self.manufactureEntry.setPlaceholderText("Enter manufacture")
         self.priceEntry  = QLineEdit()
-        self.priceEntry.setPlaceholderText("Enter product price")
+        self.priceEntry.setPlaceholderText("Enter price")
         self.quotaEntry = QLineEdit()
-        self.quotaEntry.setPlaceholderText("Enter number of products")
+        self.quotaEntry.setPlaceholderText("Enter quantity")
 
         x = datetime.now()
         global datePickEntry

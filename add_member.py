@@ -9,13 +9,11 @@ cur = sqlConnect.cursor()
 defaultImg = 'img/store.png'
 
 
-class AddMember(QWidget):
+class AddMember(QDialog):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Add Member")
         self.setWindowIcon(QIcon('icons/users.svg'))
-        self.setGeometry(850, 450, 350, 600)
-        self.setFixedSize(self.size())
         self.UI()
         self.show()
 
@@ -36,13 +34,13 @@ class AddMember(QWidget):
 
         ##############widgets of bottom layout################
         self.fnameEntry = QLineEdit()
-        self.fnameEntry.setPlaceholderText("Enter member first name")
+        self.fnameEntry.setPlaceholderText("Enter first name")
         self.lnameEntry = QLineEdit()
-        self.lnameEntry.setPlaceholderText("Enter member last name")
+        self.lnameEntry.setPlaceholderText("Enternlast name")
         self.phoneEntry = QLineEdit()
-        self.phoneEntry.setPlaceholderText("Enter member phone")
+        self.phoneEntry.setPlaceholderText("Enter phone #")
         self.addressEntry = QLineEdit()
-        self.addressEntry.setPlaceholderText("Enter member full address")
+        self.addressEntry.setPlaceholderText("Enter full address")
         self.submitBtn = QPushButton("Submit")
         self.submitBtn.clicked.connect(self.addMember)
 
