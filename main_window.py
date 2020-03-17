@@ -5,6 +5,8 @@ import qdarkstyle
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
+from PyQt5.QtChart import QChart, QChartView, QPieSeries, QPieSlice
+
 
 import add_member
 import add_product
@@ -294,7 +296,10 @@ class Main(QMainWindow):
         self.tab2.setLayout(self.memberMainLayout)
 
         ############Tab3 Layout##############
-        self.statMainLayout = QVBoxLayout()
+        self.statMainLayout = QHBoxLayout()
+        self.statLeftLayout = QVBoxLayout()
+        self.statRightLayout = QVBoxLayout()
+
         self.statLayout = QFormLayout()
         self.statGroupBox = QGroupBox()
         self.statLayout.addRow("Total Products: ", self.totalProductLabel)
@@ -305,9 +310,71 @@ class Main(QMainWindow):
         self.statLayout.addRow("Amount Earned: ", self.totalAmountEarnedLabel)
 
 
+        ###########Add Pie Chart#################
+        ##############Products Sold Pie Chart###################
+        self.getStat()
+        global productInstock, soldItems, totalAmount, amountEarned
+        self.series = QPieSeries()
+        self.series.append("Product Instock", productInstock)
+        self.series.append("Sold Items", soldItems)
+
+        # adding slice
+        slice = QPieSlice()
+        slice = self.series.slices()[1]
+        slice.setExploded(True)
+        slice.setLabelVisible(True)
+        slice.setPen(QPen(Qt.darkGreen, 2))
+        slice.setBrush(Qt.green)
+
+        chart = QChart()
+        chart.legend().hide()
+        chart.addSeries(self.series)
+        chart.createDefaultAxes()
+        chart.setAnimationOptions(QChart.SeriesAnimations)
+        chart.setTitle("Products Sold Pie Chart")
+
+        chart.legend().setVisible(True)
+        chart.legend().setAlignment(Qt.AlignBottom)
+
+        chartview = QChartView(chart)
+        chartview.setRenderHint(QPainter.Antialiasing)
+
+        self.statRightLayout.addWidget(chartview)
+
+        ##############Cash Flow Pie Chart###################
+        self.series1 = QPieSeries()
+        self.series1.append("Total Amount", totalAmount)
+        self.series1.append("Amount Earned", amountEarned)
+
+        # adding slice
+        slice1 = QPieSlice()
+        slice1 = self.series1.slices()[1]
+        slice1.setExploded(True)
+        slice1.setLabelVisible(True)
+        slice1.setPen(QPen(Qt.darkYellow, 2))
+        slice1.setBrush(Qt.yellow)
+
+        chart1 = QChart()
+        chart1.legend().hide()
+        chart1.addSeries(self.series1)
+        chart1.createDefaultAxes()
+        chart1.setAnimationOptions(QChart.SeriesAnimations)
+        chart1.setTitle("Cash Flow Pie Chart")
+
+        chart1.legend().setVisible(True)
+        chart1.legend().setAlignment(Qt.AlignBottom)
+
+        chartview1 = QChartView(chart1)
+        chartview1.setRenderHint(QPainter.Antialiasing)
+
+        self.statRightLayout.addWidget(chartview1)
+
+
         self.statGroupBox.setLayout(self.statLayout)
         self.statGroupBox.setStyleSheet("QLabel {font-size: 30px}")
-        self.statMainLayout.addWidget(self.statGroupBox)
+        self.statLeftLayout.addWidget(self.statGroupBox)
+        self.statMainLayout.addLayout(self.statLeftLayout, 40)
+        self.statMainLayout.addLayout(self.statRightLayout, 60)
         self.statMainLayout.setAlignment(Qt.AlignCenter)
         self.tab3.setLayout(self.statMainLayout)
 
@@ -433,6 +500,8 @@ class Main(QMainWindow):
         self.getSellingHistory()
 
     def getStat(self):
+        global productInstock, soldItems, totalAmount, amountEarned
+
         countProducts = cur.execute("SELECT count(product_id) FROM products").fetchall()
         countProducts = countProducts[0][0]
 
@@ -457,6 +526,8 @@ class Main(QMainWindow):
         self.soldItemLabel.setText(str(soldItems) + " units")
         self.totalAmountLabel.setText("$" + str(totalAmount))
         self.totalAmountEarnedLabel.setText("$" + str(amountEarned))
+
+
 
     def getSellingHistory(self):
         query = "SELECT products.product_name, products.product_manufacturer, products.product_price, members.member_fname, sellings.selling_quantity, sellings.selling_amount, sellings.selling_date FROM products, members, sellings" \

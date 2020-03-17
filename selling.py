@@ -201,7 +201,6 @@ class ConfirmWindow(QDialog):
                 self.printReceipt()
 
             self.close()
-            sqlConnect.close()
         except:
             QMessageBox.information(self, "Info", "Something went wrong")
 
