@@ -12,9 +12,19 @@ cur = sqlConnect.cursor()
 
 defaultImg = 'store.png'
 
+# Create mouse clicked event for QLineEdit
+class ClickedQLineEdit(QLineEdit):
+    clicked = pyqtSignal()
+
+    def __init__(self, widget):
+        super().__init__(widget)
+
+    def mousePressEvent(self, QMouseEvent):
+        self.clicked.emit()
+
 class AddProduct(QDialog):
     date = ''
-    def __init__(self):
+    def __init__(self, parent = None):
         super().__init__()
         self.setWindowTitle("Add Product")
         self.setWindowIcon(QIcon('icons/add.svg'))
@@ -48,11 +58,11 @@ class AddProduct(QDialog):
         x = datetime.now()
         global datePickEntry
         dateString = '{}/{}/{}'.format(x.day, x.month, x.year)
-        datePickEntry = QLineEdit()
+        datePickEntry = ClickedQLineEdit(self)
         datePickEntry.setText(dateString)
+        datePickEntry.setReadOnly(True)
+        datePickEntry.clicked.connect(self.openCalendar)
 
-        self.dateBtn = QPushButton("...")
-        self.dateBtn.clicked.connect(self.openCalendar)
         self.uploadBtn = QPushButton("Browse")
         self.uploadBtn.clicked.connect(self.uploadImg)
         self.submitBtn = QPushButton("Submit")
@@ -77,7 +87,6 @@ class AddProduct(QDialog):
         self.bottomLayout.addRow("Price: ", self.priceEntry)
         self.bottomLayout.addRow("Quota: ", self.quotaEntry)
         self.bottomLayout.addRow("Date: ", datePickEntry)
-        self.bottomLayout.addRow("", self.dateBtn)
         self.bottomLayout.addRow("Product Image: ", self.uploadBtn)
         self.bottomLayout.addRow("", self.submitBtn)
         self.bottomFrame.setLayout(self.bottomLayout)

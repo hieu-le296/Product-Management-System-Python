@@ -11,6 +11,15 @@ import main_window
 sqlConnect = sqlite3.connect("products.db")
 cur = sqlConnect.cursor()
 
+# Create mouse clicked event for QLineEdit
+class ClickedQLineEdit(QLineEdit):
+    clicked = pyqtSignal()
+
+    def __init__(self, widget):
+        super().__init__(widget)
+
+    def mousePressEvent(self, QMouseEvent):
+        self.clicked.emit()
 
 class DisplayProduct(QDialog):
     productId = 0
@@ -52,11 +61,11 @@ class DisplayProduct(QDialog):
         x = datetime.now()
         global datePickEntry
         dateString = '{}/{}/{}'.format(x.day, x.month, x.year)
-        datePickEntry = QLineEdit()
+        datePickEntry = ClickedQLineEdit(self)
         datePickEntry.setText(dateString)
+        datePickEntry.setReadOnly(True)
+        datePickEntry.clicked.connect(self.openCalendar)
 
-        self.dateBtn = QPushButton("...")
-        self.dateBtn.clicked.connect(self.openCalendar)
         self.uploadBtn = QPushButton("Upload")
         self.uploadBtn.clicked.connect(self.uploadImg)
         self.deleteBtn = QPushButton("Delete")
@@ -83,7 +92,6 @@ class DisplayProduct(QDialog):
         self.bottomLayout.addRow(QLabel("Quota: "), self.quotaEntry)
         self.bottomLayout.addRow(QLabel("Status: "), self.availabilityCombo)
         self.bottomLayout.addRow("Date: ", datePickEntry)
-        self.bottomLayout.addRow("", self.dateBtn)
         self.bottomLayout.addRow(QLabel("Image: "), self.uploadBtn)
         self.bottomLayout.addRow("", self.backBtn)
         self.bottomLayout.addRow(QLabel(""), self.deleteBtn)
