@@ -199,6 +199,25 @@ class Main(QMainWindow):
         self.totalAmountEarnedLabel = QLabel()
 
         ############Tab 4 Widgets##############
+        self.sellingTable = QTableWidget()
+        self.sellingTable.setColumnCount(8)
+        self.sellingTable.setStyleSheet("font-size: 15px")
+        self.sellingTable.setColumnHidden(0, True)
+        self.sellingTable.setHorizontalHeaderItem(1, QTableWidgetItem("Product Name"))
+        self.sellingTable.setHorizontalHeaderItem(2, QTableWidgetItem("Manufacturer"))
+        self.sellingTable.setHorizontalHeaderItem(3, QTableWidgetItem("Price"))
+        self.sellingTable.setHorizontalHeaderItem(4, QTableWidgetItem("Selling To"))
+        self.sellingTable.setHorizontalHeaderItem(5, QTableWidgetItem("Quantity"))
+        self.sellingTable.setHorizontalHeaderItem(6, QTableWidgetItem("Amount"))
+        self.sellingTable.setHorizontalHeaderItem(7, QTableWidgetItem("Date"))
+        self.sellingTable.horizontalHeader().setSectionResizeMode(1, QHeaderView.Stretch)
+        self.sellingTable.horizontalHeader().setSectionResizeMode(2, QHeaderView.Stretch)
+        self.sellingTable.horizontalHeader().setSectionResizeMode(7, QHeaderView.Stretch)
+
+        self.historySearchText = QLabel("Search Member")
+        self.historySearchEntry = QLineEdit()
+        self.historySearchButton = QPushButton("Search")
+
         self.historyShow = QTextEdit()
         self.historyShow.setReadOnly(True)
         self.deleteBtn = QPushButton("Delete History")
@@ -379,16 +398,43 @@ class Main(QMainWindow):
         self.tab3.setLayout(self.statMainLayout)
 
         ############Tab4 Layout##############
-        self.historyMainLayout = QVBoxLayout()
-        self.historyLayout = QVBoxLayout()
-        self.historyGroupBox = QGroupBox("Selling History")
-        self.historyLayout.addWidget(self.historyShow)
-        self.historyLayout.addWidget(self.deleteBtn)
+        self.historyMainLayout = QHBoxLayout()
+        # self.historyLayout = QVBoxLayout()
+        # self.historyGroupBox = QGroupBox("Selling History")
+        # self.historyLayout.addWidget(self.historyShow)
+        # self.historyLayout.addWidget(self.deleteBtn)
+        #
+        # self.historyGroupBox.setLayout(self.historyLayout)
+        # self.historyGroupBox.setStyleSheet("QTextEdit {font-size: 20px}")
+        # self.historyMainLayout.addWidget(self.historyGroupBox)
+        # self.historyMainLayout.setAlignment(Qt.AlignCenter)
+        self.historyLeftLayout = QVBoxLayout()
+        self.historyRightLayout = QVBoxLayout()
+        self.historyRightTopLayout = QHBoxLayout()
+        self.historyRightBottomLayout = QHBoxLayout()
 
-        self.historyGroupBox.setLayout(self.historyLayout)
-        self.historyGroupBox.setStyleSheet("QTextEdit {font-size: 20px}")
-        self.historyMainLayout.addWidget(self.historyGroupBox)
-        self.historyMainLayout.setAlignment(Qt.AlignCenter)
+        ############Right Layouts##############
+        self.historyRightTopGroupBox = QGroupBox()
+        self.historyRightBottomGroupBox = QGroupBox()
+
+
+        ############Add Widgets##############
+        ############Left Main Layout Widgets##############
+        self.historyLeftLayout.addWidget(self.sellingTable)
+
+        ############Right Top Layout Widgets##############
+        self.historyRightTopGroupBox.setContentsMargins(10, 10, 10, 580)
+        self.historyRightTopLayout.addWidget(self.historySearchText)
+        self.historyRightTopLayout.addWidget(self.historySearchEntry)
+        self.historyRightTopLayout.addWidget(self.historySearchButton)
+        self.historyRightTopGroupBox.setLayout(self.historyRightTopLayout)
+        self.historyRightLayout.addWidget(self.historyRightTopGroupBox)
+
+        ############Right Top Layout Widgets##############
+
+        ############Main Layout for tab 4##############
+        self.historyMainLayout.addLayout(self.historyLeftLayout, 70)
+        self.historyMainLayout.addLayout(self.historyRightLayout, 30)
         self.tab4.setLayout(self.historyMainLayout)
 
         # block signal for tabs
@@ -771,7 +817,7 @@ class Main(QMainWindow):
 
 def main():
     App = QApplication(sys.argv)
-    window = login_class.Login()
+    window = Main()
     window.show()
     App.setStyleSheet(qdarkstyle.load_stylesheet())
     sys.exit(App.exec_())

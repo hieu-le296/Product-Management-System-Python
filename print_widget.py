@@ -79,7 +79,6 @@ class Print(QWidget):
                 self.textEdit.append("Status: " + product_status)
                 self.textEdit.append("-----------------------------------------------------")
         elif self.member.isChecked():
-            checked = True
             members = cur.execute("SELECT * FROM members")
             self.textEdit.append(
                 "                                                                                  Membership List        ")
@@ -97,7 +96,6 @@ class Print(QWidget):
                 self.textEdit.append("-----------------------------------------------------")
 
         elif self.selling.isChecked():
-            checked = True
             query ="SELECT products.product_name, products.product_manufacturer, products.product_price, members.member_fname, sellings.selling_quantity, sellings.selling_amount, sellings.selling_date FROM products, members, sellings WHERE products.product_id = sellings.selling_product_id AND members.member_id = sellings.selling_member_id"
             history = cur.execute(query).fetchall()
             self.textEdit.append("                                                                               Selling History        ")
