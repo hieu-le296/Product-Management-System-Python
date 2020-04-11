@@ -4,6 +4,7 @@ import sys
 import qdarkstyle
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import *
+from PyQt5.QtPrintSupport import QPrinter, QPrintPreviewDialog
 from PyQt5.QtWidgets import *
 from PyQt5.QtChart import QChart, QChartView, QPieSeries, QPieSlice
 
@@ -43,7 +44,6 @@ class Main(QMainWindow):
         self.displayMember()
         self.displaySellingRecord()
         self.getStat()
-        self.getSellingHistory()
 
     def toolBar(self):
         self.tb = self.addToolBar("Tool Bar")
@@ -169,7 +169,7 @@ class Main(QMainWindow):
         self.memberTable.setHorizontalHeaderItem(0, QTableWidgetItem("Member ID"))
         self.memberTable.setHorizontalHeaderItem(1, QTableWidgetItem("First Name"))
         self.memberTable.setHorizontalHeaderItem(2, QTableWidgetItem("Last Name"))
-        self.memberTable.setHorizontalHeaderItem(3, QTableWidgetItem("Phone Number"))
+        self.memberTable.setHorizontalHeaderItem(3, QTableWidgetItem("Phone"))
         self.memberTable.setHorizontalHeaderItem(4, QTableWidgetItem("Address"))
         self.memberTable.horizontalHeader().setSectionResizeMode(4, QHeaderView.Stretch)
         self.memberTable.doubleClicked.connect(self.selectedMember)
@@ -193,17 +193,19 @@ class Main(QMainWindow):
 
         ############Tab 3 Widgets##############
         self.sellingTable = QTableWidget()
-        self.sellingTable.setColumnCount(7)
+        self.sellingTable.setColumnCount(8)
         self.sellingTable.setStyleSheet("font-size: 15px")
-        self.sellingTable.setHorizontalHeaderItem(0, QTableWidgetItem("Product Name"))
-        self.sellingTable.setHorizontalHeaderItem(1, QTableWidgetItem("Manufacturer"))
-        self.sellingTable.setHorizontalHeaderItem(2, QTableWidgetItem("Price"))
-        self.sellingTable.setHorizontalHeaderItem(3, QTableWidgetItem("Selling To"))
-        self.sellingTable.setHorizontalHeaderItem(4, QTableWidgetItem("Quantity"))
-        self.sellingTable.setHorizontalHeaderItem(5, QTableWidgetItem("Amount"))
-        self.sellingTable.setHorizontalHeaderItem(6, QTableWidgetItem("Date"))
-        self.sellingTable.horizontalHeader().setSectionResizeMode(0, QHeaderView.Stretch)
+        self.sellingTable.setHorizontalHeaderItem(0, QTableWidgetItem("Receipt #"))
+        self.sellingTable.setHorizontalHeaderItem(1, QTableWidgetItem("Product Name"))
+        self.sellingTable.setHorizontalHeaderItem(2, QTableWidgetItem("Manufacturer"))
+        self.sellingTable.setHorizontalHeaderItem(3, QTableWidgetItem("Price"))
+        self.sellingTable.setHorizontalHeaderItem(4, QTableWidgetItem("Selling To"))
+        self.sellingTable.setHorizontalHeaderItem(5, QTableWidgetItem("Quantity"))
+        self.sellingTable.setHorizontalHeaderItem(6, QTableWidgetItem("Amount"))
+        self.sellingTable.setHorizontalHeaderItem(7, QTableWidgetItem("Date"))
         self.sellingTable.horizontalHeader().setSectionResizeMode(1, QHeaderView.Stretch)
+        self.sellingTable.horizontalHeader().setSectionResizeMode(2, QHeaderView.Stretch)
+        self.sellingTable.clicked.connect(self.viewSelectedRecord)
 
         self.historySearchText = QLabel("Search Records")
         self.historySearchEntry = QLineEdit()
@@ -211,7 +213,11 @@ class Main(QMainWindow):
         self.historySearchButton.clicked.connect(self.searchRecord)
 
         self.historyShow = QTextEdit()
+        self.historyShow.append("###########Reciept###########")
+        self.historyShow.setStyleSheet("font-size: 20px")
         self.historyShow.setReadOnly(True)
+        self.printReceiptButton = QPushButton("Print Receipt")
+        self.printReceiptButton.clicked.connect(self.printReceipt)
         self.deleteBtn = QPushButton("Delete History")
         self.deleteBtn.clicked.connect(self.deleteHistory)
 
@@ -310,14 +316,12 @@ class Main(QMainWindow):
         self.memberRightLayout.addWidget(self.memberRightBottomGroupBox, 60)
 
         ############Tab 2 Main Layouts##############
-        self.memberMainLayout.addLayout(self.memberLeftLayout, 65)
-        self.memberMainLayout.addLayout(self.memberRightLayout, 35)
+        self.memberMainLayout.addLayout(self.memberLeftLayout, 70)
+        self.memberMainLayout.addLayout(self.memberRightLayout, 30)
         self.tab2.setLayout(self.memberMainLayout)
 
         ############Tab3 Layout##############
         self.historyMainLayout = QHBoxLayout()
-        # self.historyLayout = QVBoxLayout()
-        # self.historyGroupBox = QGroupBox("Selling History")
         # self.historyLayout.addWidget(self.historyShow)
         # self.historyLayout.addWidget(self.deleteBtn)
         #
@@ -328,7 +332,7 @@ class Main(QMainWindow):
         self.historyLeftLayout = QVBoxLayout()
         self.historyRightLayout = QVBoxLayout()
         self.historyRightTopLayout = QHBoxLayout()
-        self.historyRightBottomLayout = QHBoxLayout()
+        self.historyRightBottomLayout = QVBoxLayout()
 
         ############Right Layouts##############
         self.historyRightTopGroupBox = QGroupBox("Search for Records")
@@ -347,6 +351,11 @@ class Main(QMainWindow):
         self.historyRightLayout.addWidget(self.historyRightTopGroupBox)
 
         ############Right Bottom Layout Widgets##############
+        self.historyRightBottomLayout.addWidget(self.historyShow)
+        self.historyRightBottomLayout.addWidget(self.printReceiptButton)
+        self.historyRightBottomLayout.addWidget(self.deleteBtn)
+        self.historyRightBottomGroupBox.setLayout(self.historyRightBottomLayout)
+        self.historyRightLayout.addWidget(self.historyRightBottomGroupBox)
 
         ############Main Layout for tab 3##############
         self.historyMainLayout.addLayout(self.historyLeftLayout, 70)
@@ -528,7 +537,6 @@ class Main(QMainWindow):
         self.displaySellingRecord()
         self.getStat()
         self.historyShow.setText("")
-        self.getSellingHistory()
 
         # Update pie charts
         self.series.clear()
@@ -581,28 +589,15 @@ class Main(QMainWindow):
         self.totalAmountLabel.setText("$" + str(totalAmount + amountEarned))
         self.totalAmountEarnedLabel.setText("$" + str(amountEarned))
 
+    def printReceipt(self):
+        printer = QPrinter(QPrinter.HighResolution)
+        previewDialog = QPrintPreviewDialog(printer, self)
+        previewDialog.paintRequested.connect(self.printPreview)
+        previewDialog.exec_()
 
-    def getSellingHistory(self):
-        query = "SELECT products.product_name, products.product_manufacturer, products.product_price, members.member_fname, sellings.selling_quantity, sellings.selling_amount, sellings.selling_date FROM products, members, sellings" \
-                " WHERE products.product_id = sellings.selling_product_id AND members.member_id = sellings.selling_member_id"
-        history = cur.execute(query).fetchall()
-        if history is not None:
-            for record in history:
-                product_name = record[0]
-                product_manu = record[1]
-                product_price = record[2]
-                member_name = record[3]
-                selling_quantity = record[4]
-                selling_amount = record[5]
-                selling_date = record[6]
-                self.historyShow.append("Product Name: " + str(product_name))
-                self.historyShow.append("Manufacturer: " + str(product_manu))
-                self.historyShow.append("Product Price: $" + str(product_price))
-                self.historyShow.append("Selling to: " + str(member_name))
-                self.historyShow.append("Quantity: " + str(selling_quantity))
-                self.historyShow.append("Amount: $" + str(selling_amount))
-                self.historyShow.append("Date Sold: " + str(selling_date))
-                self.historyShow.append("-----------------------------------------------------")
+    def printPreview(self, printer):
+        self.historyShow.document().print_(printer)
+
 
     def deleteHistory(self):
         mbox = QMessageBox.question(self, "Wanrning", "Are you sure to delete this product?",
@@ -618,7 +613,7 @@ class Main(QMainWindow):
     def viewProductItem(self):
         productId = self.getProductIdFromCurrentRow()
 
-        query = ("SELECT * FROM products WHERE product_id=?")
+        query = "SELECT * FROM products WHERE product_id=?"
         product = cur.execute(query, (productId,)).fetchone()  # single item tuple = (1,)
         productName = product[1]
         productManufacturer = product[2]
@@ -640,7 +635,7 @@ class Main(QMainWindow):
     def viewSelectedMember(self):
         memberId = self.getMemberIdFromCurrentRow()
 
-        query = ("SELECT * FROM members WHERE member_id=?")
+        query = "SELECT * FROM members WHERE member_id=?"
         member = cur.execute(query, (memberId,)).fetchone()  # single item tuple = (1,)
         memberFName = member[1]
         memberLName = member[2]
@@ -652,8 +647,40 @@ class Main(QMainWindow):
         self.member_phone.setText("Phone Number: " + str(memberPhone))
         self.member_address.setText("Full Address: " + str(memberAddr))
 
+    def viewSelectedRecord(self):
+        sellingId = self.getSellingIdFromCurrentRow()
+
+        productAndMemberIdQuery = "SELECT selling_product_id, selling_member_id FROM sellings WHERE selling_id = ?"
+        listId = cur.execute(productAndMemberIdQuery, (sellingId,)).fetchone()
+
+        productId = listId[0]
+        memberId = listId[1]
+
+
+        query = "SELECT products.product_name, products.product_manufacturer, products.product_price, members.member_fname, sellings.selling_quantity, sellings.selling_amount, sellings.selling_date FROM products, members, sellings" \
+                " WHERE products.product_id = ? AND members.member_id = ?"
+        record = cur.execute(query, (productId, memberId)).fetchone()
+        if record is not None:
+            product_name = record[0]
+            product_manu = record[1]
+            product_price = record[2]
+            member_name = record[3]
+            selling_quantity = record[4]
+            selling_amount = record[5]
+            selling_date = record[6]
+            self.historyShow.clear()
+            self.historyShow.append("###########Reciept###########")
+            self.historyShow.append("Receipt number: " + str(sellingId))
+            self.historyShow.append("Product Name: " + str(product_name))
+            self.historyShow.append("Manufacturer: " + str(product_manu))
+            self.historyShow.append("Product Price: $" + str(product_price))
+            self.historyShow.append("Selling to: " + str(member_name))
+            self.historyShow.append("Quantity: " + str(selling_quantity))
+            self.historyShow.append("Amount: $" + str(selling_amount))
+            self.historyShow.append("Date Sold: " + str(selling_date))
+            print(record)
+
     def tabsChanged(self):
-        self.getSellingHistory()
         self.getStat()
         self.displayProduct()
         self.displayMember()
@@ -714,7 +741,7 @@ class Main(QMainWindow):
         for i in reversed(range(self.sellingTable.rowCount())):
             self.sellingTable.removeRow(i)
 
-        query = "SELECT products.product_name, products.product_manufacturer, products.product_price, members.member_fname, sellings.selling_quantity, sellings.selling_amount, sellings.selling_date FROM products, members, sellings" \
+        query = "SELECT sellings.selling_id, products.product_name, products.product_manufacturer, products.product_price, members.member_fname, sellings.selling_quantity, sellings.selling_amount, sellings.selling_date FROM products, members, sellings" \
                 " WHERE products.product_id = sellings.selling_product_id AND members.member_id = sellings.selling_member_id"
         records = cur.execute(query)
         for row_data in records:
@@ -747,6 +774,15 @@ class Main(QMainWindow):
 
         memberId = listMember[0]
         return memberId
+
+    def getSellingIdFromCurrentRow(self):
+        listSelling = []
+        for i in range(0, 6):
+            listSelling.append(self.sellingTable.item(self.sellingTable.currentRow(), i).text())
+
+        sellingId = listSelling[0]
+        return sellingId
+
 
     def selectedMember(self):
         memberId = self.getMemberIdFromCurrentRow()
@@ -828,7 +864,7 @@ class Main(QMainWindow):
             QMessageBox.information(self, "Warning", "Search query cannot be empty")
         else:
             self.historySearchEntry.setText("")
-            query = "SELECT products.product_name, products.product_manufacturer, products.product_price, members.member_fname, sellings.selling_quantity, sellings.selling_amount, sellings.selling_date " \
+            query = "SELECT sellings.selling_id, products.product_name, products.product_manufacturer, products.product_price, members.member_fname, sellings.selling_quantity, sellings.selling_amount, sellings.selling_date " \
                     "FROM ((products INNER JOIN sellings ON products.product_id = sellings.selling_product_id) INNER JOIN members ON members.member_id = sellings.selling_member_id)" \
                     "WHERE products.product_name LIKE ? or products.product_manufacturer LIKE ? or members.member_fname LIKE ? or sellings.selling_date LIKE ?"
             results = cur.execute(query, (

@@ -203,8 +203,6 @@ class ConfirmWindow(QDialog):
                 self.printReceipt()
 
             self.close()
-            self.main = main_window.Main()
-            self.main.displaySellingRecord()
         except:
             QMessageBox.information(self, "Info", "Something went wrong")
 
