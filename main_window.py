@@ -41,6 +41,7 @@ class Main(QMainWindow):
         self.createMenu()
         self.displayProduct()
         self.displayMember()
+        self.displaySellingRecord()
         self.getStat()
         self.getSellingHistory()
 
@@ -107,8 +108,8 @@ class Main(QMainWindow):
         self.tab4 = QWidget()
         self.tabs.addTab(self.tab1, "Products")
         self.tabs.addTab(self.tab2, "Membership")
-        self.tabs.addTab(self.tab3, "Statistics")
-        self.tabs.addTab(self.tab4, "Selling History")
+        self.tabs.addTab(self.tab3, "Selling Records")
+        self.tabs.addTab(self.tab4, "Statistics")
 
     def widgets(self):
         ############Tab 1 Widgets##############
@@ -191,37 +192,36 @@ class Main(QMainWindow):
         self.member_address.setAlignment(Qt.AlignCenter)
 
         ############Tab 3 Widgets##############
+        self.sellingTable = QTableWidget()
+        self.sellingTable.setColumnCount(7)
+        self.sellingTable.setStyleSheet("font-size: 15px")
+        self.sellingTable.setHorizontalHeaderItem(0, QTableWidgetItem("Product Name"))
+        self.sellingTable.setHorizontalHeaderItem(1, QTableWidgetItem("Manufacturer"))
+        self.sellingTable.setHorizontalHeaderItem(2, QTableWidgetItem("Price"))
+        self.sellingTable.setHorizontalHeaderItem(3, QTableWidgetItem("Selling To"))
+        self.sellingTable.setHorizontalHeaderItem(4, QTableWidgetItem("Quantity"))
+        self.sellingTable.setHorizontalHeaderItem(5, QTableWidgetItem("Amount"))
+        self.sellingTable.setHorizontalHeaderItem(6, QTableWidgetItem("Date"))
+        self.sellingTable.horizontalHeader().setSectionResizeMode(0, QHeaderView.Stretch)
+        self.sellingTable.horizontalHeader().setSectionResizeMode(1, QHeaderView.Stretch)
+
+        self.historySearchText = QLabel("Search Records")
+        self.historySearchEntry = QLineEdit()
+        self.historySearchButton = QPushButton("Search")
+        self.historySearchButton.clicked.connect(self.searchRecord)
+
+        self.historyShow = QTextEdit()
+        self.historyShow.setReadOnly(True)
+        self.deleteBtn = QPushButton("Delete History")
+        self.deleteBtn.clicked.connect(self.deleteHistory)
+
+        ############Tab 4 Widgets##############
         self.totalProductLabel = QLabel()
         self.totalMemberLabel = QLabel()
         self.totalInStockLabel = QLabel()
         self.soldItemLabel = QLabel()
         self.totalAmountLabel = QLabel()
         self.totalAmountEarnedLabel = QLabel()
-
-        ############Tab 4 Widgets##############
-        self.sellingTable = QTableWidget()
-        self.sellingTable.setColumnCount(8)
-        self.sellingTable.setStyleSheet("font-size: 15px")
-        self.sellingTable.setColumnHidden(0, True)
-        self.sellingTable.setHorizontalHeaderItem(1, QTableWidgetItem("Product Name"))
-        self.sellingTable.setHorizontalHeaderItem(2, QTableWidgetItem("Manufacturer"))
-        self.sellingTable.setHorizontalHeaderItem(3, QTableWidgetItem("Price"))
-        self.sellingTable.setHorizontalHeaderItem(4, QTableWidgetItem("Selling To"))
-        self.sellingTable.setHorizontalHeaderItem(5, QTableWidgetItem("Quantity"))
-        self.sellingTable.setHorizontalHeaderItem(6, QTableWidgetItem("Amount"))
-        self.sellingTable.setHorizontalHeaderItem(7, QTableWidgetItem("Date"))
-        self.sellingTable.horizontalHeader().setSectionResizeMode(1, QHeaderView.Stretch)
-        self.sellingTable.horizontalHeader().setSectionResizeMode(2, QHeaderView.Stretch)
-        self.sellingTable.horizontalHeader().setSectionResizeMode(7, QHeaderView.Stretch)
-
-        self.historySearchText = QLabel("Search Member")
-        self.historySearchEntry = QLineEdit()
-        self.historySearchButton = QPushButton("Search")
-
-        self.historyShow = QTextEdit()
-        self.historyShow.setReadOnly(True)
-        self.deleteBtn = QPushButton("Delete History")
-        self.deleteBtn.clicked.connect(self.deleteHistory)
 
     def layouts(self):
         ############Tab1 Layout##############
@@ -237,7 +237,7 @@ class Main(QMainWindow):
         self.productLeftLayout.addWidget(self.productTable)
 
         ############Right Layouts##############
-        self.topGroupBox = QGroupBox("Search Box")
+        self.topGroupBox = QGroupBox("Search for Products")
         self.topGroupBox.setStyleSheet("QLabel {font-size: 20px}")
         self.middleGroupBox = QGroupBox("List Box")
         self.middleGroupBox.setStyleSheet("QLabel {font-size: 20px}")
@@ -315,6 +315,46 @@ class Main(QMainWindow):
         self.tab2.setLayout(self.memberMainLayout)
 
         ############Tab3 Layout##############
+        self.historyMainLayout = QHBoxLayout()
+        # self.historyLayout = QVBoxLayout()
+        # self.historyGroupBox = QGroupBox("Selling History")
+        # self.historyLayout.addWidget(self.historyShow)
+        # self.historyLayout.addWidget(self.deleteBtn)
+        #
+        # self.historyGroupBox.setLayout(self.historyLayout)
+        # self.historyGroupBox.setStyleSheet("QTextEdit {font-size: 20px}")
+        # self.historyMainLayout.addWidget(self.historyGroupBox)
+        # self.historyMainLayout.setAlignment(Qt.AlignCenter)
+        self.historyLeftLayout = QVBoxLayout()
+        self.historyRightLayout = QVBoxLayout()
+        self.historyRightTopLayout = QHBoxLayout()
+        self.historyRightBottomLayout = QHBoxLayout()
+
+        ############Right Layouts##############
+        self.historyRightTopGroupBox = QGroupBox("Search for Records")
+        self.historyRightBottomGroupBox = QGroupBox()
+
+        ############Add Widgets##############
+        ############Left Main Layout Widgets##############
+        self.historyLeftLayout.addWidget(self.sellingTable)
+
+        ############Right Top Layout Widgets##############
+        self.historyRightTopGroupBox.setContentsMargins(10, 10, 10, 580)
+        self.historyRightTopLayout.addWidget(self.historySearchText)
+        self.historyRightTopLayout.addWidget(self.historySearchEntry)
+        self.historyRightTopLayout.addWidget(self.historySearchButton)
+        self.historyRightTopGroupBox.setLayout(self.historyRightTopLayout)
+        self.historyRightLayout.addWidget(self.historyRightTopGroupBox)
+
+        ############Right Bottom Layout Widgets##############
+
+        ############Main Layout for tab 3##############
+        self.historyMainLayout.addLayout(self.historyLeftLayout, 70)
+        self.historyMainLayout.addLayout(self.historyRightLayout, 30)
+
+        self.tab3.setLayout(self.historyMainLayout)
+
+        ############Tab4 Layout##############
         self.statMainLayout = QHBoxLayout()
         self.statLeftLayout = QVBoxLayout()
         self.statRightLayout = QVBoxLayout()
@@ -328,7 +368,6 @@ class Main(QMainWindow):
         self.statLayout.addRow("Total Amount: ", self.totalAmountLabel)
         self.statLayout.addRow("Amount Earned: ", self.totalAmountEarnedLabel)
 
-
         ###########Add Pie Chart#################
         ##############Products Sold Pie Chart###################
         self.getStat()
@@ -337,15 +376,8 @@ class Main(QMainWindow):
         self.series.append("Product Instock", productInstock)
         self.series.append("Sold Items", soldItems)
 
-        # adding slice
-        self.slice = QPieSlice()
-        self.slice = self.series.slices()[1]
-        self.slice.setExploded(True)
-        self.slice.setLabelVisible(True)
-        self.slice.setPen(QPen(Qt.darkGreen, 2))
-        self.slice.setBrush(Qt.green)
-
         self.chart = QChart()
+        self.chart.setTheme(QChart.ChartThemeBlueCerulean)
         self.chart.legend().hide()
         self.chart.addSeries(self.series)
         self.chart.createDefaultAxes()
@@ -365,15 +397,8 @@ class Main(QMainWindow):
         self.series1.append("Total Amount", (totalAmount + amountEarned))
         self.series1.append("Amount Earned", amountEarned)
 
-        # adding slice
-        self.slice1 = QPieSlice()
-        self.slice1 = self.series1.slices()[1]
-        self.slice1.setExploded(True)
-        self.slice1.setLabelVisible(True)
-        self.slice1.setPen(QPen(Qt.darkYellow, 2))
-        self.slice1.setBrush(Qt.yellow)
-
         self.chart1 = QChart()
+        self.chart1.setTheme(QChart.ChartThemeBlueCerulean)
         self.chart1.legend().hide()
         self.chart1.addSeries(self.series1)
         self.chart1.createDefaultAxes()
@@ -388,54 +413,13 @@ class Main(QMainWindow):
 
         self.statRightLayout.addWidget(self.chartview1)
 
-
         self.statGroupBox.setLayout(self.statLayout)
         self.statGroupBox.setStyleSheet("QLabel {font-size: 30px}")
         self.statLeftLayout.addWidget(self.statGroupBox)
         self.statMainLayout.addLayout(self.statLeftLayout, 40)
         self.statMainLayout.addLayout(self.statRightLayout, 60)
         self.statMainLayout.setAlignment(Qt.AlignCenter)
-        self.tab3.setLayout(self.statMainLayout)
-
-        ############Tab4 Layout##############
-        self.historyMainLayout = QHBoxLayout()
-        # self.historyLayout = QVBoxLayout()
-        # self.historyGroupBox = QGroupBox("Selling History")
-        # self.historyLayout.addWidget(self.historyShow)
-        # self.historyLayout.addWidget(self.deleteBtn)
-        #
-        # self.historyGroupBox.setLayout(self.historyLayout)
-        # self.historyGroupBox.setStyleSheet("QTextEdit {font-size: 20px}")
-        # self.historyMainLayout.addWidget(self.historyGroupBox)
-        # self.historyMainLayout.setAlignment(Qt.AlignCenter)
-        self.historyLeftLayout = QVBoxLayout()
-        self.historyRightLayout = QVBoxLayout()
-        self.historyRightTopLayout = QHBoxLayout()
-        self.historyRightBottomLayout = QHBoxLayout()
-
-        ############Right Layouts##############
-        self.historyRightTopGroupBox = QGroupBox()
-        self.historyRightBottomGroupBox = QGroupBox()
-
-
-        ############Add Widgets##############
-        ############Left Main Layout Widgets##############
-        self.historyLeftLayout.addWidget(self.sellingTable)
-
-        ############Right Top Layout Widgets##############
-        self.historyRightTopGroupBox.setContentsMargins(10, 10, 10, 580)
-        self.historyRightTopLayout.addWidget(self.historySearchText)
-        self.historyRightTopLayout.addWidget(self.historySearchEntry)
-        self.historyRightTopLayout.addWidget(self.historySearchButton)
-        self.historyRightTopGroupBox.setLayout(self.historyRightTopLayout)
-        self.historyRightLayout.addWidget(self.historyRightTopGroupBox)
-
-        ############Right Top Layout Widgets##############
-
-        ############Main Layout for tab 4##############
-        self.historyMainLayout.addLayout(self.historyLeftLayout, 70)
-        self.historyMainLayout.addLayout(self.historyRightLayout, 30)
-        self.tab4.setLayout(self.historyMainLayout)
+        self.tab4.setLayout(self.statMainLayout)
 
         # block signal for tabs
         self.tabs.blockSignals(False)
@@ -541,6 +525,7 @@ class Main(QMainWindow):
     def funcRefresh(self):
         self.displayProduct()
         self.displayMember()
+        self.displaySellingRecord()
         self.getStat()
         self.historyShow.setText("")
         self.getSellingHistory()
@@ -551,7 +536,6 @@ class Main(QMainWindow):
         self.series.append("Sold Items", soldItems)
         self.slice = self.series.slices()[1]
         self.slice.setExploded(True)
-        self.slice.setLabelVisible(True)
         self.slice.setPen(QPen(Qt.darkGreen, 2))
         self.slice.setBrush(Qt.green)
 
@@ -561,9 +545,13 @@ class Main(QMainWindow):
 
         self.slice1 = self.series1.slices()[1]
         self.slice1.setExploded(True)
-        self.slice1.setLabelVisible(True)
         self.slice1.setPen(QPen(Qt.darkYellow, 2))
         self.slice1.setBrush(Qt.yellow)
+
+        self.slice2 = QPieSlice()
+        self.slice2 = self.series1.slices()[0]
+        self.slice2.setPen(QPen(Qt.darkRed))
+        self.slice2.setBrush(Qt.red)
 
     def getStat(self):
         global productInstock, soldItems, totalAmount, amountEarned
@@ -669,6 +657,8 @@ class Main(QMainWindow):
         self.getStat()
         self.displayProduct()
         self.displayMember()
+        self.displaySellingRecord()
+
 
         # Update pie charts
         self.series.clear()
@@ -676,7 +666,6 @@ class Main(QMainWindow):
         self.series.append("Sold Items", soldItems)
         self.slice = self.series.slices()[1]
         self.slice.setExploded(True)
-        self.slice.setLabelVisible(True)
         self.slice.setPen(QPen(Qt.darkGreen, 2))
         self.slice.setBrush(Qt.green)
 
@@ -686,9 +675,13 @@ class Main(QMainWindow):
 
         self.slice1 = self.series1.slices()[1]
         self.slice1.setExploded(True)
-        self.slice1.setLabelVisible(True)
         self.slice1.setPen(QPen(Qt.darkYellow, 2))
         self.slice1.setBrush(Qt.yellow)
+
+        self.slice2 = QPieSlice()
+        self.slice2 = self.series1.slices()[0]
+        self.slice2.setPen(QPen(Qt.darkRed))
+        self.slice2.setBrush(Qt.red)
 
     def displayProduct(self):
         for i in reversed(range(self.productTable.rowCount())):
@@ -716,6 +709,20 @@ class Main(QMainWindow):
                 self.memberTable.setItem(row_number, column_number, QTableWidgetItem(str(data)))
 
         self.memberTable.setEditTriggers(QAbstractItemView.NoEditTriggers)
+
+    def displaySellingRecord(self):
+        for i in reversed(range(self.sellingTable.rowCount())):
+            self.sellingTable.removeRow(i)
+
+        query = "SELECT products.product_name, products.product_manufacturer, products.product_price, members.member_fname, sellings.selling_quantity, sellings.selling_amount, sellings.selling_date FROM products, members, sellings" \
+                " WHERE products.product_id = sellings.selling_product_id AND members.member_id = sellings.selling_member_id"
+        records = cur.execute(query)
+        for row_data in records:
+            row_number = self.sellingTable.rowCount()
+            self.sellingTable.insertRow(row_number)
+            for column_number, data in enumerate(row_data):
+                self.sellingTable.setItem(row_number, column_number, QTableWidgetItem(str(data)))
+        self.sellingTable.setEditTriggers(QAbstractItemView.NoEditTriggers)
 
     def getProductIdFromCurrentRow(self):
         listProduct = []
@@ -814,6 +821,29 @@ class Main(QMainWindow):
                     self.memberTable.insertRow(row_number)
                     for column_number, data in enumerate(row_data):
                         self.memberTable.setItem(row_number, column_number, QTableWidgetItem(str(data)))
+
+    def searchRecord(self):
+        value = self.historySearchEntry.text()
+        if value == "":
+            QMessageBox.information(self, "Warning", "Search query cannot be empty")
+        else:
+            self.historySearchEntry.setText("")
+            query = "SELECT products.product_name, products.product_manufacturer, products.product_price, members.member_fname, sellings.selling_quantity, sellings.selling_amount, sellings.selling_date " \
+                    "FROM ((products INNER JOIN sellings ON products.product_id = sellings.selling_product_id) INNER JOIN members ON members.member_id = sellings.selling_member_id)" \
+                    "WHERE products.product_name LIKE ? or products.product_manufacturer LIKE ? or members.member_fname LIKE ? or sellings.selling_date LIKE ?"
+            results = cur.execute(query, (
+                '%' + value + '%', '%' + value + '%', '%' + value + '%', '%' + value + '%')).fetchall()
+            if results == []:
+                QMessageBox.information(self, "Warning", "There is no such a record")
+            else:
+                for i in reversed(range(self.sellingTable.rowCount())):
+                    self.sellingTable.removeRow(i)
+
+                for row_data in results:
+                    row_number = self.sellingTable.rowCount()
+                    self.sellingTable.insertRow(row_number)
+                    for column_number, data in enumerate(row_data):
+                        self.sellingTable.setItem(row_number, column_number, QTableWidgetItem(str(data)))
 
 def main():
     App = QApplication(sys.argv)

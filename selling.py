@@ -5,6 +5,8 @@ from PyQt5.QtCore import Qt
 from datetime import datetime
 import sqlite3
 
+import main_window
+
 sqlConnect = sqlite3.connect("products.db")
 cur = sqlConnect.cursor()
 
@@ -201,6 +203,8 @@ class ConfirmWindow(QDialog):
                 self.printReceipt()
 
             self.close()
+            self.main = main_window.Main()
+            self.main.displaySellingRecord()
         except:
             QMessageBox.information(self, "Info", "Something went wrong")
 
