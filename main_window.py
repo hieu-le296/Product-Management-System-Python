@@ -31,7 +31,7 @@ class Main(QMainWindow):
         super().__init__()
         self.setWindowTitle("Product Management")
         self.setWindowIcon(QIcon('icons/logo.png'))
-        self.setGeometry(450, 150, 1500, 800)
+        self.setGeometry(400, 200, 1800, 900)
         self.UI()
 
     def UI(self):
@@ -162,6 +162,10 @@ class Main(QMainWindow):
         self.product_Img = QLabel()
         self.product_Img.setAlignment(Qt.AlignCenter)
 
+        self.updateProductBtn = QPushButton("Update")
+        self.updateProductBtn.clicked.connect(self.updateProduct)
+
+
         ############Tab 2 Widgets##############
         self.memberTable = QTableWidget()
         self.memberTable.setColumnCount(5)
@@ -191,6 +195,9 @@ class Main(QMainWindow):
         self.member_address = QLabel()
         self.member_address.setAlignment(Qt.AlignCenter)
 
+        self.updateMemberBtn = QPushButton("Update")
+        self.updateMemberBtn.clicked.connect(self.updateMember)
+
         ############Tab 3 Widgets##############
         self.sellingTable = QTableWidget()
         self.sellingTable.setColumnCount(8)
@@ -218,8 +225,10 @@ class Main(QMainWindow):
         self.historyShow.setReadOnly(True)
         self.printReceiptButton = QPushButton("Print Receipt")
         self.printReceiptButton.clicked.connect(self.printReceipt)
-        self.deleteBtn = QPushButton("Delete History")
-        self.deleteBtn.clicked.connect(self.deleteHistory)
+        self.deleteRecordBtn = QPushButton("Delete this record")
+        self.deleteRecordBtn.clicked.connect(self.deleteOneRecord)
+        self.deleteAllRecordsBtn = QPushButton("Delete all records")
+        self.deleteAllRecordsBtn.clicked.connect(self.deleteHistory)
 
         ############Tab 4 Widgets##############
         self.totalProductLabel = QLabel()
@@ -237,6 +246,7 @@ class Main(QMainWindow):
         self.productRightTopLayout = QHBoxLayout()
         self.productRightMiddleLayout = QHBoxLayout()
         self.productRightBottomLayout = QVBoxLayout()
+        self.productRightBottomLayout1 = QVBoxLayout()
 
         ############Add Widgets##############
         ############Left Main Layout Widgets##############
@@ -275,7 +285,9 @@ class Main(QMainWindow):
         self.productBottomForm.addRow("", self.product_date)
         self.productBottomForm.addRow("", self.product_status)
         self.bottomGroupBox.setLayout(self.productBottomForm)
+        self.productRightBottomLayout1.addWidget(self.updateProductBtn)
         self.productRightLayout.addWidget(self.bottomGroupBox, 80)
+        self.productRightLayout.addLayout(self.productRightBottomLayout1)
 
         ############Tab 1 Main Layouts##############
         self.productMainLayout.addLayout(self.productLeftLayout, 75)
@@ -287,7 +299,7 @@ class Main(QMainWindow):
         self.memberLeftLayout = QVBoxLayout()
         self.memberRightLayout = QVBoxLayout()
         self.memberRightTopLayout = QHBoxLayout()
-        self.memberRightBottomLayout = QVBoxLayout
+        self.memberRightBottomLayout = QVBoxLayout()
 
         ############Right Layouts##############
         self.memberRightBottomGroupBox = QGroupBox()
@@ -312,23 +324,18 @@ class Main(QMainWindow):
         self.memberBottomForm.addRow("", self.member_lname)
         self.memberBottomForm.addRow("", self.member_phone)
         self.memberBottomForm.addRow("", self.member_address)
+        self.memberRightBottomLayout.addWidget(self.updateMemberBtn)
         self.memberRightBottomGroupBox.setLayout(self.memberBottomForm)
         self.memberRightLayout.addWidget(self.memberRightBottomGroupBox, 60)
+        self.memberRightLayout.addLayout(self.memberRightBottomLayout)
 
         ############Tab 2 Main Layouts##############
-        self.memberMainLayout.addLayout(self.memberLeftLayout, 70)
-        self.memberMainLayout.addLayout(self.memberRightLayout, 30)
+        self.memberMainLayout.addLayout(self.memberLeftLayout, 75)
+        self.memberMainLayout.addLayout(self.memberRightLayout, 25)
         self.tab2.setLayout(self.memberMainLayout)
 
         ############Tab3 Layout##############
         self.historyMainLayout = QHBoxLayout()
-        # self.historyLayout.addWidget(self.historyShow)
-        # self.historyLayout.addWidget(self.deleteBtn)
-        #
-        # self.historyGroupBox.setLayout(self.historyLayout)
-        # self.historyGroupBox.setStyleSheet("QTextEdit {font-size: 20px}")
-        # self.historyMainLayout.addWidget(self.historyGroupBox)
-        # self.historyMainLayout.setAlignment(Qt.AlignCenter)
         self.historyLeftLayout = QVBoxLayout()
         self.historyRightLayout = QVBoxLayout()
         self.historyRightTopLayout = QHBoxLayout()
@@ -353,13 +360,14 @@ class Main(QMainWindow):
         ############Right Bottom Layout Widgets##############
         self.historyRightBottomLayout.addWidget(self.historyShow)
         self.historyRightBottomLayout.addWidget(self.printReceiptButton)
-        self.historyRightBottomLayout.addWidget(self.deleteBtn)
+        self.historyRightBottomLayout.addWidget(self.deleteRecordBtn)
+        self.historyRightBottomLayout.addWidget(self.deleteAllRecordsBtn)
         self.historyRightBottomGroupBox.setLayout(self.historyRightBottomLayout)
         self.historyRightLayout.addWidget(self.historyRightBottomGroupBox)
 
         ############Main Layout for tab 3##############
-        self.historyMainLayout.addLayout(self.historyLeftLayout, 70)
-        self.historyMainLayout.addLayout(self.historyRightLayout, 30)
+        self.historyMainLayout.addLayout(self.historyLeftLayout, 75)
+        self.historyMainLayout.addLayout(self.historyRightLayout, 25)
 
         self.tab3.setLayout(self.historyMainLayout)
 
@@ -589,6 +597,18 @@ class Main(QMainWindow):
         self.totalAmountLabel.setText("$" + str(totalAmount + amountEarned))
         self.totalAmountEarnedLabel.setText("$" + str(amountEarned))
 
+    def updateProduct(self):
+        if not self.productTable.selectedItems():
+            QMessageBox.information(self, "Information", "Please select a product")
+        else:
+            self.selectedProduct()
+
+    def updateMember(self):
+        if not self.memberTable.selectedItems():
+            QMessageBox.information(self, "Information", "Please select a member")
+        else:
+            self.selectedMember()
+
     def printReceipt(self):
         printer = QPrinter(QPrinter.HighResolution)
         previewDialog = QPrintPreviewDialog(printer, self)
@@ -598,17 +618,37 @@ class Main(QMainWindow):
     def printPreview(self, printer):
         self.historyShow.document().print_(printer)
 
+    def deleteOneRecord(self):
+        listSelling = []
+
+        if not self.sellingTable.selectedItems():
+            QMessageBox.information(self, "Information", "No row has been selected")
+        else:
+            for i in range(0, 8):
+                listSelling.append(self.sellingTable.item(self.sellingTable.currentRow(), i).text())
+            mbox = QMessageBox.question(self, "Wanrning", "Are you sure to delete all records?",
+                                        QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+            if (mbox == QMessageBox.Yes):
+                try:
+                    sellingId = listSelling[0]
+                    query = "DELETE FROM sellings WHERE selling_id = ?"
+                    cur.execute(query, (sellingId,))
+                    sqlConnect.commit()
+                    QMessageBox.information(self, "Information", "Selected receipt has been deleted. Please Refresh")
+                except:
+                    QMessageBox.information(self, "Information", "Selected receipt has been not deleted")
+
 
     def deleteHistory(self):
-        mbox = QMessageBox.question(self, "Wanrning", "Are you sure to delete this product?",
+        mbox = QMessageBox.question(self, "Wanrning", "Are you sure to delete all records?",
                                     QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
         if (mbox == QMessageBox.Yes):
             try:
                 cur.execute("DELETE FROM sellings")
                 sqlConnect.commit()
-                QMessageBox.information(self, "Information", "History has been deleted")
+                QMessageBox.information(self, "Information", "All Records have been deleted")
             except:
-                QMessageBox.information(self, "Information", "History has not been deleted")
+                QMessageBox.information(self, "Information", "All records have not been deleted")
 
     def viewProductItem(self):
         productId = self.getProductIdFromCurrentRow()
@@ -648,67 +688,28 @@ class Main(QMainWindow):
         self.member_address.setText("Full Address: " + str(memberAddr))
 
     def viewSelectedRecord(self):
-        sellingId = self.getSellingIdFromCurrentRow()
+        listSelling = []
+        for i in range(0, 8):
+            listSelling.append(self.sellingTable.item(self.sellingTable.currentRow(), i).text())
 
-        productAndMemberIdQuery = "SELECT selling_product_id, selling_member_id FROM sellings WHERE selling_id = ?"
-        listId = cur.execute(productAndMemberIdQuery, (sellingId,)).fetchone()
-
-        productId = listId[0]
-        memberId = listId[1]
-
-
-        query = "SELECT products.product_name, products.product_manufacturer, products.product_price, members.member_fname, sellings.selling_quantity, sellings.selling_amount, sellings.selling_date FROM products, members, sellings" \
-                " WHERE products.product_id = ? AND members.member_id = ?"
-        record = cur.execute(query, (productId, memberId)).fetchone()
-        if record is not None:
-            product_name = record[0]
-            product_manu = record[1]
-            product_price = record[2]
-            member_name = record[3]
-            selling_quantity = record[4]
-            selling_amount = record[5]
-            selling_date = record[6]
-            self.historyShow.clear()
-            self.historyShow.append("###########Reciept###########")
-            self.historyShow.append("Receipt number: " + str(sellingId))
-            self.historyShow.append("Product Name: " + str(product_name))
-            self.historyShow.append("Manufacturer: " + str(product_manu))
-            self.historyShow.append("Product Price: $" + str(product_price))
-            self.historyShow.append("Selling to: " + str(member_name))
-            self.historyShow.append("Quantity: " + str(selling_quantity))
-            self.historyShow.append("Amount: $" + str(selling_amount))
-            self.historyShow.append("Date Sold: " + str(selling_date))
-            print(record)
-
-    def tabsChanged(self):
-        self.getStat()
-        self.displayProduct()
-        self.displayMember()
-        self.displaySellingRecord()
-
-
-        # Update pie charts
-        self.series.clear()
-        self.series.append("Product Instock", productInstock)
-        self.series.append("Sold Items", soldItems)
-        self.slice = self.series.slices()[1]
-        self.slice.setExploded(True)
-        self.slice.setPen(QPen(Qt.darkGreen, 2))
-        self.slice.setBrush(Qt.green)
-
-        self.series1.clear()
-        self.series1.append("Total Amount", totalAmount)
-        self.series1.append("Amount Earned", amountEarned)
-
-        self.slice1 = self.series1.slices()[1]
-        self.slice1.setExploded(True)
-        self.slice1.setPen(QPen(Qt.darkYellow, 2))
-        self.slice1.setBrush(Qt.yellow)
-
-        self.slice2 = QPieSlice()
-        self.slice2 = self.series1.slices()[0]
-        self.slice2.setPen(QPen(Qt.darkRed))
-        self.slice2.setBrush(Qt.red)
+        sellingId = listSelling[0]
+        product_name = listSelling[1]
+        product_manu = listSelling[2]
+        product_price = listSelling[3]
+        member_name = listSelling[4]
+        selling_quantity = listSelling[5]
+        selling_amount = listSelling[6]
+        selling_date = listSelling[7]
+        self.historyShow.clear()
+        self.historyShow.append("###########Reciept###########")
+        self.historyShow.append("Receipt number: " + str(sellingId))
+        self.historyShow.append("Product Name: " + str(product_name))
+        self.historyShow.append("Manufacturer: " + str(product_manu))
+        self.historyShow.append("Product Price: $" + str(product_price))
+        self.historyShow.append("Selling to: " + str(member_name))
+        self.historyShow.append("Quantity: " + str(selling_quantity))
+        self.historyShow.append("Amount: $" + str(selling_amount))
+        self.historyShow.append("Date Sold: " + str(selling_date))
 
     def displayProduct(self):
         for i in reversed(range(self.productTable.rowCount())):
@@ -741,8 +742,9 @@ class Main(QMainWindow):
         for i in reversed(range(self.sellingTable.rowCount())):
             self.sellingTable.removeRow(i)
 
-        query = "SELECT sellings.selling_id, products.product_name, products.product_manufacturer, products.product_price, members.member_fname, sellings.selling_quantity, sellings.selling_amount, sellings.selling_date FROM products, members, sellings" \
-                " WHERE products.product_id = sellings.selling_product_id AND members.member_id = sellings.selling_member_id"
+        query = "SELECT sellings.selling_id, products.product_name, products.product_manufacturer, products.product_price, members.member_fname, sellings.selling_quantity, sellings.selling_amount, sellings.selling_date " \
+                "FROM products, members, sellings " \
+                "WHERE products.product_id = sellings.selling_product_id AND members.member_id = sellings.selling_member_id"
         records = cur.execute(query)
         for row_data in records:
             row_number = self.sellingTable.rowCount()
@@ -775,15 +777,6 @@ class Main(QMainWindow):
         memberId = listMember[0]
         return memberId
 
-    def getSellingIdFromCurrentRow(self):
-        listSelling = []
-        for i in range(0, 6):
-            listSelling.append(self.sellingTable.item(self.sellingTable.currentRow(), i).text())
-
-        sellingId = listSelling[0]
-        return sellingId
-
-
     def selectedMember(self):
         memberId = self.getMemberIdFromCurrentRow()
         display_member.DisplayMember.memberId = memberId
@@ -797,7 +790,8 @@ class Main(QMainWindow):
             QMessageBox.information(self, "Warning", "Search query cannot be empty")
         else:
             self.searchEntry.setText("")
-            query = "SELECT product_id, product_name, product_manufacturer, product_price, product_quota, product_date, product_availability FROM products WHERE product_name LIKE ? or product_manufacturer LIKE ? "
+            query = "SELECT product_id, product_name, product_manufacturer, product_price, product_quota, product_date, product_availability " \
+                    "FROM products WHERE product_name LIKE ? or product_manufacturer LIKE ? "
             results = cur.execute(query, ('%' + value + '%', '%' + value + '%')).fetchall()
 
             if results == []:
@@ -880,6 +874,36 @@ class Main(QMainWindow):
                     self.sellingTable.insertRow(row_number)
                     for column_number, data in enumerate(row_data):
                         self.sellingTable.setItem(row_number, column_number, QTableWidgetItem(str(data)))
+
+    def tabsChanged(self):
+        self.getStat()
+        self.displayProduct()
+        self.displayMember()
+        self.displaySellingRecord()
+
+
+        # Update pie charts
+        self.series.clear()
+        self.series.append("Product Instock", productInstock)
+        self.series.append("Sold Items", soldItems)
+        self.slice = self.series.slices()[1]
+        self.slice.setExploded(True)
+        self.slice.setPen(QPen(Qt.darkGreen, 2))
+        self.slice.setBrush(Qt.green)
+
+        self.series1.clear()
+        self.series1.append("Total Amount", totalAmount)
+        self.series1.append("Amount Earned", amountEarned)
+
+        self.slice1 = self.series1.slices()[1]
+        self.slice1.setExploded(True)
+        self.slice1.setPen(QPen(Qt.darkYellow, 2))
+        self.slice1.setBrush(Qt.yellow)
+
+        self.slice2 = QPieSlice()
+        self.slice2 = self.series1.slices()[0]
+        self.slice2.setPen(QPen(Qt.darkRed))
+        self.slice2.setBrush(Qt.red)
 
 def main():
     App = QApplication(sys.argv)
