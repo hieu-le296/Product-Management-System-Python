@@ -1,4 +1,4 @@
-from PyQt5 import QtPrintSupport, QtGui, QtWidgets
+from PyQt5 import QtPrintSupport, QtWidgets
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import Qt
@@ -39,9 +39,10 @@ class SellProduct(QDialog):
         self.titleText.setAlignment(Qt.AlignCenter)
         ##############Widgets of Bottom Layout##############
         self.productCombo = QComboBox()
-        self.productCombo.currentIndexChanged.connect(self.changeComboValue)
+        self.productCombo.currentIndexChanged.connect(self.changeComboProductValue)
         self.memberCombo = QComboBox()
         self.quantityCombo = QComboBox()
+        self.discountCombo = QComboBox()
         self.submitBtn = QPushButton("Submit")
         self.submitBtn.clicked.connect(self.sellProduct)
 
@@ -62,6 +63,7 @@ class SellProduct(QDialog):
         self.bottomLayout.addRow(QLabel("Product: "), self.productCombo)
         self.bottomLayout.addRow(QLabel("Selling to: "), self.memberCombo)
         self.bottomLayout.addRow(QLabel("Quantity: "), self.quantityCombo)
+        self.bottomLayout.addRow(QLabel("Discount: "), self.discountCombo)
         self.bottomLayout.addRow(QLabel(""), self.submitBtn)
         self.bottomFrame.setLayout(self.bottomLayout)
 
@@ -87,7 +89,12 @@ class SellProduct(QDialog):
         for i in range(1, quantity + 1):
             self.quantityCombo.addItem(str(i))
 
-    def changeComboValue(self):
+        self.discountCombo.clear()
+        for discount in range(5, 51):
+            self.discountCombo.addItem(str(discount) + "%")
+
+
+    def changeComboProductValue(self):
         self.quantityCombo.clear()
         product_id = self.productCombo.currentData()
         query = ("SELECT product_quota FROM products WHERE product_id =?")
@@ -97,12 +104,15 @@ class SellProduct(QDialog):
             self.quantityCombo.addItem(str(i))
 
     def sellProduct(self):
-        global productName, productId, memberName, memberId, quantity
+        global productName, productId, memberName, memberId, quantity, discount, discount_text
         productName = self.productCombo.currentText()
         productId = self.productCombo.currentData()
         memberName = self.memberCombo.currentText()
         memberId = self.memberCombo.currentData()
         quantity = int(self.quantityCombo.currentText())
+        discount_text = self.discountCombo.currentText()
+        discount = discount_text.split("%")
+        discount = int(discount[0])
         self.confirm = ConfirmWindow()
         self.close()
 
@@ -131,10 +141,11 @@ class ConfirmWindow(QDialog):
         self.titleText.setAlignment(Qt.AlignCenter)
 
         ##############widgets of bottom layout################
-        global productName, productId, memberName, memberId, quantity, price
+        global productName, productId, memberName, memberId, quantity, price, discount, discount_text
         priceQuery = "SELECT product_price FROM products WHERE product_id =?"
         price = cur.execute(priceQuery, (productId,)).fetchone()
-        self.amount = quantity * price[0]
+        discount_amount = ((quantity * price[0]) * discount) / 100
+        self.amount = quantity * price[0] - discount_amount
 
         self.productName = QLabel()
         self.productName.setText(productName)
@@ -151,10 +162,11 @@ class ConfirmWindow(QDialog):
 
         self.textEdit = QTextEdit(self)
         self.textEdit.setReadOnly(True)
-        self.textEdit.append("Selling Receipt")
+        self.textEdit.append("########Selling Receipt#######")
         self.textEdit.append("Product: " + productName)
         self.textEdit.append("Customer Name: " + memberName)
         self.textEdit.append("Quantity: " + str(quantity))
+        self.textEdit.append("Discount: " + str(discount_text))
         self.textEdit.append("Amount: $" + str(price[0]) + "x" + str(quantity) + " = $" + str(self.amount))
 
     def layouts(self):
@@ -179,12 +191,12 @@ class ConfirmWindow(QDialog):
         self.setLayout(self.mainLayout)
 
     def confirm(self):
-        global productName, productId, memberName, memberId, quantity
+        global productName, productId, memberName, memberId, quantity, discount
 
         try:
-            sellQuery = "INSERT INTO 'sellings' (selling_product_id, selling_member_id, selling_quantity, selling_amount, selling_date) VALUES (?,?,?,?,?)"
+            sellQuery = "INSERT INTO 'sellings' (selling_product_id, selling_member_id, selling_quantity, discount_rate, selling_amount, selling_date) VALUES (?,?,?,?,?,?)"
             quotaQuery = ("SELECT product_quota FROM products WHERE product_id =?")
-            cur.execute(sellQuery, (productId, memberId, quantity, self.amount, self.dateString))
+            cur.execute(sellQuery, (productId, memberId, quantity, discount, self.amount, self.dateString))
             self.quota = cur.execute(quotaQuery, (productId,)).fetchone()
             sqlConnect.commit()
 

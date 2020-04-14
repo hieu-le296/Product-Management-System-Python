@@ -36,12 +36,12 @@ class AddMember(QDialog):
         self.fnameEntry = QLineEdit()
         self.fnameEntry.setPlaceholderText("Enter first name")
         self.lnameEntry = QLineEdit()
-        self.lnameEntry.setPlaceholderText("Enternlast name")
+        self.lnameEntry.setPlaceholderText("Enter last name")
         self.phoneEntry = QLineEdit()
         self.phoneEntry.setPlaceholderText("Enter phone #")
         self.addressEntry = QLineEdit()
         self.addressEntry.setPlaceholderText("Enter full address")
-        self.submitBtn = QPushButton("Submit")
+        self.submitBtn = QPushButton("Add")
         self.submitBtn.clicked.connect(self.addMember)
 
     def layouts(self):

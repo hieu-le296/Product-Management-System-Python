@@ -1,4 +1,6 @@
 import os
+import re
+
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
@@ -65,7 +67,7 @@ class AddProduct(QDialog):
 
         self.uploadBtn = QPushButton("Browse")
         self.uploadBtn.clicked.connect(self.uploadImg)
-        self.submitBtn = QPushButton("Submit")
+        self.submitBtn = QPushButton("Add")
         self.submitBtn.clicked.connect(self.addProduct)
 
     def layouts(self):
@@ -111,13 +113,20 @@ class AddProduct(QDialog):
         global datePickEntry
         name = self.nameEntry.text()
         manufacturer = self.manufactureEntry.text()
+        num_format = re.compile(r'^\-?[1-9][0-9]*\.?[0-9]*')
         price = self.priceEntry.text()
         quota = self.quotaEntry.text()
+        if (not num_format.match(price)) or (not num_format.match(quota)):
+            QMessageBox.information(self, "Info", "Price or quota must be a number")
+            checked = False
+        else:
+            checked = True
+
         if datePickEntry.text() != '':
             productDate = datePickEntry.text()
         else:
             productDate = None
-        if name and manufacturer and price and quota != "":
+        if name and manufacturer and price and quota != "" and checked is True:
             try:
                 query = "INSERT INTO 'products' (product_name, product_manufacturer, product_price, product_quota,product_img, product_date) VALUES (?,?,?,?,?,?)"
                 cur.execute(query, (name, manufacturer, price, quota, defaultImg, productDate))
@@ -129,7 +138,7 @@ class AddProduct(QDialog):
                 QMessageBox.information(self, "Info", "Product has not been added")
 
         else:
-            QMessageBox.information(self, "Info", "Fields cannot be empty!")
+            QMessageBox.information(self, "Info", "Product has not been added")
 
     def openCalendar(self):
         self.open = Calendar()
