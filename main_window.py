@@ -938,13 +938,3 @@ class Main(QMainWindow):
         self.slice2.setPen(QPen(Qt.darkRed))
         self.slice2.setBrush(Qt.red)
 
-def main():
-    App = QApplication(sys.argv)
-    window = Main()
-    window.show()
-    App.setStyleSheet(qdarkstyle.load_stylesheet())
-    sys.exit(App.exec_())
-
-
-if __name__ == '__main__':
-    main()

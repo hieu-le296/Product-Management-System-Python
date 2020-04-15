@@ -64,7 +64,8 @@ class SaveAs(QWidget):
         checked = False
         if self.product.isChecked():
             checked = True
-            products = cur.execute("SELECT product_id, product_name, product_manufacturer, product_price, product_quota, product_date, product_availability FROM products")
+            products = cur.execute("SELECT product_id, product_name, product_manufacturer, product_price, product_quota, "
+                                   "product_date, product_availability FROM products")
             self.textEdit.append("                                                                              Product List        ")
             for product in products:
                 product_id = product[0]
@@ -101,7 +102,10 @@ class SaveAs(QWidget):
 
         elif self.selling.isChecked():
             checked = True
-            query = "SELECT products.product_name, products.product_manufacturer, products.product_price, members.member_fname, sellings.selling_quantity, sellings.selling_amount, sellings.selling_date FROM products, members, sellings WHERE products.product_id = sellings.selling_product_id AND members.member_id = sellings.selling_member_id"
+            query = "SELECT products.product_name, products.product_manufacturer, products.product_price, members.member_fname, " \
+                    "sellings.selling_quantity, sellings.discount_rate, sellings.selling_amount, sellings.selling_date " \
+                    "FROM products, members, sellings " \
+                    "WHERE products.product_id = sellings.selling_product_id AND members.member_id = sellings.selling_member_id"
             history = cur.execute(query).fetchall()
             self.textEdit.append("                                                                               Selling History        ")
             for record in history:
@@ -110,13 +114,15 @@ class SaveAs(QWidget):
                 product_price = record[2]
                 member_name = record[3]
                 selling_quantity = record[4]
-                selling_amount = record[5]
-                selling_date = record[6]
+                discount_rate = record[5]
+                selling_amount = record[6]
+                selling_date = record[7]
                 self.textEdit.append("Product Name: " + product_name)
                 self.textEdit.append("Manufacturer: " + product_manu)
                 self.textEdit.append("Product Price: $" + str(product_price))
                 self.textEdit.append("Selling to: " + member_name)
                 self.textEdit.append("Quantity: " + str(selling_quantity))
+                self.textEdit.append("Discount Rate: " + str(discount_rate) + "%")
                 self.textEdit.append("Amount: $" + str(selling_amount))
                 self.textEdit.append("Date Sold: " + str(selling_date))
                 self.textEdit.append("-----------------------------------------------------")
@@ -129,7 +135,7 @@ class SaveAs(QWidget):
                 printer.setOutputFormat(QPrinter.PdfFormat)
                 printer.setOutputFileName(fn)
                 self.textEdit.document().print_(printer)
-                QMessageBox.information(self, "Success", "Exported to PDF successfully")
+                QMessageBox.information(self, "Success", "PDF exported Successfully")
                 self.close()
         else:
             QMessageBox.information(self, "Warning", "Please select one")
@@ -161,7 +167,8 @@ class SaveAs(QWidget):
         for i in reversed(range(self.sellingTable.rowCount())):
             self.sellingTable.removeRow(i)
 
-        query = "SELECT sellings.selling_id, products.product_name, products.product_manufacturer, products.product_price, members.member_fname, sellings.selling_quantity, sellings.discount_rate, sellings.selling_amount, sellings.selling_date " \
+        query = "SELECT sellings.selling_id, products.product_name, products.product_manufacturer, products.product_price, " \
+                "members.member_fname, sellings.selling_quantity, sellings.discount_rate, sellings.selling_amount, sellings.selling_date " \
                 "FROM products, members, sellings " \
                 "WHERE products.product_id = sellings.selling_product_id AND members.member_id = sellings.selling_member_id"
         records = cur.execute(query)
@@ -172,23 +179,15 @@ class SaveAs(QWidget):
                 self.sellingTable.setItem(row_number, column_number, QTableWidgetItem(str(data)))
 
     def exportCSV(self):
-        checked = False
         if self.product.isChecked():
-            checked = True
             self.displayProduct()
             self.saveSheet(self.productTable)
         elif self.member.isChecked():
-            checked = True
             self.displayMember()
             self.saveSheet(self.memberTable)
         elif self.selling.isChecked():
-            checked = True
             self.displaySellingRecord()
             self.saveSheet(self.sellingTable)
-
-        if checked is True:
-            QMessageBox.information(self, "Success", "Saved As CSV successfully")
-            self.close()
         else:
             QMessageBox.information(self, "Warning", "Please select one")
 
@@ -208,3 +207,5 @@ class SaveAs(QWidget):
                         else:
                             row_data.append('')
                     writer.writerow(row_data)
+            QMessageBox.information(self, "Success", "CSV File Saved Successfully")
+            self.close()
