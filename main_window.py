@@ -13,7 +13,7 @@ import add_member
 import add_product
 import display_product
 import display_member
-import export_pdf
+import save_as
 import help_class
 import login_class
 import print_widget
@@ -74,10 +74,10 @@ class Main(QMainWindow):
         self.print.triggered.connect(self.funcPrintPreview)
         self.tb.addAction(self.print)
         self.tb.addSeparator()
-        ############Export PDF##############
-        self.exportPDF = QAction(QIcon('icons/pdf.svg'), "Export PDF", self)
-        self.exportPDF.triggered.connect(self.funcExportPdf)
-        self.tb.addAction(self.exportPDF)
+        ############Save As##############
+        self.saveAs = QAction(QIcon('icons/pdf.svg'), "Save As", self)
+        self.saveAs.triggered.connect(self.funcSaveAs)
+        self.tb.addAction(self.saveAs)
         self.tb.addSeparator()
         ############Calendar##############
         self.calendarToolBar = QAction(QIcon('icons/calendar.svg'), "Calendar", self)
@@ -466,10 +466,10 @@ class Main(QMainWindow):
         printMenu.setShortcut("Ctrl+P")
         printMenu.triggered.connect(self.funcPrintPreview)
 
-        exportPDF = QAction("ExportPDF", self)
-        exportPDF.setShortcut("Ctrl+S")
-        exportPDF.setIcon(QIcon('icons/pdf.svg'))
-        exportPDF.triggered.connect(self.funcExportPdf)
+        saveAsMenu = QAction("Save As...", self)
+        saveAsMenu.setShortcut("Ctrl+S")
+        saveAsMenu.setIcon(QIcon('icons/pdf.svg'))
+        saveAsMenu.triggered.connect(self.funcSaveAs)
 
         sellProductMenu = QAction("Sell Product", self)
         sellProductMenu.setIcon(QIcon('icons/sell.svg'))
@@ -500,7 +500,7 @@ class Main(QMainWindow):
         file.addAction(addProductMenu)
         file.addAction(addMemberMenu)
         file.addAction(printMenu)
-        file.addAction(exportPDF)
+        file.addAction(saveAsMenu)
         product.addAction(sellProductMenu)
         setting.addAction(refreshMenu)
         setting.addAction(changePasswordMenu)
@@ -517,8 +517,8 @@ class Main(QMainWindow):
     def funcSellProduct(self):
         self.sell = selling.SellProduct()
 
-    def funcExportPdf(self):
-        self.export = export_pdf.ExportPDF()
+    def funcSaveAs(self):
+        self.export = save_as.SaveAs()
 
     def funcPrintPreview(self):
         self.printDiaglog = print_widget.Print()
