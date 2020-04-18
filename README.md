@@ -80,4 +80,4 @@ You can deploy on the different OS, but setup.py must be modified
 
 ## License
 
-This project is initial for academic work at the University of the Fraser Valleyw. All Rights Reserved.
+This project is initial for academic work at the University of the Fraser Valley. All Rights Reserved.
