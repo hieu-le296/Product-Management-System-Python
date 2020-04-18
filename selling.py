@@ -19,13 +19,30 @@ class SellProduct(QDialog):
         self.setWindowTitle("Selling Product")
         self.setWindowIcon(QIcon('icons/sell.svg'))
         self.UI()
+        style_sheet = """
+                       QLabel {
+                           font-size: 15px;
+                       }
+
+                       QPushButton {
+                           background-color: #5AA1C2;
+                           color: #ffffff;
+                           border-radius: 10px;
+                           font: bold 14px;
+                           min-width: 10em;
+                           padding: 6px;
+                       }
+
+
+
+                       """
+        self.setStyleSheet(style_sheet)
         self.show()
 
     def UI(self):
         self.widgets()
         self.layouts()
         self.fetchData()
-        self.setStyleSheet("QLabel {font-size: 15px}")
 
 
     def widgets(self):
@@ -123,12 +140,31 @@ class ConfirmWindow(QDialog):
         self.setWindowTitle("Sell Product")
         self.setWindowIcon(QIcon("icons/icon.ico"))
         self.UI()
+        style_sheet = """
+                    QLabel {
+                        font-size: 15px;
+                        }
+
+                    QPushButton {
+                        background-color: #5AA1C2;
+                        color: #ffffff;
+                        border-radius: 10px;
+                        font: bold 14px;
+                        min-width: 10em;
+                        padding: 6px;
+                        }
+
+                    QTextEdit {
+                        font-size: 15px
+                        }
+
+                    """
+        self.setStyleSheet(style_sheet)
         self.show()
 
     def UI(self):
         self.widgets()
         self.layouts()
-        self.setStyleSheet("QLabel {font-size: 15px} QTextEdit {font-size: 15px}")
 
     def widgets(self):
         ##############widgets of top layout################

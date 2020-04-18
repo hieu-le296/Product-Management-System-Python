@@ -11,16 +11,33 @@ import sqlite3
 sqlConnect = sqlite3.connect("products.db")
 cur = sqlConnect.cursor()
 
-class SaveAs(QWidget):
+class SaveAs(QDialog):
 
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Save As")
         self.setWindowIcon(QIcon('icons/pdf.svg'))
-        self.setGeometry(850, 450, 250, 180)
-        self.setFixedSize(self.size())
         self.widgets()
         self.layouts()
+        style_sheet = """
+                QLabel {
+                    font-size: 15px;
+                }
+
+                QPushButton {
+                    background-color: #5AA1C2;
+                    color: #ffffff;
+                    border-radius: 10px;
+                    font: bold 14px;
+                    min-width: 10em;
+                    padding: 6px;
+                }
+
+                QRadioButton {
+                    font-size: 12px;
+                }
+                """
+        self.setStyleSheet(style_sheet)
         self.show()
 
     def widgets(self):
@@ -31,6 +48,7 @@ class SaveAs(QWidget):
         self.sellingTable = QTableWidget()
         self.sellingTable.setColumnCount(9)
         self.text = QLabel("Select one option", self)
+        self.text.setAlignment(Qt.AlignCenter)
         self.product = QRadioButton("Products", self)
         self.member = QRadioButton("Membership", self)
         self.selling = QRadioButton('Selling History', self)
@@ -42,11 +60,10 @@ class SaveAs(QWidget):
 
     def layouts(self):
         self.mainLayout = QVBoxLayout()
-        self.topLayout = QVBoxLayout()
+        self.topLayout = QHBoxLayout()
         self.bottomLayout = QHBoxLayout()
         self.topFrame = QFrame()
 
-        self.topLayout.addWidget(self.text)
         self.topLayout.addWidget(self.product)
         self.topLayout.addWidget(self.member)
         self.topLayout.addWidget(self.selling)
@@ -55,8 +72,10 @@ class SaveAs(QWidget):
 
         self.bottomLayout.addWidget(self.exportCSVBtn)
         self.bottomLayout.addWidget(self.exportPDFBtn)
+        self.mainLayout.addWidget(self.text)
         self.mainLayout.addWidget(self.topFrame)
         self.mainLayout.addLayout(self.bottomLayout)
+        self.mainLayout.addStretch(1)
         self.setLayout(self.mainLayout)
 
     def exportPDF(self):

@@ -24,10 +24,10 @@ Visual Studio Code (optional for editor)
 Open terminal (Command Prompt on Windows 10) and type:
 
 ```
-#pip3 install -r requirements.txt
+pip3 install -r requirements.txt
 ```
 
-#Note: You can create python virtual environment to install python dependencies.
+*Note: You can create python virtual environment to install python dependencies.
 
 ## Running the tests
 
@@ -52,7 +52,7 @@ python3 setup.py build
 ```
 The executable file (main_window.exe) will be located in build folder
 
-#You can deploy on the different OS, but setup.py must be modified
+You can deploy on the different OS, but setup.py must be modified
 
 
 ## Built With
@@ -80,4 +80,4 @@ The executable file (main_window.exe) will be located in build folder
 
 ## License
 
-This project is licensed under the GNUv3 License - see the [LICENSE.md](LICENSE.md) file for details
+This project is initial for academic work at the University of the Fraser Valleyw. All Rights Reserved.

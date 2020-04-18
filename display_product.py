@@ -28,13 +28,37 @@ class DisplayProduct(QDialog):
         self.setWindowTitle("Product Detail")
         self.setWindowIcon(QIcon("icons/add.svg"))
         self.UI()
+        style_sheet = """
+                QLabel {
+                    font-size: 30px;
+                }
+
+                QLineEdit {
+                    background-color: #f7f7f7; 
+                    color: #000000; 
+                    padding-top: 5px; 
+                    padding-left: 10px;
+                }
+
+                QPushButton {
+                    background-color: #35A69B;
+                    color: #ffffff;
+                    border-radius: 10px;
+                    font: bold 14px;
+                    min-width: 10em;
+                    padding: 6px;
+                }
+
+
+
+                """
+        self.setStyleSheet(style_sheet)
         self.show()
 
     def UI(self):
         self.productDetails()
         self.widgets()
         self.layouts()
-        self.setStyleSheet("QLabel {font-size: 15px}")
 
     def widgets(self):
         #################Top layouts widgets#########
@@ -66,42 +90,44 @@ class DisplayProduct(QDialog):
         datePickEntry.setReadOnly(True)
         datePickEntry.clicked.connect(self.openCalendar)
 
-        self.uploadBtn = QPushButton("Upload")
+        self.uploadBtn = QPushButton("Browser Product Image")
         self.uploadBtn.clicked.connect(self.uploadImg)
         self.deleteBtn = QPushButton("Delete")
+        self.deleteBtn.setStyleSheet("background-color: #B00020")
         self.deleteBtn.clicked.connect(self.deleteProduct)
         self.backBtn = QPushButton("Back to Main")
         self.backBtn.clicked.connect(self.backToMain)
         self.updateBtn = QPushButton("Update")
         self.updateBtn.clicked.connect(self.updateProduct)
+        self.updateBtn.setStyleSheet("background-color: #5AA1C2;")
 
 
     def layouts(self):
         self.mainLayout = QVBoxLayout()
         self.topLayout = QVBoxLayout()
-        self.bottomLayout = QFormLayout()
+        self.bottomLayout = QVBoxLayout()
         self.topFrame = QFrame()
-        self.bottomFrame = QFrame()
 
         ###########Add Widgets##########
         self.topLayout.addWidget(self.titleText)
         self.topLayout.addWidget(self.product_Img)
-        self.bottomLayout.addRow(QLabel("Name: "), self.nameEntry)
-        self.bottomLayout.addRow(QLabel("Manufacture: "), self.manufacturerEntry)
-        self.bottomLayout.addRow(QLabel("Price: "), self.priceEntry)
-        self.bottomLayout.addRow(QLabel("Quota: "), self.quotaEntry)
-        self.bottomLayout.addRow(QLabel("Status: "), self.availabilityCombo)
-        self.bottomLayout.addRow("Date: ", datePickEntry)
-        self.bottomLayout.addRow(QLabel("Image: "), self.uploadBtn)
-        self.bottomLayout.addRow("", self.backBtn)
-        self.bottomLayout.addRow(QLabel(""), self.deleteBtn)
-        self.bottomLayout.addRow(QLabel(""), self.updateBtn)
+        ##############Widgets of Bottom layout##############
+
+        self.bottomLayout.addWidget(self.nameEntry)
+        self.bottomLayout.addWidget(self.manufacturerEntry)
+        self.bottomLayout.addWidget(self.priceEntry)
+        self.bottomLayout.addWidget(self.quotaEntry)
+        self.bottomLayout.addWidget(datePickEntry)
+        self.bottomLayout.addWidget(self.availabilityCombo)
+        self.bottomLayout.addWidget(self.uploadBtn)
+        self.bottomLayout.addWidget(self.backBtn)
+        self.bottomLayout.addWidget(self.deleteBtn)
+        self.bottomLayout.addWidget(self.updateBtn)
 
         ###########Set Layouts##########
         self.topFrame.setLayout(self.topLayout)
-        self.bottomFrame.setLayout(self.bottomLayout)
         self.mainLayout.addWidget(self.topFrame)
-        self.mainLayout.addWidget(self.bottomFrame)
+        self.mainLayout.addLayout(self.bottomLayout)
 
         self.setLayout(self.mainLayout)
 

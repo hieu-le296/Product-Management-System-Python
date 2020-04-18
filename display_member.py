@@ -13,8 +13,34 @@ class DisplayMember(QDialog):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Membership Detail")
-        self.setWindowIcon(QIcon("icons/users.png"))
+        self.setWindowIcon(QIcon('icons/users.svg'))
         self.UI()
+        style_sheet = """
+
+
+                      QLabel {
+                          font-size: 30px;
+                      }
+
+                      QLineEdit {
+                          background-color: #f7f7f7; 
+                          color: #000000; 
+                          padding-top: 5px; 
+                          padding-left: 10px;
+                      }
+
+                      QPushButton {
+                          color: #ffffff;
+                          border-radius: 10px;
+                          font: bold 14px;
+                          min-width: 10em;
+                          padding: 6px;
+                      }
+
+
+
+                      """
+        self.setStyleSheet(style_sheet)
         self.show()
 
     def UI(self):
@@ -42,10 +68,13 @@ class DisplayMember(QDialog):
         self.addressEntry = QLineEdit()
         self.addressEntry.setText(self.memberAddress)
         self.updateBtn = QPushButton("Update")
+        self.updateBtn.setStyleSheet("background-color: #5AA1C2; ")
         self.backBtn = QPushButton("Back to Main")
+        self.backBtn.setStyleSheet("background-color: #35A69B;")
         self.backBtn.clicked.connect(self.backToMain)
         self.updateBtn.clicked.connect(self.updateMember)
         self.deleteBtn = QPushButton("Delete")
+        self.deleteBtn.setStyleSheet("background-color: #B00020")
         self.deleteBtn.clicked.connect(self.deleteMember)
 
 
@@ -54,7 +83,7 @@ class DisplayMember(QDialog):
     def layouts(self):
         self.mainLayout = QVBoxLayout()
         self.topLayout = QVBoxLayout()
-        self.bottomLayout = QFormLayout()
+        self.bottomLayout = QVBoxLayout()
         self.topFrame = QFrame()
         self.bottomFrame = QFrame()
 
@@ -63,17 +92,24 @@ class DisplayMember(QDialog):
         self.topLayout.addWidget(self.memberImg)
         self.topFrame.setLayout(self.topLayout)
 
-        self.bottomLayout.addRow(QLabel("First Name: "), self.fnameEntry)
-        self.bottomLayout.addRow(QLabel("Last Name: "), self.lnameEntry)
-        self.bottomLayout.addRow(QLabel("Phone: "), self.phoneEntry)
-        self.bottomLayout.addRow(QLabel("Full Address: "), self.addressEntry)
-        self.bottomLayout.addRow("", self.backBtn)
-        self.bottomLayout.addRow(QLabel(""), self.deleteBtn)
-        self.bottomLayout.addRow(QLabel(""), self.updateBtn)
-        self.bottomFrame.setLayout(self.bottomLayout)
+        # self.bottomLayout.addRow(QLabel("First Name: "), self.fnameEntry)
+        # self.bottomLayout.addRow(QLabel("Last Name: "), self.lnameEntry)
+        # self.bottomLayout.addRow(QLabel("Phone: "), self.phoneEntry)
+        # self.bottomLayout.addRow(QLabel("Full Address: "), self.addressEntry)
+        # self.bottomLayout.addRow("", self.backBtn)
+        # self.bottomLayout.addRow(QLabel(""), self.deleteBtn)
+        # self.bottomLayout.addRow(QLabel(""), self.updateBtn)
+        # self.bottomFrame.setLayout(self.bottomLayout)
+        self.bottomLayout.addWidget(self.fnameEntry)
+        self.bottomLayout.addWidget(self.lnameEntry)
+        self.bottomLayout.addWidget(self.phoneEntry)
+        self.bottomLayout.addWidget(self.addressEntry)
+        self.bottomLayout.addWidget(self.backBtn)
+        self.bottomLayout.addWidget(self.deleteBtn)
+        self.bottomLayout.addWidget(self.updateBtn)
 
         self.mainLayout.addWidget(self.topFrame)
-        self.mainLayout.addWidget(self.bottomFrame)
+        self.mainLayout.addLayout(self.bottomLayout)
         self.setLayout(self.mainLayout)
 
     def memberDetails(self):

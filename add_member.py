@@ -15,12 +15,38 @@ class AddMember(QDialog):
         self.setWindowTitle("Add Member")
         self.setWindowIcon(QIcon('icons/users.svg'))
         self.UI()
+        style_sheet = """
+
+
+               QLabel {
+                   font-size: 30px;
+               }
+
+               QLineEdit {
+                   background-color: #f7f7f7; 
+                   color: #000000; 
+                   padding-top: 5px; 
+                   padding-left: 10px;
+               }
+
+               QPushButton {
+                   background-color: #35A69B; 
+                   color: #ffffff;
+                   border-radius: 10px;
+                   font: bold 14px;
+                   min-width: 10em;
+                   padding: 6px;
+               }
+
+
+
+               """
+        self.setStyleSheet(style_sheet)
         self.show()
 
     def UI(self):
         self.widgets()
         self.layouts()
-        self.setStyleSheet("QLabel {font-size: 15px}")
 
     def widgets(self):
         ##############widgets of top layout################
@@ -47,7 +73,7 @@ class AddMember(QDialog):
     def layouts(self):
         self.mainLayout = QVBoxLayout()
         self.topLayout = QVBoxLayout()
-        self.bottomLayout = QFormLayout()
+        self.bottomLayout = QVBoxLayout()
         self.topFrame = QFrame()
         self.bottomFrame = QFrame()
 
@@ -56,15 +82,14 @@ class AddMember(QDialog):
         self.topLayout.addWidget(self.titleText)
         self.topFrame.setLayout(self.topLayout)
 
-        self.bottomLayout.addRow(QLabel("First Name: "), self.fnameEntry)
-        self.bottomLayout.addRow(QLabel("Last Name: "), self.lnameEntry)
-        self.bottomLayout.addRow(QLabel("Phone Number: "), self.phoneEntry)
-        self.bottomLayout.addRow(QLabel("Full Address: "), self.addressEntry)
-        self.bottomLayout.addRow(QLabel(""), self.submitBtn)
-        self.bottomFrame.setLayout(self.bottomLayout)
+        self.bottomLayout.addWidget(self.fnameEntry)
+        self.bottomLayout.addWidget(self.lnameEntry)
+        self.bottomLayout.addWidget(self.phoneEntry)
+        self.bottomLayout.addWidget(self.addressEntry)
+        self.bottomLayout.addWidget(self.submitBtn)
 
         self.mainLayout.addWidget(self.topFrame)
-        self.mainLayout.addWidget(self.bottomFrame)
+        self.mainLayout.addLayout(self.bottomLayout)
 
         self.setLayout(self.mainLayout)
 

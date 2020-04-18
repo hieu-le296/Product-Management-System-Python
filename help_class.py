@@ -31,7 +31,7 @@ class Help(QDialog):
         self.label.setText("""
                        <html style="color: white; font-size: 15px;">
                            <span style="font-size: 20px; font-weight: bold;">Product Management System v{}</span>
-                           <p>Features: Add Product, Add Membership, Sell Product, Print, Export to PDF, Change Password<p>
+                           <p>Features: Add Product, Add Membership, Sell Product, Update Product/Membership, Print, Export to CSV or PDF, Statistics, Change Password<p>
                            <p>Usage:<p>
                            <p>+For each time you add product, add membership or sell the product, or update something please click on Refresh icon to populate data<p>
                            <p>+When you click on the item or member on the table row, the information will be shown on the right<p>

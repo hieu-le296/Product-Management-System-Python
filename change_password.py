@@ -1,5 +1,5 @@
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QPixmap
+from PyQt5.QtGui import QPixmap, QIcon
 from PyQt5.QtWidgets import QDialog, QVBoxLayout, QFormLayout, QFrame, QLabel, QLineEdit, QPushButton, QMessageBox
 import sqlite3
 import hashlib
@@ -13,8 +13,32 @@ class ChangePassword(QDialog):
     def __init__(self, parent=None):
         super().__init__()
         self.setWindowTitle("Change Password")
+        self.setWindowIcon(QIcon('icons/logo.png'))
         self.widgets()
         self.layout()
+        style_sheet = """
+                   QLabel {
+                       font-size: 15px;
+                   }
+
+                   QLineEdit {
+                       background-color: #f7f7f7;
+                       color: #000000;
+                       padding-top: 5px;
+                       padding-left: 10px;
+                   }
+
+                   QPushButton {
+                       background-color: #5AA1C2;
+                       color: #ffffff;
+                       border-radius: 10px;
+                       font: bold 14px;
+                       min-width: 10em;
+                       padding: 6px;
+                   }
+               """
+        self.setStyleSheet(style_sheet)
+
         self.show()
 
     def widgets(self):

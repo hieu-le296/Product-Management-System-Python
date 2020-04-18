@@ -32,6 +32,28 @@ class Main(QMainWindow):
         self.setWindowTitle("Product Management")
         self.setWindowIcon(QIcon('icons/logo.png'))
         self.setGeometry(400, 200, 1800, 900)
+        style_sheet = """
+                QLineEdit {
+                    background-color: #f7f7f7;
+                    color: #000000;
+                    padding-top: 5px;
+                    padding-left: 10px;
+                }
+                QLabel {
+                    font-size: 15px;
+                    font: bold;
+                }
+
+                QPushButton {
+                    background-color: #35A69B;
+                    color: #ffffff;
+                    border-radius: 10px;
+                    font: bold 14px;
+                    min-width: 10em;
+                    padding: 6px;
+                }
+                """
+        self.setStyleSheet(style_sheet)
         self.UI()
 
     def UI(self):
@@ -69,15 +91,15 @@ class Main(QMainWindow):
         self.refresh.triggered.connect(self.funcRefresh)
         self.tb.addAction(self.refresh)
         self.tb.addSeparator()
-        ############Printer##############
-        self.print = QAction(QIcon('icons/printer.svg'), "Print", self)
-        self.print.triggered.connect(self.funcPrintPreview)
-        self.tb.addAction(self.print)
-        self.tb.addSeparator()
         ############Save As##############
         self.saveAs = QAction(QIcon('icons/pdf.svg'), "Save As", self)
         self.saveAs.triggered.connect(self.funcSaveAs)
         self.tb.addAction(self.saveAs)
+        self.tb.addSeparator()
+        ############Printer##############
+        self.print = QAction(QIcon('icons/printer.svg'), "Print", self)
+        self.print.triggered.connect(self.funcPrintPreview)
+        self.tb.addAction(self.print)
         self.tb.addSeparator()
         ############Calendar##############
         self.calendarToolBar = QAction(QIcon('icons/calendar.svg'), "Calendar", self)
@@ -182,6 +204,7 @@ class Main(QMainWindow):
         ############Right Top Layout Widget##############
         self.memberSearchText = QLabel("Search")
         self.memberSearchEntry = QLineEdit()
+        self.memberSearchEntry.setPlaceholderText("Search for Members")
         self.memberSearchButton = QPushButton("Search")
         self.memberSearchButton.clicked.connect(self.searchMember)
 
@@ -217,6 +240,7 @@ class Main(QMainWindow):
 
         self.historySearchText = QLabel("Search")
         self.historySearchEntry = QLineEdit()
+        self.historySearchEntry.setPlaceholderText("Search for Records")
         self.historySearchButton = QPushButton("Search")
         self.historySearchButton.clicked.connect(self.searchRecord)
 
@@ -227,9 +251,11 @@ class Main(QMainWindow):
         self.printReceiptButton = QPushButton("Print Receipt")
         self.printReceiptButton.clicked.connect(self.printReceipt)
         self.deleteRecordBtn = QPushButton("Delete this record")
+        self.deleteRecordBtn.setStyleSheet("background-color: #DE8200")
         self.deleteRecordBtn.clicked.connect(self.deleteOneRecord)
         self.deleteAllRecordsBtn = QPushButton("Delete all records")
         self.deleteAllRecordsBtn.clicked.connect(self.deleteHistory)
+        self.deleteAllRecordsBtn.setStyleSheet("background-color: #B00020")
 
         ############Tab 4 Widgets##############
         self.totalProductLabel = QLabel()
@@ -499,8 +525,8 @@ class Main(QMainWindow):
         #add submenu to main menu
         file.addAction(addProductMenu)
         file.addAction(addMemberMenu)
-        file.addAction(printMenu)
         file.addAction(saveAsMenu)
+        file.addAction(printMenu)
         product.addAction(sellProductMenu)
         setting.addAction(refreshMenu)
         setting.addAction(changePasswordMenu)
@@ -773,7 +799,8 @@ class Main(QMainWindow):
         for i in reversed(range(self.sellingTable.rowCount())):
             self.sellingTable.removeRow(i)
 
-        query = "SELECT sellings.selling_id, products.product_name, products.product_manufacturer, products.product_price, members.member_fname, sellings.selling_quantity, sellings.discount_rate, sellings.selling_amount, sellings.selling_date " \
+        query = "SELECT sellings.selling_id, products.product_name, products.product_manufacturer, products.product_price, " \
+                "members.member_fname, sellings.selling_quantity, sellings.discount_rate, sellings.selling_amount, sellings.selling_date " \
                 "FROM products, members, sellings " \
                 "WHERE products.product_id = sellings.selling_product_id AND members.member_id = sellings.selling_member_id"
         records = cur.execute(query)
@@ -840,7 +867,8 @@ class Main(QMainWindow):
     def listProduct(self):
         products = None
         if self.allProduct.isChecked():
-            query = "SELECT product_id, product_name, product_manufacturer, product_price, product_quota, product_date, product_availability FROM products"
+            query = "SELECT product_id, product_name, product_manufacturer, product_price, product_quota, product_date, product_availability " \
+                    "FROM products"
             products = cur.execute(query).fetchall()
 
         elif self.availableProduct.isChecked():

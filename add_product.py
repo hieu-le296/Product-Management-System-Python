@@ -24,19 +24,46 @@ class ClickedQLineEdit(QLineEdit):
     def mousePressEvent(self, QMouseEvent):
         self.clicked.emit()
 
+
 class AddProduct(QDialog):
     date = ''
-    def __init__(self, parent = None):
+
+    def __init__(self, parent=None):
         super().__init__()
         self.setWindowTitle("Add Product")
         self.setWindowIcon(QIcon('icons/add.svg'))
         self.UI()
+        style_sheet = """
+        
+
+        QLabel {
+            font-size: 30px;
+        }
+
+        QLineEdit {
+            background-color: #f7f7f7; 
+            color: #000000; 
+            padding-top: 5px; 
+            padding-left: 10px;
+        }
+
+        QPushButton {
+            color: #ffffff;
+            border-radius: 10px;
+            font: bold 14px;
+            min-width: 10em;
+            padding: 6px;
+        }
+
+
+
+        """
+        self.setStyleSheet(style_sheet)
         self.show()
 
     def UI(self):
         self.widgets()
         self.layouts()
-        self.setStyleSheet("QLabel {font-size: 15px}")
 
     def widgets(self):
         ##############Widgets of top layout##############
@@ -45,17 +72,17 @@ class AddProduct(QDialog):
         self.addProductImg.setPixmap(self.img)
         self.addProductImg.setAlignment(Qt.AlignCenter)
         self.titleText = QLabel("Add Product")
-        self.titleText.setStyleSheet("QLabel {font-size: 30px}")
         self.titleText.setAlignment(Qt.AlignCenter)
+
         ##############Widgets of top layout##############
         self.nameEntry = QLineEdit()
-        self.nameEntry.setPlaceholderText("Enter name")
-        self.manufactureEntry = QLineEdit()
-        self.manufactureEntry.setPlaceholderText("Enter manufacture")
-        self.priceEntry  = QLineEdit()
-        self.priceEntry.setPlaceholderText("Enter price")
-        self.quotaEntry = QLineEdit()
-        self.quotaEntry.setPlaceholderText("Enter quantity")
+        self.nameEntry.setPlaceholderText("Enter Name")
+        self.manufactureEntry = QLineEdit(self)
+        self.manufactureEntry.setPlaceholderText("Enter Manufacturer")
+        self.priceEntry = QLineEdit(self)
+        self.priceEntry.setPlaceholderText("Enter Price")
+        self.quotaEntry = QLineEdit(self)
+        self.quotaEntry.setPlaceholderText("Enter Quantity")
 
         x = datetime.now()
         global datePickEntry
@@ -65,37 +92,38 @@ class AddProduct(QDialog):
         datePickEntry.setReadOnly(True)
         datePickEntry.clicked.connect(self.openCalendar)
 
-        self.uploadBtn = QPushButton("Browse")
+        self.uploadBtn = QPushButton("Browse Product Image")
         self.uploadBtn.clicked.connect(self.uploadImg)
+        self.uploadBtn.setStyleSheet("background-color: #35A69B;")
         self.submitBtn = QPushButton("Add")
         self.submitBtn.clicked.connect(self.addProduct)
+        self.submitBtn.setStyleSheet("background-color: #5AA1C2;")
 
     def layouts(self):
         ##############Main Layout##############
         self.mainLayout = QVBoxLayout()
         self.topLayout = QVBoxLayout()
-        self.bottomLayout = QFormLayout()
+        self.bottomLayout = QVBoxLayout()
         self.topFrame = QFrame()
-        self.bottomFrame = QFrame()
+
         ##############Add Widgets##############
         ##############Widgets of Top Layout##############
         self.topLayout.addWidget(self.addProductImg)
         self.topLayout.addWidget(self.titleText)
         self.topFrame.setLayout(self.topLayout)
 
-        ##############Widgets of Form layout##############
-        self.bottomLayout.addRow("Name: ", self.nameEntry)
-        self.bottomLayout.addRow("Manufacture: ", self.manufactureEntry)
-        self.bottomLayout.addRow("Price: ", self.priceEntry)
-        self.bottomLayout.addRow("Quota: ", self.quotaEntry)
-        self.bottomLayout.addRow("Date: ", datePickEntry)
-        self.bottomLayout.addRow("Product Image: ", self.uploadBtn)
-        self.bottomLayout.addRow("", self.submitBtn)
-        self.bottomFrame.setLayout(self.bottomLayout)
+        ##############Widgets of Bottom layout##############
+        self.bottomLayout.addWidget(self.nameEntry)
+        self.bottomLayout.addWidget(self.manufactureEntry)
+        self.bottomLayout.addWidget(self.priceEntry)
+        self.bottomLayout.addWidget(self.quotaEntry)
+        self.bottomLayout.addWidget(datePickEntry)
+        self.bottomLayout.addWidget(self.uploadBtn)
+        self.bottomLayout.addWidget(self.submitBtn)
 
         ##############Add everything to main layout##############
         self.mainLayout.addWidget(self.topFrame)
-        self.mainLayout.addWidget(self.bottomFrame)
+        self.mainLayout.addLayout(self.bottomLayout)
         self.setLayout(self.mainLayout)
 
     def uploadImg(self):

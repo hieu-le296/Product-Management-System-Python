@@ -7,16 +7,33 @@ import sqlite3
 sqlConnect = sqlite3.connect("products.db")
 cur = sqlConnect.cursor()
 
-class Print(QWidget):
+class Print(QDialog):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Print Preview")
         self.setWindowIcon(QIcon('icons/printer.svg'))
-        self.setGeometry(850, 450, 250, 180)
-        self.setFixedSize(self.size())
         self.widgets()
         self.layouts()
         self.setWindowIcon(QIcon('icons/printer.svg'))
+        style_sheet = """
+                   QLabel {
+                       font-size: 15px;
+                   }
+
+                   QPushButton {
+                       background-color: #5AA1C2;
+                       color: #ffffff;
+                       border-radius: 10px;
+                       font: bold 14px;
+                       min-width: 10em;
+                       padding: 6px;
+                   }
+                   
+                   QRadioButton {
+                        font-size: 12px;
+                    }
+               """
+        self.setStyleSheet(style_sheet)
         self.show()
 
     def widgets(self):
@@ -33,7 +50,6 @@ class Print(QWidget):
         self.selling = QRadioButton('Selling History', self)
         self.previewBtn = QPushButton("Print Preview", self)
         self.previewBtn.clicked.connect(self.printPreviewDialog)
-        self.setStyleSheet("QLabel {font-size: 15px} QRadioButton {font-size: 12px}")
 
     def layouts(self):
         self.mainLayout = QVBoxLayout()
@@ -52,6 +68,7 @@ class Print(QWidget):
 
         self.mainLayout.addWidget(self.topFrame)
         self.mainLayout.addLayout(self.bottomLayout)
+        self.mainLayout.addStretch(1)
         self.setLayout(self.mainLayout)
 
     def displayProduct(self):
@@ -81,7 +98,8 @@ class Print(QWidget):
         for i in reversed(range(self.sellingTable.rowCount())):
             self.sellingTable.removeRow(i)
 
-        query = "SELECT sellings.selling_id, products.product_name, products.product_manufacturer, products.product_price, members.member_fname, sellings.selling_quantity, sellings.discount_rate, sellings.selling_amount, sellings.selling_date " \
+        query = "SELECT sellings.selling_id, products.product_name, products.product_manufacturer, products.product_price, " \
+                "members.member_fname, sellings.selling_quantity, sellings.discount_rate, sellings.selling_amount, sellings.selling_date " \
                 "FROM products, members, sellings " \
                 "WHERE products.product_id = sellings.selling_product_id AND members.member_id = sellings.selling_member_id"
         records = cur.execute(query)
