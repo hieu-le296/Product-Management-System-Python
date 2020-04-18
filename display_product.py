@@ -11,6 +11,7 @@ import main_window
 sqlConnect = sqlite3.connect("products.db")
 cur = sqlConnect.cursor()
 
+
 # Create mouse clicked event for QLineEdit
 class ClickedQLineEdit(QLineEdit):
     clicked = pyqtSignal()
@@ -21,8 +22,10 @@ class ClickedQLineEdit(QLineEdit):
     def mousePressEvent(self, QMouseEvent):
         self.clicked.emit()
 
+
 class DisplayProduct(QDialog):
     productId = 0
+
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Product Detail")
@@ -100,7 +103,6 @@ class DisplayProduct(QDialog):
         self.updateBtn = QPushButton("Update")
         self.updateBtn.clicked.connect(self.updateProduct)
         self.updateBtn.setStyleSheet("background-color: #5AA1C2;")
-
 
     def layouts(self):
         self.mainLayout = QVBoxLayout()
@@ -184,7 +186,8 @@ class DisplayProduct(QDialog):
             QMessageBox.information(self, "Info", "Fields cannot be empty")
 
     def deleteProduct(self):
-        mbox = QMessageBox.question(self, "Wanrning", "Are you sure to delete this product?", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+        mbox = QMessageBox.question(self, "Wanrning", "Are you sure to delete this product?",
+                                    QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
         if (mbox == QMessageBox.Yes):
             try:
                 cur.execute("DELETE FROM products WHERE product_id=?", (self.productId,))

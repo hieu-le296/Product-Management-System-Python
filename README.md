@@ -1,5 +1,20 @@
-# Product-Manager-Python
-This Product Manager Application is COMP 371 Project
+# Product Management System
+This Product Management System is COMP 371 Project
+
+## Features:
+This application has some basic features:
+* Exceptional Theme
+* Add Product
+* Add Membership
+* Sell Product with the option to print receipt 
+* Display simple statistics with Pie Charts
+* Search for products/membership/records
+* Save As CSV or PDF file
+* Print option
+* Show information on the right panel by clicking any cell of table
+* Update item/membership by double clicking any cell of table
+* Change admin password
+* Some shortcuts to quickly open windows
 
 ## Getting Started
 
@@ -7,7 +22,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 If you run this project in Virtual Environment, please delete the previous virtual environment (venv) and create the new one whenever you run it on the different Operating System.
 
-### Prerequisites
+## Prerequisites
 
 What things you need to install the software and how to install them
 
@@ -19,33 +34,42 @@ Linux OS such as CentOS, Ubuntu, Linux Mint
 Visual Studio Code (optional for editor)
 ```
 
-### Installing
+## Installing
 
 Open terminal (Command Prompt on Windows 10) and type:
 
 ```
-pip3 install -r requirements.txt
+pip install -r requirements.txt
 ```
 
 *Note: You can create python virtual environment to install python dependencies.
 
-## Running the tests
+## Running the program
 
-There is no need to run database migration again. In order to run this program:
+In order to run this program:
+
+### Direct run
+Double click the file main.py
+
+### By terminal/Command Prompt:
+##### On Mac/Linux:
 
 ```
-python3 main_window.py
+python3 main.py
 ```
-
+##### On Windows:
+```
+python main.py
+```
 ## Login to program
 ```
 username: admin
 password: password
 ```
 
-## Deployment - Windows 10
+## Distribution - Windows 10
 ```
-pip3 install cx_freeze
+pip install cx_freeze
 ```
 ```
 python3 setup.py build
@@ -67,7 +91,9 @@ You can deploy on the different OS, but setup.py must be modified
 * PyQt5 QWidgets
 * PyQt5 QtGui
 * PyQt5 QtChart
-* Database: SQLlite
+* PyQt5 QtPrintSupport
+* PIL 
+* Database: sqlite3
 * Hashing 
 
 ## Version
@@ -80,4 +106,4 @@ You can deploy on the different OS, but setup.py must be modified
 
 ## License
 
-This project is initial for academic work at the University of the Fraser Valley. All Rights Reserved.
+This project is the initial work for academic work at the University of the Fraser Valley. All Rights Reserved.

@@ -14,6 +14,7 @@ cur = sqlConnect.cursor()
 
 defaultImg = 'store.png'
 
+
 # Create mouse clicked event for QLineEdit
 class ClickedQLineEdit(QLineEdit):
     clicked = pyqtSignal()
@@ -204,5 +205,3 @@ class Calendar(QWidget):
         dateSelected = '{}/{}/{}'.format(date.day(), date.month(), date.year())
         self.lbl.setText(dateSelected)
         datePickEntry.setText(dateSelected)
-
-

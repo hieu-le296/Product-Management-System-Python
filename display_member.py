@@ -8,8 +8,10 @@ import main_window
 sqlConnect = sqlite3.connect("products.db")
 cur = sqlConnect.cursor()
 
+
 class DisplayMember(QDialog):
     memberId = 0
+
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Membership Detail")
@@ -77,9 +79,6 @@ class DisplayMember(QDialog):
         self.deleteBtn.setStyleSheet("background-color: #B00020")
         self.deleteBtn.clicked.connect(self.deleteMember)
 
-
-
-
     def layouts(self):
         self.mainLayout = QVBoxLayout()
         self.topLayout = QVBoxLayout()
@@ -124,10 +123,9 @@ class DisplayMember(QDialog):
         except:
             QMessageBox.information(self, "Error", "Member has been deleted. Program exited.")
 
-
-
     def deleteMember(self):
-        mbox = QMessageBox.question(self, "Warning", "Are you sure to delete this member?", QMessageBox.Yes|QMessageBox.No, QMessageBox.No)
+        mbox = QMessageBox.question(self, "Warning", "Are you sure to delete this member?",
+                                    QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
 
         if mbox == QMessageBox.Yes:
             try:
@@ -141,7 +139,6 @@ class DisplayMember(QDialog):
 
             except:
                 QMessageBox.information(self, "Info", "Member has not been deleted")
-
 
     def updateMember(self):
         fname = self.fnameEntry.text()

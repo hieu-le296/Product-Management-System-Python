@@ -8,6 +8,7 @@ import main_window
 sqlConnect = sqlite3.connect("products.db")
 cur = sqlConnect.cursor()
 
+
 class Login(QDialog):
     def __init__(self, parent=None):
         super().__init__()
@@ -39,7 +40,6 @@ class Login(QDialog):
         """
         self.setStyleSheet(style_sheet)
 
-
     def widgets(self):
         self.infoImg = QLabel()
         self.img = QPixmap('icons/ufv.png')
@@ -49,7 +49,6 @@ class Login(QDialog):
         self.titleLabel = QLabel("Project Management System")
         self.titleLabel.setAlignment(Qt.AlignCenter)
         self.titleLabel.setStyleSheet("font: bold 24px; color: #99ca3c;")
-
 
         self.username = QLineEdit(self)
         self.QUserLabel = QLabel("Username")
@@ -67,7 +66,6 @@ class Login(QDialog):
         self.bottomLayout = QFormLayout()
         self.topFrame = QFrame()
         self.bottomFrame = QFrame()
-
 
         self.topLayout.addWidget(self.infoImg)
         self.topLayout.addWidget(self.titleLabel)

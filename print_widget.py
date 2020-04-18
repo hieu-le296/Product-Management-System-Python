@@ -7,6 +7,7 @@ import sqlite3
 sqlConnect = sqlite3.connect("products.db")
 cur = sqlConnect.cursor()
 
+
 class Print(QDialog):
     def __init__(self):
         super().__init__()
@@ -109,7 +110,6 @@ class Print(QDialog):
             for column_number, data in enumerate(row_data):
                 self.sellingTable.setItem(row_number, column_number, QTableWidgetItem(str(data)))
 
-
     def printPreviewDialog(self):
         printer = QPrinter(QPrinter.HighResolution)
         previewDialog = QPrintPreviewDialog(printer, self)
@@ -138,6 +138,3 @@ class Print(QDialog):
             for col in range(new_table.columns()):
                 cursor.insertText(table.item(row, col).text())
                 cursor.movePosition(QTextCursor.NextCell)
-
-
-

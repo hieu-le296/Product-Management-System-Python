@@ -1,6 +1,11 @@
+import sqlite3
+
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
+
+sqlConnect = sqlite3.connect("products.db")
+cur = sqlConnect.cursor()
 
 
 class Calendar(QWidget):
@@ -14,7 +19,6 @@ class Calendar(QWidget):
     def UI(self):
         vbox = QVBoxLayout()
         self.setGeometry(1000, 300, 350, 300)
-        self.setWindowTitle('Calendar')
 
         cal = QCalendarWidget(self)
         cal.setGridVisible(True)
@@ -30,4 +34,9 @@ class Calendar(QWidget):
         self.setLayout(vbox)
 
     def showDate(self, date):
-        self.lbl.setText('{}/{}/{}'.format(date.day(), date.month(), date.year()))
+        date_format = '{}/{}/{}'.format(date.day(), date.month(), date.year())
+        query = "SELECT COUNT(selling_id) FROM sellings WHERE selling_date = ?"
+        number_of_records = cur.execute(query, (date_format,)).fetchall()
+
+        self.lbl.setText(date_format + " - " + str(number_of_records[0][0]) + " records found.")
+

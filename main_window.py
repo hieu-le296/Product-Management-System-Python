@@ -1,7 +1,5 @@
 import sqlite3
-import sys
 
-import qdarkstyle
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import *
 from PyQt5.QtPrintSupport import QPrinter, QPrintPreviewDialog
